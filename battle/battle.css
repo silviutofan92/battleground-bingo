@@ -1,0 +1,354 @@
+/* Battleground overlay. Every rule is scoped under .bg-overlay and every
+   class starts with bg- so nothing leaks into the host page. */
+
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(120% 90% at 50% 40%, #1B3139 0%, #0B2026 72%);
+  color: #F3E7C9;
+  font: 15px/1.35 system-ui, sans-serif;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  overscroll-behavior: contain;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bg-overlay *,
+.bg-overlay *::before,
+.bg-overlay *::after {
+  box-sizing: border-box;
+}
+
+@media (min-width: 900px) and (min-height: 700px) {
+  .bg-overlay {
+    padding: 24px;
+  }
+}
+
+.bg-overlay .bg-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 1280px;
+  max-height: 920px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1B3139 0%, #0B2026 100%);
+  border: 3px solid #F5B735;
+  border-radius: 12px;
+  box-shadow: 0 0 0 2px #0B2026, 0 0 0 4px #E6811A, 0 18px 50px rgba(0, 0, 0, 0.65);
+  outline: none;
+}
+
+@media (max-width: 899px), (max-height: 699px) {
+  .bg-overlay .bg-frame {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.bg-overlay .bg-head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 4px 4px 4px 14px;
+  border-bottom: 1px solid rgba(245, 183, 53, 0.45);
+  background: linear-gradient(180deg, rgba(245, 183, 53, 0.12), rgba(245, 183, 53, 0));
+}
+
+.bg-overlay .bg-title {
+  margin: 0;
+  padding: 0;
+  font: 700 19px/1.1 serif;
+  color: #F5B735;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 0 #000;
+  white-space: nowrap;
+}
+
+.bg-overlay .bg-status {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  color: #E9D9AE;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bg-overlay .bg-round {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #F5B735, #E6811A);
+  color: #0B2026;
+  font: 700 13px/1 system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.bg-overlay .bg-close {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid #E6811A;
+  border-radius: 50%;
+  background: #12292F;
+  color: #F5B735;
+  font: 700 24px/1 system-ui, sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+@media (max-width: 480px) {
+  .bg-overlay .bg-head {
+    gap: 6px;
+    padding-left: 10px;
+  }
+
+  .bg-overlay .bg-title {
+    font-size: 15px;
+    letter-spacing: 0;
+  }
+
+  .bg-overlay .bg-status {
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+
+.bg-overlay .bg-close:hover {
+  border-color: #F5B735;
+  background: #1B3139;
+}
+
+.bg-overlay .bg-hero {
+  flex: 0 0 auto;
+  height: 23px;
+  margin: 0;
+  padding: 0 14px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(245, 183, 53, 0.25);
+  background: rgba(0, 0, 0, 0.18);
+  color: #E9D9AE;
+  font-size: 12px;
+  line-height: 22px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bg-overlay .bg-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background:
+    radial-gradient(90% 70% at 50% 50%, rgba(25, 125, 132, 0.10), rgba(0, 0, 0, 0) 70%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.012) 0 6px, rgba(0, 0, 0, 0) 6px 12px);
+}
+
+.bg-overlay .bg-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bg-overlay .bg-log {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 58px;
+  margin: 0;
+  padding: 2px 12px;
+  overflow: hidden;
+  border-top: 1px solid rgba(245, 183, 53, 0.35);
+  background: rgba(0, 0, 0, 0.28);
+  color: #F3E7C9;
+  font-size: 13.5px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.bg-overlay .bg-bar {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  padding: 8px;
+  border-top: 1px solid rgba(245, 183, 53, 0.35);
+}
+
+.bg-overlay .bg-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  padding: 6px 4px;
+  border: 2px solid #E6811A;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #24414A, #12292F);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #F5B735;
+  font: 600 14px/1.1 system-ui, sans-serif;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  touch-action: manipulation;
+  position: relative;
+}
+
+.bg-overlay .bg-casts {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #E95707;
+  color: #FFFFFF;
+  font: 700 11px/16px system-ui, sans-serif;
+  text-align: center;
+}
+
+.bg-overlay .bg-btn:hover {
+  border-color: #F5B735;
+  background: linear-gradient(180deg, #2E525C, #17343B);
+}
+
+.bg-overlay .bg-btn:focus-visible,
+.bg-overlay .bg-close:focus-visible {
+  outline: 3px solid #F5B735;
+  outline-offset: 2px;
+}
+
+.bg-overlay .bg-btn[aria-pressed="true"] {
+  border-color: #F5B735;
+  background: linear-gradient(180deg, #F5B735, #E6811A);
+  color: #0B2026;
+}
+
+.bg-overlay .bg-btn[aria-disabled="true"] {
+  opacity: 0.42;
+  cursor: default;
+}
+
+.bg-overlay .bg-btn.bg-armed {
+  border-color: #E95707;
+  background: linear-gradient(180deg, #E95707, #BA2C03);
+  color: #FFFFFF;
+}
+
+.bg-overlay .bg-scroll-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(11, 32, 38, 0.6);
+}
+
+.bg-overlay .bg-scroll-wrap[hidden] {
+  display: none;
+}
+
+.bg-overlay .bg-scroll {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  padding: 28px 22px 22px;
+  border: 2px solid #B98A2E;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #F7E9C3 0%, #EBD397 55%, #DDBB6C 100%);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
+  color: #3A2809;
+  text-align: center;
+}
+
+.bg-overlay .bg-scroll::before,
+.bg-overlay .bg-scroll::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+  right: -12px;
+  height: 16px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #A06A22, #5A3A0E);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+.bg-overlay .bg-scroll::before {
+  top: -9px;
+}
+
+.bg-overlay .bg-scroll::after {
+  bottom: -9px;
+}
+
+.bg-overlay .bg-scroll-title {
+  margin: 0 0 8px;
+  font: 700 32px/1.1 serif;
+  color: #7A1D02;
+  letter-spacing: 0.03em;
+}
+
+.bg-overlay .bg-defeat .bg-scroll-title {
+  color: #054E64;
+}
+
+.bg-overlay .bg-scroll-text {
+  margin: 0 0 18px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.bg-overlay .bg-scroll-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bg-overlay .bg-scroll .bg-btn {
+  min-width: 120px;
+  padding: 8px 14px;
+}
+
+.bg-overlay .bg-scroll .bg-btn-primary {
+  border-color: #7A1D02;
+  background: linear-gradient(180deg, #E95707, #BA2C03);
+  color: #FFFFFF;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-overlay *,
+  .bg-overlay *::before,
+  .bg-overlay *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

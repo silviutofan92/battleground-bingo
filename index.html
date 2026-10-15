@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T011449Z">
+<meta name="build" content="bb-20261015T014104Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T011449Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T014104Z">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=DM+Sans:wght@400;500;700;900&amp;display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=DM+Sans:wght@400;500;700;900&amp;display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap"></noscript>
 <style>
   :root {
     --ink: #0B2026; --deep: #1B3139; --parch: #FBF6EA; --parch2: #F1E4C8; --line: #D9BC82;
@@ -26,7 +26,7 @@
   html.phisher { filter: saturate(1.6) brightness(1.08); }
 
   body {
-    font-family: 'DM Sans', sans-serif; color: var(--text);
+    font-family: 'Noto Serif', Georgia, serif; color: var(--text);
     min-height: 100vh; min-height: 100dvh; padding: 20px 12px 96px;
     background: radial-gradient(ellipse at 50% -10%, #2D4A54 0%, #1B3139 35%, #0B2026 75%, #06141A 100%);
     background-attachment: fixed;
@@ -53,7 +53,7 @@
   .setup-page h2 { font-size: 19px; color: var(--fire1); margin: 12px 0 6px; }
   .setup-page p { font-size: 14px; color: #5A4426; margin-bottom: 16px; line-height: 1.5; }
   .setup-page input {
-    font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 700; color: var(--text);
+    font-family: 'Noto Serif', Georgia, serif; font-size: 18px; font-weight: 700; color: var(--text);
     border: 2px solid var(--line); background: #FFFDF7; border-radius: 10px; padding: 12px 16px;
     width: min(300px, 100%); text-align: center; outline: none; display: block; margin: 0 auto 14px;
   }
@@ -142,6 +142,10 @@
   .bingo-serpent { width: auto; max-width: 100%; height: auto; max-height: 120px; display: block; margin: 0 auto 2px; }
   .bingo-serpent[hidden] { display: none; }
   @media (min-width: 741px) {
+    .game-main { padding: 14px 16px 12px; }
+    .game-header { margin-bottom: 8px; }
+    .bingo-banner { margin-bottom: 8px; padding: 8px 12px 10px; }
+    .grid { gap: 5px; margin-bottom: 10px; }
     .bingo-banner.show { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; text-align: left; }
     .bingo-serpent { grid-row: 1 / 3; grid-column: 1; max-height: 56px; margin: 0; }
     .bingo-title, .bingo-sub { grid-column: 2; }
@@ -157,7 +161,7 @@
     background: #FFFDF7; border: 2px solid var(--line); border-radius: 10px; padding: 8px 6px; color: var(--text);
     text-align: center; font-size: 11.5px; font-weight: 500; line-height: 1.3;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 84px; cursor: pointer; position: relative; user-select: none; -webkit-user-select: none;
+    min-height: 80px; cursor: pointer; position: relative; user-select: none; -webkit-user-select: none;
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   }
   .cell .emoji { font-size: 18px; margin-bottom: 2px; display: block; }
@@ -170,7 +174,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T011449Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T014104Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -189,8 +193,9 @@
   .game-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 10px; padding-top: 10px; border-top: 1px solid var(--line); }
   .hud { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 11.5px; color: #5A4426; }
   .hud b { color: var(--fire2); font-family: 'Cinzel', Georgia, serif; }
+  .rank-icon .ic { width: 18px; height: 18px; color: var(--fire2); margin: 0 3px 0 2px; vertical-align: -4px; }
   .reset-btn {
-    font-family: 'DM Sans', sans-serif; background: #EFE4CC; border: none; padding: 6px 12px; border-radius: 8px;
+    font-family: 'Noto Serif', Georgia, serif; background: #EFE4CC; border: none; padding: 6px 12px; border-radius: 8px;
     font-size: 11px; font-weight: 700; color: #5A4426; cursor: pointer;
   }
   .reset-btn:hover { background: #E4D5B5; }
@@ -230,13 +235,13 @@
   .modal .modal-square { font-size: 14px; color: #4A3618; margin-bottom: 14px; }
   .modal label { display: block; text-align: left; font-size: 12px; font-weight: 700; color: var(--muted); margin: 0 0 4px; }
   .modal input, .modal select {
-    font-family: 'DM Sans', sans-serif; width: 100%; border: 2px solid var(--line); background: #FFFDF7; color: var(--text);
+    font-family: 'Noto Serif', Georgia, serif; width: 100%; border: 2px solid var(--line); background: #FFFDF7; color: var(--text);
     border-radius: 8px; padding: 9px 12px; font-size: 16px; outline: none; margin-bottom: 12px;
   }
   .modal input:focus, .modal select:focus { border-color: var(--fire4); }
   .modal-hint { font-size: 12px; color: var(--muted); text-align: left; margin: -6px 0 12px; }
   .modal-btns { display: flex; gap: 8px; }
-  .modal-btns button { font-family: 'DM Sans', sans-serif; flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .modal-btns button { font-family: 'Noto Serif', Georgia, serif; flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; }
   .btn-confirm { background: linear-gradient(180deg, var(--fire4), var(--fire3)); color: #FFF4E0; }
   .btn-skip { background: #EFE4CC; color: #5A4426; }
   .modal-cancel { margin-top: 10px; background: none; border: none; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer; font-family: inherit; }
@@ -305,7 +310,8 @@
   .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .hero-opt { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border: 2px solid var(--line); border-radius: 10px; background: #FFFDF7; cursor: pointer; }
   .hero-opt input { position: absolute; opacity: 0; pointer-events: none; }
-  .hero-opt .ho-icon { font-size: 24px; line-height: 1; color: var(--fire2); }
+  .hero-opt .ho-portrait { width: 64px; height: 64px; border-radius: 8px; border: 2px solid var(--goldline); object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+  .hero-opt:has(input:checked) .ho-portrait { border-color: var(--fire3); box-shadow: 0 0 0 2px var(--gold), 0 2px 8px rgba(186,44,3,0.4); }
   .hero-opt .ho-icon .ic { width: 30px; height: 30px; }
   .hero-opt .ho-name { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 13px; color: var(--text); }
   .hero-opt .ho-meta { font-size: 11px; color: var(--muted); }
@@ -315,7 +321,9 @@
   /* Hero bar (card) */
   .hero-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 5px 10px; margin-bottom: 8px; border-radius: 10px; background: linear-gradient(180deg, #2A1A07, #1A1004); color: #F5D27A; border: 1px solid var(--bronze); }
   .hb-who { display: flex; align-items: center; gap: 6px; min-width: 0; overflow-wrap: anywhere; font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 13px; }
-  .hb-who .ic, .hb-who .hb-cls { width: 22px; height: 22px; font-size: 18px; color: var(--gold); }
+  .ho-portrait-ic .ic { width: 34px; height: 34px; color: var(--fire2); }
+  .hb-portrait-ic .ic { width: 22px; height: 22px; color: var(--gold); }
+  .hb-portrait { width: 28px; height: 28px; border-radius: 6px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; }
   .hb-stats { display: flex; gap: 10px; font-size: 13px; font-weight: 700; color: #FFF4E0; }
   .hb-stats span { display: inline-flex; align-items: center; gap: 3px; }
   .hb-stats .ic { color: var(--gold); width: 16px; height: 16px; }
@@ -326,6 +334,14 @@
   .hb-levelup { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 12.5px; color: var(--fire1); background: linear-gradient(180deg, #FFE7A3, var(--gold)); border: 1.5px solid #FFF4E0; border-radius: 8px; padding: 4px 10px; cursor: pointer; animation: pulse 0.8s ease infinite alternate; }
   .hb-levelup[hidden] { display: none; }
 
+  .hero-bar { position: relative; }
+  .hb-xp { flex: 1 1 170px; position: relative; height: 15px; border-radius: 8px; background: #120A02; border: 1px solid var(--bronze); overflow: hidden; }
+  .hb-xp-fill { height: 100%; width: 0; background: linear-gradient(90deg, #8A5A12, var(--gold)); transition: width 0.6s ease; }
+  .hb-xp-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #FFF4E0; text-shadow: 0 1px 2px #000; letter-spacing: 0.2px; }
+  .xp-float { position: absolute; right: 12px; top: -6px; z-index: 5; font-family: 'Cinzel', Georgia, serif; font-weight: 900; font-size: 15px; color: var(--gold); text-shadow: 0 1px 0 #2A1A07, 0 0 8px rgba(245,183,53,0.6); pointer-events: none; animation: xp-up 1.4s ease-out forwards; }
+  @keyframes xp-up { 0% { opacity: 0; transform: translateY(8px); } 15% { opacity: 1; } 100% { opacity: 0; transform: translateY(-26px); } }
+  .modal-xp { font-family: 'Noto Serif', Georgia, serif; font-size: 12px; font-weight: 700; color: #8A5A12; background: rgba(245,183,53,0.18); border: 1px solid rgba(201,150,46,0.5); border-radius: 10px; padding: 1px 8px; vertical-align: 2px; white-space: nowrap; }
+  .modal-xp:empty { display: none; }
   /* Skill chooser (in the cheat-free overlay) */
   .skill-choices { display: grid; gap: 8px; margin: 4px 0 12px; }
   .skill-choice { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 2px 10px; text-align: left; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; background: #FFFDF7; cursor: pointer; font-family: inherit; color: var(--text); }
@@ -387,13 +403,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T011449Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T014104Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T011449Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T014104Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -407,6 +423,7 @@
       <li>Pick the <strong>session</strong> and note <strong>who said it</strong>. The time is stamped for you, in Munich time. That is your evidence.</li>
       <li>It counts when it is <strong>said out loud or shown on screen</strong> in a session (the chat does not count). Marks count from 10:00 Munich time.</li>
       <li>The centre square is <strong>free</strong>.</li>
+      <li>Your hero earns <strong>XP</strong>: 400 per square, 800 per completed line, 2,000 for a blackout, and 500 per Battleground win (first five). Levels follow the game's experience table.</li>
     </ul>
     <h3>Winning</h3>
     <ul>
@@ -420,7 +437,7 @@
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
     <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">8</span></span></div>
-    <p class="credits">Icons by Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons and art are original.</p>
+    <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons and art are original.</p>
   </div>
 
   <h2>Enter your name, hero</h2>
@@ -439,7 +456,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T011449Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T014104Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -449,7 +466,7 @@
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T011449Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T014104Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
@@ -461,10 +478,11 @@
       <div class="hb-skills" id="hb-skills"></div>
       <span class="hb-wins" id="hb-wins"></span>
       <button type="button" class="hb-levelup" id="hb-levelup" hidden>Level up! Choose a skill</button>
+      <div class="hb-xp" id="hb-xp" role="progressbar" aria-label="Experience" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hb-xp-fill" id="hb-xp-fill"></div><span class="hb-xp-text" id="hb-xp-text"></span></div>
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T011449Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T014104Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -472,7 +490,7 @@
     <div class="grid" id="grid" role="grid" aria-label="5 by 5 bingo grid"></div>
 
     <div class="game-footer">
-      <div class="hud"><span id="calendar">Month 1 · Week 1 · Day 1</span><span title="Just for fun: the end-of-game rank from Heroes III">Rank (for fun): <b id="rank">Troglodyte</b></span></div>
+      <div class="hud"><span id="calendar">Month 1 · Week 1 · Day 1</span><span title="Just for fun: the end-of-game rank from Heroes III">Rank (for fun): <span id="rank-icon" class="rank-icon"></span><b id="rank">Troglodyte</b></span></div>
       <button class="reset-btn" id="reset-btn" type="button">Reset card</button>
       <span class="score" aria-live="polite"><span id="count">1</span>/25</span>
     </div>
@@ -502,7 +520,7 @@
 <!-- Note modal -->
 <div class="modal-overlay" id="modal">
   <div class="modal frame" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <h3 id="modal-title">Spotted!</h3>
+    <h3 id="modal-title">Spotted! <span class="modal-xp" id="modal-xp"></span></h3>
     <div class="modal-square" id="modal-square"></div>
     <label for="modal-session">Which session?</label>
     <select id="modal-session"></select>
@@ -802,6 +820,7 @@ function handleCellClick(cell, idx) {
   pendingCell = { cell, idx, pos: [...document.getElementById('grid').children].indexOf(cell) };
   document.getElementById('game-wrapper').inert = true;
   document.getElementById('modal-square').innerHTML = iconHtml(SQUARE_ICONS[idx]) + ' ' + escapeHtml(SQUARES[idx].text);
+  document.getElementById('modal-xp').textContent = window.bbXpPreview ? window.bbXpPreview() : '';
   document.getElementById('modal-session').value = currentSession();
   document.getElementById('modal-note').value = '';
   document.getElementById('modal').classList.add('open');
@@ -925,7 +944,9 @@ function updateHud() {
   const m = markedCount();
   const week = Math.floor((m - 1) / 7) + 1, day = ((m - 1) % 7) + 1;
   document.getElementById('calendar').textContent = 'Month 1 · Week ' + week + ' · Day ' + day;
-  document.getElementById('rank').textContent = rankFor(m * 16);
+  const rank = rankFor(m * 16);
+  document.getElementById('rank').textContent = rank;
+  document.getElementById('rank-icon').innerHTML = iconHtml('rank-' + rank.toLowerCase().replace(/[^a-z]+/g, '-'));
   const blackout = isBlackout();
   const hp = blackout ? 0 : Math.max(10, 100 - 18 * getBingoLines().length);
   document.getElementById('foe-hp-fill').style.width = hp + '%';
@@ -1260,7 +1281,7 @@ document.addEventListener('keydown', (e) => {
     timers.forEach(clearTimeout);
     timers.clear();
     toastsEl.innerHTML = '';
-    document.querySelectorAll('.fx-sprite, .confetti-canvas').forEach(n => n.remove());
+    document.querySelectorAll('.fx-sprite, .confetti-canvas, .xp-float').forEach(n => n.remove());
     document.documentElement.classList.remove('phisher');
     document.querySelectorAll('.cell.reveal').forEach(n => n.classList.remove('reveal'));
     closeOverlay();
@@ -1515,9 +1536,19 @@ document.addEventListener('keydown', (e) => {
   const SKILL_LEVEL = ['', 'Basic', 'Advanced', 'Expert'];
   const MAX_SKILLS = 8;
   let hero = null;
+  const HERO_PORTRAITS = false; // original painted portraits: switched on once the owner approves them
+  function heroFace(c, cls) {
+    return HERO_PORTRAITS ? '<img class="' + cls + '" src="assets/hero-' + c.id + '.webp?v=' + BUILD + '" alt="" width="160" height="160">'
+      : '<span class="' + cls + '-ic">' + iconHtml(c.icon) + '</span>';
+  }
 
   function classById(id) { return CLASSES.find(c => c.id === id) || CLASSES[5]; }
-  function levelForMarks(m) { return 1 + Math.floor((Math.max(1, m) - 1) / 3); }
+  // Experience: each square (counted once, by the most squares ever marked), each newly completed line,
+  // the blackout, and the first five battle wins. Levels follow the HoMM3 hero experience table.
+  const XP = { square: 400, line: 800, blackout: 2000, battle: 500, battleMax: 5 };
+  const XP_TABLE = [0, 1000, 2000, 3200, 4600, 6200, 8000, 10000, 12200, 14700, 17500, 20600, 24320, 28784, 34140, 40567];
+  function levelForXp(xp) { let l = 1; while (l < XP_TABLE.length && xp >= XP_TABLE[l]) l++; return l; }
+  function fmtXp(n) { return Number(n).toLocaleString('en-GB'); }
   function validHero(x) {
     return x && x.v === 1 && CLASSES.some(c => c.id === x.cls) && Array.isArray(x.stats) && x.stats.length === 4 &&
       x.stats.every(n => Number.isInteger(n) && n >= 0 && n < 100) && Number.isInteger(x.level) && x.level >= 1 &&
@@ -1525,9 +1556,19 @@ document.addEventListener('keydown', (e) => {
       Array.isArray(x.skills) && x.skills.every(s => Array.isArray(s) && SKILLS[s[0]] && s[1] >= 1 && s[1] <= 3) &&
       (x.offers === null || Array.isArray(x.offers)) && Number.isInteger(x.wins);
   }
+  // Heroes saved before experience existed get the XP fields, computed from the board on the next sync
+  function withXp(x) {
+    if (!Number.isInteger(x.xp)) x.xp = 0;
+    if (!Number.isInteger(x.squareXp)) x.squareXp = 0;
+    if (!Array.isArray(x.lines)) x.lines = [];
+    if (typeof x.blackoutXp !== 'boolean') x.blackoutXp = false;
+    if (!Number.isInteger(x.battleXpWins)) x.battleXpWins = 0;
+    return x;
+  }
   function newHero(clsId) {
     const c = classById(clsId);
-    return { v: 1, cls: c.id, stats: c.stats.slice(), level: 1, maxMarks: 1, cheatLevels: 0, pending: 0, skills: [], offers: null, wins: 0 };
+    return { v: 1, cls: c.id, stats: c.stats.slice(), level: 1, maxMarks: 1, cheatLevels: 0, pending: 0, skills: [], offers: null, wins: 0,
+      xp: 0, squareXp: 0, lines: [], blackoutXp: false, battleXpWins: 0 };
   }
   function saveHero() { if (hero) writeJSON(HERO_KEY, hero); }
   function selectedClass() { const r = document.querySelector('input[name="hero-class"]:checked'); return r ? r.value : 'warlock'; }
@@ -1537,19 +1578,25 @@ document.addEventListener('keydown', (e) => {
     const grid = document.getElementById('hero-grid');
     grid.innerHTML = CLASSES.map(c =>
       '<label class="hero-opt"><input type="radio" name="hero-class" value="' + c.id + '"' + (c.id === 'warlock' ? ' checked' : '') + '>' +
-      '<span class="ho-icon">' + iconHtml(c.icon, c.emoji) + '</span><span class="ho-name">' + c.name + '</span>' +
+      heroFace(c, 'ho-portrait') + '<span class="ho-name">' + c.name + '</span>' +
       '<span class="ho-meta">' + c.town + ' · ' + (c.might ? 'might' : 'magic') + '</span></label>').join('');
   }
 
   function renderHero() {
     if (!hero) return;
     const c = classById(hero.cls);
-    document.getElementById('hb-who').innerHTML = '<span class="hb-cls">' + iconHtml(c.icon, c.emoji) + '</span>Level ' + hero.level + ' ' + c.name;
+    document.getElementById('hb-who').innerHTML = heroFace(c, 'hb-portrait') + 'Level ' + hero.level + ' ' + c.name;
     document.getElementById('hb-stats').innerHTML = STATS.map((s, i) =>
       '<span title="' + s[0] + '">' + iconHtml(s[1], s[2]) + hero.stats[i] + '</span>').join('');
     document.getElementById('hb-skills').innerHTML = hero.skills.map(([id, lvl]) =>
       '<span class="hb-skill" title="' + escapeHtml(SKILLS[id][2]) + '">' + iconHtml(id, SKILLS[id][1]) + ' ' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</span>').join('');
     document.getElementById('hb-wins').innerHTML = hero.wins ? iconHtml('battle') + ' ' + hero.wins + (hero.wins === 1 ? ' battle won' : ' battles won') : '';
+    const xl = levelForXp(hero.xp);
+    const lo = XP_TABLE[xl - 1], hi = XP_TABLE[xl];
+    const pct = hi === undefined ? 100 : Math.round(100 * (hero.xp - lo) / (hi - lo));
+    document.getElementById('hb-xp-fill').style.width = pct + '%';
+    document.getElementById('hb-xp-text').textContent = hi === undefined ? fmtXp(hero.xp) + ' XP · max level' : fmtXp(hero.xp) + ' / ' + fmtXp(hi) + ' XP';
+    document.getElementById('hb-xp').setAttribute('aria-valuenow', String(pct));
     const btn = document.getElementById('hb-levelup');
     btn.hidden = hero.pending === 0;
     btn.textContent = hero.pending > 1 ? 'Level up! Choose ' + hero.pending + ' skills' : 'Level up! Choose a skill';
@@ -1572,15 +1619,35 @@ document.addEventListener('keydown', (e) => {
       toast('<b>' + escapeHtml(state.playerName || 'Your hero') + ' is now a level ' + hero.level + ' ' + c.name + '!</b><br>+1 ' + STATS[s][0] + '. Tap "Level up!" to choose a skill.', 5500);
     }
   }
-  // Levels follow the highest number of marks ever reached, so unmarking and re-marking never farms levels
-  function syncLevels(quiet) {
+  // XP is never paid twice: squares by the most ever marked, each line once, the blackout once
+  function syncLevels(quiet, extraXp) {
     if (!hero) return;
     hero.maxMarks = Math.max(hero.maxMarks, markedCount());
-    const want = levelForMarks(hero.maxMarks) + hero.cheatLevels;
+    let gained = extraXp || 0;
+    const squareXp = (hero.maxMarks - 1) * XP.square;
+    if (squareXp > hero.squareXp) { gained += squareXp - hero.squareXp; hero.squareXp = squareXp; }
+    for (const line of getBingoLines()) { if (!hero.lines.includes(line)) { hero.lines.push(line); gained += XP.line; } }
+    if (isBlackout() && !hero.blackoutXp) { hero.blackoutXp = true; gained += XP.blackout; }
+    hero.xp += gained;
+    const want = levelForXp(hero.xp) + hero.cheatLevels;
     while (hero.level < want) gainLevel(quiet);
     saveHero();
     renderHero();
+    if (gained && !quiet) floatXp(gained);
   }
+  function floatXp(n) {
+    const bar = document.getElementById('hero-bar');
+    const f = document.createElement('div');
+    f.className = 'xp-float fx-sprite-xp';
+    f.textContent = '+' + fmtXp(n) + ' XP';
+    f.setAttribute('aria-hidden', 'true');
+    bar.appendChild(f);
+    later(() => f.remove(), 1500);
+  }
+  window.bbXpPreview = function () {
+    if (!hero) return '';
+    return markedCount() + 1 > hero.maxMarks ? '+' + fmtXp(XP.square) + ' XP' : 'no new XP';
+  };
   function heroCheatLevel() {
     if (!hero) return;
     hero.cheatLevels++;
@@ -1635,7 +1702,7 @@ document.addEventListener('keydown', (e) => {
 
   function loadHeroFor(clsId) {
     const saved = readJSON(HERO_KEY, null);
-    hero = validHero(saved) ? saved : newHero(clsId);
+    hero = validHero(saved) ? withXp(saved) : newHero(clsId);
     syncLevels(true);
   }
   bus.on('card:reset', () => { hero = newHero(selectedClass()); syncLevels(true); });
@@ -1678,19 +1745,34 @@ document.addEventListener('keydown', (e) => {
   function onBattleClose(r) {
     const result = r && r.result;
     if (result === 'ally') {
-      if (hero) { hero.wins++; saveHero(); renderHero(); }
+      if (hero) {
+        hero.wins++;
+        let bonus = 0;
+        if (hero.battleXpWins < XP.battleMax) { hero.battleXpWins++; bonus = XP.battle; }
+        syncLevels(false, bonus);
+      }
       maybeFanfare('line');
       toast('<b>Victory!</b><br>The Teal Dragon retreats from the Battleground.', 5000);
     } else if (result === 'enemy') {
       toast('<b>Your army was routed.</b><br>Mark more squares, grow stronger, and return.', 5000);
     }
   }
+  // Unit art for the battle: standalone SVGs cut from the game-icons.net sprite (the battle tints them)
+  const UNIT_ICONS = { genieArchers: 'archery', catalogKnights: 'knight', lakeflowCavalry: 'cavalry', wraiths: 'wraith', golems: 'golem', shades: 'shade' };
+  function unitIcons() {
+    const out = {};
+    for (const [unit, key] of Object.entries(UNIT_ICONS)) {
+      const sym = document.getElementById('i-' + key);
+      if (sym) out[unit] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + (sym.getAttribute('viewBox') || '0 0 512 512') + '">' + sym.innerHTML + '</svg>';
+    }
+    return out;
+  }
   function openBattle() {
     if (!BATTLE_ON) { toast('<b>The Grail is not yet uncovered.</b><br>Visit more obelisks and come back later today.', 5000); return; }
     loadBattle().then(() => {
       window.Battleground.open({
         allyImg: 'assets/red-crest.webp?v=' + BUILD, enemyImg: 'assets/teal-tower.webp?v=' + BUILD,
-        hero: heroForBattle(), onClose: onBattleClose,
+        hero: heroForBattle(), unitIcons: unitIcons(), onClose: onBattleClose,
       });
     }).catch(() => toast('<b>The Battleground is out of reach.</b><br>Check your connection and try again.', 5000));
   }
