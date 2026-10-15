@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T061734Z">
+<meta name="build" content="bb-20261015T063142Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T061734Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T063142Z">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'">
@@ -86,8 +86,6 @@
   .rules-panel ul, .rules-body ul { margin-left: 18px; margin-bottom: 4px; }
   .rules-panel li, .rules-body li { margin-bottom: 2px; }
   .lore { margin-top: 12px; padding: 8px 10px; border-left: 3px solid var(--gold); background: rgba(245,183,53,0.14); font-style: italic; border-radius: 0 6px 6px 0; }
-  .credits { margin-top: 10px; font-size: 11px; color: var(--muted); }
-  .credits a { color: var(--fire3); }
   .lore .count { font-style: normal; font-weight: 700; color: var(--fire2); white-space: nowrap; }
 
   /* --- GAME LAYOUT: card + log side by side --- */
@@ -175,7 +173,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T061734Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T063142Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -391,6 +389,11 @@
   }
 
   /* Responsive: stack on mobile */
+  /* Phones under 390px: the card shrinks to the screen instead of widening the page */
+  @media (max-width: 389px) {
+    .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .cell { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+  }
   @media (max-width: 600px) {
     .game-wrapper.active { flex-direction: column; }
     .game-sidebar { width: 100%; position: static; max-height: none; overflow: visible; }
@@ -436,13 +439,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T061734Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T063142Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T061734Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T063142Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -470,7 +473,7 @@
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
     <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">16</span></span></div>
-    <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. The card's dragons and the hero portraits are original art. Battle unit sprites: Heroes of Might and Magic III, via the <a href="https://heroes.thelazy.net/" target="_blank" rel="noopener">Heroes 3 wiki</a>. Sounds: Heroes of Might and Magic III, streamed from the <a href="https://github.com/ZephyrVentum/HoMM3-Soundboard" target="_blank" rel="noopener">HoMM3-Soundboard</a> project.</p>
+    <!-- Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from game-icons.net (CC BY 3.0, recoloured). -->
   </div>
 
   <h2>Enter your name, hero</h2>
@@ -490,7 +493,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T061734Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T063142Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -501,7 +504,7 @@
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T061734Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T063142Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
@@ -524,7 +527,7 @@
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T061734Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T063142Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
