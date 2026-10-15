@@ -56,8 +56,18 @@
     ballista: { name: 'Ballista', one: 'Ballista', side: 'ally', count: 1,
       att: 10, def: 10, dmgMin: 30, dmgMax: 50, hp: 250, speed: 0, shoot: true, machine: true },
     firstAidTent: { name: 'First Aid Tent', one: 'First Aid Tent', side: 'ally', count: 1,
-      att: 0, def: 0, dmgMin: 0, dmgMax: 0, hp: 75, speed: 0, machine: true, passive: true }
+      att: 0, def: 0, dmgMin: 0, dmgMax: 0, hp: 75, speed: 0, machine: true, passive: true },
+    // New foes that join a bolder host (difficulty from 1.09 and 1.33).
+    wyverns: { name: 'Wyverns', one: 'Wyvern', side: 'enemy', count: 1,
+      att: 14, def: 14, dmgMin: 14, dmgMax: 18, hp: 70, speed: 7, fly: true },
+    hydras: { name: 'Hydras', one: 'Hydra', side: 'enemy', count: 2,
+      att: 16, def: 18, dmgMin: 25, dmgMax: 45, hp: 175, speed: 5, noRetaliation: true }
   };
+  // Hydras are defined (art and icon keys work) but do not join yet: any
+  // Hydra in the host collapsed the casual win rate at 1.33 in simulation.
+  var NEW_FOES = [
+    { type: 'wyverns', from: 1.09, spots: [[8, 1], [8, 3], [8, 5], [7, 1], [7, 3], [7, 5]] }
+  ];
   var TENT_HEAL = 50;
 
   // Deployment: allies on the left edge, enemies on the right edge.
@@ -83,10 +93,15 @@
   var NAVIGATION = [ONE, [11, 10], [6, 5], [13, 10]]; // ally retaliation x1.1 / 1.2 / 1.3
   var DIPLOMACY = [ONE, [19, 20], [9, 10], [17, 20]]; // enemy counts kept after growth
   var CHANCE = [0, 5, 10, 15];       // percent: leadership (morale) and luck
-  var LOGISTICS = [0, 1, 1, 2];      // ally speed
-  var PATHFINDING = [0, 1, 2, 2];    // deploy columns forward
+  var LOGISTICS = [0, 1, 2, 3];      // ally speed
+  // Pathfinding: walking allies path through obstacles from Basic, and walk
+  // faster at Advanced and Expert. Tactics: round-1 initiative and guard.
+  var PATHFINDING_SPEED = [0, 0, 1, 1]; // walking allies
+  var PATHFINDING_FLY = [0, 0, 0, 1];   // flying allies
+  var TACTICS_FIRST = [0, 0, 0, 0];  // opening rounds in which every ally acts first
+  var TACTICS_GUARD = [0, 1, 2, 3];  // ally Defense bonus during round 1
   var FIRST_AID = [0, 20, 40, 60];   // HP healed each round
-  var WISDOM = [0, 1, 1, 2];         // extra Fireball casts
+  var WISDOM = [0, 1, 2, 3];         // extra Fireball casts
   var SCHOLAR = [0, 5, 10, 15];      // percent spell damage, added to sorcery
   var EAGLE_EYE = [6, 8, 10, 12];    // long-range penalty starts beyond this
   var ESTATES = [0, 2, 4, 6];        // extra Genie Archers
@@ -150,10 +165,20 @@
   // most (it decides the opening dragon exchange); after that attack, defense,
   // extra Fireball casts, Fireball damage and the skill multipliers add up.
   var GROWTH = {
-    firstAttack: 0.134, attack: 0.008, defense: 0.035, cast: 0.157, fireDamage: 0.125,
+    firstAttack: 0.134, attack: 0.008, defense: 0.035, fireDamage: 0.125,
     offense: 0.912, armorer: 1.385, archery: 0.036, leadership: 0.825, luck: 0.825,
-    logistics: 0.12, firstAid: 0.009, estates: 0.09, spread: 0.12
+    firstAid: 0.0065, estates: 0.08, spread: 0.12
   };
+
+  // Growth for extra Fireball casts and for logistics levels, measured per
+  // step (both have diminishing returns for the casual player).
+  var CAST_GROWTH = [0, 0.157, 0.314, 0.36];
+  var LOGISTICS_GROWTH = [0, 0.12, 0.078, 0.034];
+  var PATHFINDING_GROWTH = [0, 0, 0.09, 0.09];
+
+  function castGrowth(n) {
+    return n < CAST_GROWTH.length ? CAST_GROWTH[n] : CAST_GROWTH[CAST_GROWTH.length - 1] + 0.03 * (n - CAST_GROWTH.length + 1);
+  }
 
   // Skills and stats only: the cheat army and buffs are meant to overpower.
   function heroStrength(h) {
@@ -163,10 +188,10 @@
     var fireGain = (FIREBALL_DAMAGE + 8 * h.power) * sorc[0] / sorc[1] / FIREBALL_DAMAGE - 1;
     var off = OFFENSE[sk.offense], arm = ARMORER[sk.armorer], arch = ARCHERY[sk.archery];
     var g = GROWTH.firstAttack * Math.min(h.attack, 1) + GROWTH.attack * h.attack + GROWTH.defense * h.defense +
-      GROWTH.cast * extraCasts + GROWTH.fireDamage * fireGain + GROWTH.offense * (off[0] / off[1] - 1) +
+      castGrowth(extraCasts) + GROWTH.fireDamage * fireGain + GROWTH.offense * (off[0] / off[1] - 1) +
       GROWTH.armorer * (1 - arm[0] / arm[1]) + GROWTH.archery * (arch[0] / arch[1] - 1) +
       (GROWTH.leadership * CHANCE[sk.leadership] + GROWTH.luck * CHANCE[sk.luck]) / 100 +
-      GROWTH.logistics * LOGISTICS[sk.logistics] + GROWTH.firstAid * FIRST_AID[sk.firstAid] +
+      LOGISTICS_GROWTH[sk.logistics] + PATHFINDING_GROWTH[sk.pathfinding] + GROWTH.firstAid * FIRST_AID[sk.firstAid] +
       GROWTH.estates * ESTATES[sk.estates];
     return g > 0 ? g : 0;
   }
@@ -320,6 +345,7 @@
     }
     var seen = {};
     seen[hexKey(st.q, st.r)] = true;
+    var pathfinder = st.side === 'ally' && heroOf(s).skills.pathfinding > 0;
     var frontier = [{ q: st.q, r: st.r }];
     for (var step = 1; step <= st.speed && frontier.length; step++) {
       var next = [];
@@ -327,9 +353,9 @@
         var ns = neighbors(frontier[i]);
         for (var j = 0; j < ns.length; j++) {
           var k = hexKey(ns[j].q, ns[j].r);
-          if (seen[k] || obs[k] || occ[k]) continue;
+          if (seen[k] || occ[k] || (obs[k] && !pathfinder)) continue;
           seen[k] = true;
-          out.push({ q: ns[j].q, r: ns[j].r, steps: step });
+          if (!obs[k]) out.push({ q: ns[j].q, r: ns[j].r, steps: step });
           next.push(ns[j]);
         }
       }
@@ -427,7 +453,7 @@
   // Wait phase: stacks that waited act slowest first (same tie rules).
   function pickNext(s) {
     var best = null, i, st;
-    var tactics = s.round === 1 && heroOf(s).skills.tactics > 0;
+    var tactics = s.round <= TACTICS_FIRST[heroOf(s).skills.tactics];
     for (i = 0; i < s.stacks.length; i++) {
       st = s.stacks[i];
       if (!st.alive || st.acted || st.waited || st.passive) continue;
@@ -500,6 +526,11 @@
         st.waited = false;
         st.retaliated = false;
         st.moraled = false;
+        // The round-1 guard from tactics wears off.
+        if (st.guard) {
+          st.def -= st.guard;
+          st.guard = 0;
+        }
       });
       if (s.round >= ROUND_CAP) { finish(s, 'enemy', 'cap', events); return; }
       events.push({ type: 'round', round: s.round });
@@ -559,49 +590,63 @@
     // Damped: below 1 each step of difficulty moves enemy counts by 30% of
     // it, above 1 by 20% (the battle is steeper in that direction).
     var countFactor = 1 + (difficulty < 1 ? 0.3 : 0.2) * (difficulty - 1);
-    var fwd = PATHFINDING[hero.skills.pathfinding];
+    var fwd = 0;
     s.deserted = 0;
 
     function addStack(type, count, hex) {
       var u = UNITS[type], ally = u.side === 'ally';
-      var speed = u.speed > 0 && ally ? u.speed + LOGISTICS[hero.skills.logistics] + hero.buffs.speed : u.speed;
+      var speed = u.speed > 0 && ally ? u.speed + LOGISTICS[hero.skills.logistics] + hero.buffs.speed +
+        (u.fly ? PATHFINDING_FLY : PATHFINDING_SPEED)[hero.skills.pathfinding] : u.speed;
+      var guard = ally && !u.passive ? TACTICS_GUARD[hero.skills.tactics] : 0;
       s.stacks.push({
         id: type, type: type, side: u.side, name: u.name, one: u.one,
         att: u.att + (ally ? hero.attack : 0),
-        def: u.def + (ally ? hero.defense + hero.buffs.defense : 0),
+        def: u.def + (ally ? hero.defense + hero.buffs.defense : 0) + guard,
         dmgMin: u.dmgMin, dmgMax: u.dmgMax, hp: u.hp, speed: speed,
         fly: !!u.fly, breath: !!u.breath, shoot: !!u.shoot, noRetaliation: !!u.noRetaliation,
         machine: !!u.machine, passive: !!u.passive,
         count: count, hpLeft: count * u.hp, maxHp: count * u.hp, q: hex.q, r: hex.r,
         alive: true, acted: false, waited: false, defending: false, retaliated: false, moraled: false
       });
+      if (guard) s.stacks[s.stacks.length - 1].guard = guard;
     }
 
-    LINEUP.forEach(function (slot) {
-      var u = UNITS[slot.type];
+    // Enemy counts: host growth, then diplomacy, then difficulty (seeded
+    // stochastic rounding, so small steps still change the host on average).
+    // A shrunken host never leaves a stack weaker than the Teal Dragon:
+    // otherwise weakest-first players switch targets and, perversely, a
+    // smaller host becomes harder to beat (it binds the Wraiths at 10).
+    function enemyCount(type) {
+      var u = UNITS[type];
       var count = u.count;
-      if (u.side === 'enemy' && scale !== 1 && u.count > 1) count = Math.max(1, Math.round(u.count * scale));
-      if (u.side === 'enemy' && counts[slot.type] != null) count = Math.max(1, Math.floor(counts[slot.type]));
-      if (u.side === 'enemy' && keep !== ONE && count > 1) {
+      if (scale !== 1 && u.count > 1) count = Math.max(1, Math.round(u.count * scale));
+      if (counts[type] != null) count = Math.max(1, Math.floor(counts[type]));
+      if (keep !== ONE && count > 1) {
         var kept = Math.max(1, Math.round(count * keep[0] / keep[1]));
         s.deserted += count - kept;
         count = kept;
       }
-      if (u.side === 'enemy' && difficulty !== 1 && count > 1) {
-        // Seeded stochastic rounding, so small steps still change the host
-        // on average instead of rounding away.
+      if (difficulty !== 1 && count > 1) {
         var exact = count * countFactor;
         count = Math.max(1, Math.floor(exact) + (nextRandom(s) < exact - Math.floor(exact) ? 1 : 0));
       }
-      // A shrunken host never leaves a stack weaker than the Teal Dragon:
-      // otherwise weakest-first players switch targets and, perversely, a
-      // smaller host becomes harder to beat (it binds the Wraiths at 10).
-      if (u.side === 'enemy' && u.count > 1 && counts[slot.type] == null) {
-        count = Math.max(count, Math.ceil(UNITS.tealDragon.hp / u.hp));
-      }
+      if (u.count > 1 && counts[type] == null) count = Math.max(count, Math.ceil(UNITS.tealDragon.hp / u.hp));
+      return count;
+    }
+
+    LINEUP.forEach(function (slot) {
+      var u = UNITS[slot.type];
+      var count = u.side === 'enemy' ? enemyCount(slot.type) : u.count;
       if (slot.type === 'genieArchers') count += ESTATES[hero.skills.estates];
       if (u.side === 'ally' && hero.army[slot.type] > 0) count += hero.army[slot.type];
-      addStack(slot.type, count, fromOffset(u.side === 'ally' ? fwd : COLS - 1, slot.row));
+      var col = u.side === 'ally' ? fwd : COLS - 1;
+      // Pathfinding may point at an obstacle: step back until the hex is free.
+      while (u.side === 'ally' && col > 0) {
+        var spot = fromOffset(col, slot.row);
+        if (!obstacleSet(s)[hexKey(spot.q, spot.r)] && !stackAt(s, spot.q, spot.r)) break;
+        col -= 1;
+      }
+      addStack(slot.type, count, fromOffset(col, slot.row));
     });
 
     // The cheat army takes the first free hex from its list of spots.
@@ -611,6 +656,13 @@
     if (hero.army.ballista) extras.push(['ballista', 1, [[0, 3], [0, 1], [0, 5], [1, 3], [1, 2], [1, 4]]]);
     if (hero.army.firstAidTent) extras.push(['firstAidTent', 1, [[0, 3], [0, 1], [0, 5], [1, 3], [1, 4], [1, 2]]]);
     var obs = obstacleSet(s);
+    NEW_FOES.forEach(function (f) {
+      if (difficulty < f.from - 1e-6) return;
+      for (var i = 0; i < f.spots.length; i++) {
+        var h = fromOffset(f.spots[i][0], f.spots[i][1]);
+        if (onBoard(h.q, h.r) && !obs[hexKey(h.q, h.r)] && !stackAt(s, h.q, h.r)) { addStack(f.type, enemyCount(f.type), h); return; }
+      }
+    });
     extras.forEach(function (x) {
       var spots = x[2].concat([[0, 0], [1, 0], [1, 6], [2, 1], [2, 3], [2, 5], [0, 6], [2, 0], [2, 2], [2, 4], [2, 6]]);
       for (var i = 0; i < spots.length; i++) {

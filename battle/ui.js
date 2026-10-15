@@ -194,6 +194,7 @@
     var hero = opts.hero && typeof opts.hero === 'object' ? opts.hero : null;
     var sound = opts.sound && typeof opts.sound === 'object' && typeof opts.sound.toggle === 'function' ? opts.sound : null;
     var battleNumber = Math.max(1, Math.floor(Number(opts.battleNumber)) || 1);
+    var difficulty = opts.difficulty;
     var st = {
       closed: false, state: null, auto: false, busy: false, mode: 'normal',
       hover: null, hoverSig: '', pendingFireball: null, message: '', hint: '',
@@ -368,6 +369,8 @@
         if (E.UNITS[x.type] && x.count > E.UNITS[x.type].count) grown = true;
       });
       if (grown) bits.push('The Teal Dragon\'s host has grown to meet you: ' + joinNames(parts) + '.');
+      var newFoes = state.stacks.filter(function (x) { return x.type === 'wyverns' || x.type === 'hydras'; }).map(function (x) { return x.name; });
+      if (newFoes.length) bits.push('New foes join the host: ' + joinNames(newFoes) + '.');
       if (state.deserted > 0) bits.push('Your parley works: ' + state.deserted + (state.deserted === 1 ? ' creature deserts' : ' creatures desert') + ' the host.');
       return bits.join(' ');
     }
@@ -842,7 +845,7 @@
     /* ---- flow ---- */
     function newBattle(seed) {
       var s = typeof seed === 'number' && isFinite(seed) ? seed : Math.floor(Math.random() * 4294967296);
-      st.state = E.createBattle({ seed: s, hero: hero || undefined, difficulty: opts.difficulty });
+      st.state = E.createBattle({ seed: s, hero: hero || undefined, difficulty: difficulty });
       if (heroLine) {
         heroLine.textContent = heroText(hero, st.state.hero);
         heroLine.title = skillsText(st.state.hero);
@@ -960,6 +963,25 @@
       raf = window.requestAnimationFrame(frameStep);
     }
 
+    function applyNext(next) {
+      if (next.hero && typeof next.hero === 'object') {
+        hero = next.hero;
+        if (!heroLine) {
+          heroLine = el('p', 'bg-hero');
+          frame.insertBefore(heroLine, stage);
+        }
+        if (!casts) {
+          casts = el('span', 'bg-casts');
+          casts.setAttribute('aria-hidden', 'true');
+          btn.fireball.appendChild(casts);
+        }
+      }
+      if (next.difficulty != null) difficulty = next.difficulty;
+      if (next.battleNumber != null) battleNumber = Math.max(1, Math.floor(Number(next.battleNumber)) || 1);
+      if (next.unitIcons) loadIcons(next.unitIcons);
+      if (next.unitImgs) loadArts(next.unitImgs);
+    }
+
     function removeScroll() {
       if (scrollWrap && scrollWrap.parentNode) scrollWrap.parentNode.removeChild(scrollWrap);
       scrollWrap = null;
@@ -988,6 +1010,12 @@
       var closeBtn = el('button', 'bg-btn', 'Close');
       closeBtn.type = 'button';
       againBtn.addEventListener('click', function () {
+        // The page may hand over the next battle (a stronger hero, a bolder host).
+        if (typeof opts.nextBattle === 'function') {
+          var next = null;
+          try { next = opts.nextBattle(); } catch (e) { next = null; }
+          if (next && typeof next === 'object') applyNext(next);
+        }
         newBattle();
         focusEl(frame);
       });
@@ -996,6 +1024,7 @@
       scrollActions.appendChild(closeBtn);
       scroll.appendChild(scrollTitle);
       scroll.appendChild(el('p', 'bg-scroll-text', text));
+      scroll.appendChild(el('p', 'bg-scroll-note', 'Battleground only: your bingo card is unchanged.'));
       scroll.appendChild(scrollActions);
       scrollWrap.appendChild(scroll);
       frame.appendChild(scrollWrap);
@@ -1216,10 +1245,11 @@
     }
     loadIcons(opts.unitIcons);
     // Painted unit art (unitImgs): loaded once; a failed load falls back silently.
-    if (opts.unitImgs && typeof opts.unitImgs === 'object') {
-      Object.keys(opts.unitImgs).forEach(function (key) {
+    function loadArts(map) {
+      if (!map || typeof map !== 'object') return;
+      Object.keys(map).forEach(function (key) {
         var id = ICON_ALIASES[key] || key;
-        var url = opts.unitImgs[key];
+        var url = map[key];
         if (!E.UNITS[id] || typeof url !== 'string' || !url) return;
         var art = new window.Image();
         art.onload = function () {
@@ -1231,6 +1261,7 @@
         art.src = url;
       });
     }
+    loadArts(opts.unitImgs);
     loadImage(opts.allyImg, 'ally');
     loadImage(opts.enemyImg, 'enemy');
 

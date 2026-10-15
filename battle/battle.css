@@ -70,7 +70,7 @@
 .bg-overlay .bg-title {
   margin: 0;
   padding: 0;
-  font: 700 19px/1.1 serif;
+  font: 700 19px/1.1 'Cinzel', Georgia, serif;
   color: #F5B735;
   letter-spacing: 0.04em;
   text-shadow: 0 1px 0 #000;
@@ -129,6 +129,7 @@
     line-height: 1.2;
     white-space: normal;
   }
+
 }
 
 .bg-overlay .bg-sound {
@@ -181,6 +182,7 @@
   border-bottom: 1px solid rgba(245, 183, 53, 0.25);
   background: rgba(0, 0, 0, 0.18);
   color: #E9D9AE;
+  font-family: 'Noto Serif', Georgia, serif;
   font-size: 12px;
   line-height: 22px;
   white-space: nowrap;
@@ -212,13 +214,15 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  height: 58px;
+  height: auto;
+  min-height: 58px;
   margin: 0;
   padding: 2px 12px;
   overflow: hidden;
   border-top: 1px solid rgba(245, 183, 53, 0.35);
   background: rgba(0, 0, 0, 0.28);
   color: #F3E7C9;
+  font-family: 'Noto Serif', Georgia, serif;
   font-size: 13.5px;
   line-height: 1.3;
   text-align: center;
@@ -258,15 +262,15 @@
 
 .bg-overlay .bg-casts {
   position: absolute;
-  top: 2px;
-  right: 3px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: #E95707;
+  top: 0;
+  right: 1px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: #BA2C03;
   color: #FFFFFF;
-  font: 700 11px/16px system-ui, sans-serif;
+  font: 700 10px/14px system-ui, sans-serif;
   text-align: center;
 }
 
@@ -347,7 +351,7 @@
 
 .bg-overlay .bg-scroll-title {
   margin: 0 0 8px;
-  font: 700 32px/1.1 serif;
+  font: 700 32px/1.1 'Cinzel', Georgia, serif;
   color: #7A1D02;
   letter-spacing: 0.03em;
 }
@@ -358,8 +362,16 @@
 
 .bg-overlay .bg-scroll-text {
   margin: 0 0 18px;
+  font-family: 'Noto Serif', Georgia, serif;
   font-size: 15px;
   line-height: 1.4;
+}
+
+.bg-overlay .bg-scroll-note {
+  margin: -8px 0 16px;
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.85;
 }
 
 .bg-overlay .bg-scroll-actions {
@@ -377,6 +389,13 @@
   border-color: #7A1D02;
   background: linear-gradient(180deg, #E95707, #BA2C03);
   color: #FFFFFF;
+}
+
+/* On phones the Fireball cast badge sits above the label, never over it. */
+@media (max-width: 480px) {
+  .bg-overlay .bg-btn {
+    padding: 12px 2px 2px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

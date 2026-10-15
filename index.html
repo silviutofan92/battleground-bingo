@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T024154Z">
+<meta name="build" content="bb-20261015T031625Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T024154Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T031625Z">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'">
@@ -68,6 +68,7 @@
   .start-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
   .storage-warn { margin: 10px auto 0; padding: 8px 12px; max-width: 420px; border-radius: 8px; background: #FFE6D6; color: var(--fire1); font-size: 13px; font-weight: 700; border: 1px solid var(--fire3); }
   .storage-warn[hidden] { display: none; }
+  .setup-rule { font-size: 12.5px !important; color: var(--fire1) !important; font-weight: 600; margin: -4px auto 14px !important; max-width: 380px; }
   .gate-hint { font-size: 12px; color: var(--muted); margin-top: 10px; font-style: italic; }
 
   .rules-toggle {
@@ -174,7 +175,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T024154Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T031625Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -213,7 +214,7 @@
   .log-entry .log-text { display: block; margin-top: 2px; }
   .log-entry .log-note { display: block; font-style: italic; color: var(--muted); font-size: 11.5px; margin-top: 1px; }
   .log-entry.log-remove .log-text { text-decoration: line-through; }
-  .log-empty { color: #A8936B; font-style: italic; font-size: 12px; }
+  .log-empty { color: var(--muted); font-style: italic; font-size: 12px; }
 
   /* Bingo screen-shake + reduced-motion fallback */
   @keyframes shake {
@@ -242,7 +243,7 @@
   .modal-hint { font-size: 12px; color: var(--muted); text-align: left; margin: -6px 0 12px; }
   .modal-btns { display: flex; gap: 8px; }
   .modal-btns button { font-family: 'Noto Serif', Georgia, serif; flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; }
-  .btn-confirm { background: linear-gradient(180deg, var(--fire4), var(--fire3)); color: #FFF4E0; }
+  .btn-confirm { background: linear-gradient(180deg, var(--fire3), var(--fire2)); color: #FFF4E0; }
   .btn-skip { background: #EFE4CC; color: #5A4426; }
   .modal-cancel { margin-top: 10px; background: none; border: none; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer; font-family: inherit; }
   .rules-body { font-size: 13px; line-height: 1.6; color: #4A3618; }
@@ -338,6 +339,8 @@
   .hb-gold { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-size: 13px; color: #FFE7A3; }
   .hb-gold .ic { width: 16px; height: 16px; color: var(--gold); }
   .hb-shop { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 12px; color: #FFF4E0; background: linear-gradient(180deg, var(--teal3), var(--teal2)); border: 1.5px solid var(--gold); border-radius: 8px; padding: 3px 10px; cursor: pointer; }
+  .hb-shop, .hb-levelup { position: relative; }
+  .hb-shop::after, .hb-levelup::after { content: ''; position: absolute; inset: -7px -4px; }
   .hb-shop:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .shop-purse { text-align: center; font-weight: 700; color: #8A5A12; margin: -2px 0 10px; }
   .shop-purse .ic { width: 16px; height: 16px; color: #C9962E; vertical-align: -3px; }
@@ -346,8 +349,8 @@
   .shop-row img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--fire3); object-fit: cover; grid-row: 1 / 3; }
   .shop-row b { font-family: 'Cinzel', Georgia, serif; font-size: 13.5px; color: var(--fire2); }
   .shop-meta { font-size: 12px; color: #4A3618; }
-  .shop-buy { grid-column: 3; grid-row: 1 / 3; display: flex; gap: 4px; }
-  .shop-buy button { font-family: inherit; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 7px; border: 1.5px solid var(--goldline); background: linear-gradient(180deg, #FFE7A3, var(--gold)); color: var(--fire1); cursor: pointer; }
+  .shop-buy { grid-column: 3; grid-row: 1 / 3; display: flex; gap: 6px; }
+  .shop-buy button { min-width: 40px; min-height: 40px; font-family: inherit; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 7px; border: 1.5px solid var(--goldline); background: linear-gradient(180deg, #FFE7A3, var(--gold)); color: var(--fire1); cursor: pointer; }
   .shop-buy button:disabled { opacity: 0.4; cursor: not-allowed; }
   .hb-army { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 11.5px; font-weight: 700; color: #FFE7A3; }
   .hb-army:empty { display: none; }
@@ -410,8 +413,13 @@
     .setup-banners .banner { width: 62px; }
     .setup-title { padding-top: 12px; }
     .setup-title h1 { font-size: clamp(17px, calc(12vw - 26px), 25px); }
-    .bingo-serpent { max-height: 64px; }
-    .bingo-title { font-size: 22px; }
+    .bingo-banner .bingo-serpent { display: none !important; }
+    .bingo-banner { padding: 6px 10px 8px; }
+    .bingo-title { font-size: 18px; letter-spacing: 4px; }
+    .bingo-sub { font-size: 11.5px; line-height: 1.35; }
+    .hb-wins { display: none !important; }
+    .hb-skill { width: 30px; height: 30px; }
+    .fx-toasts { top: 8px; bottom: auto; }
   }
 
   @media print {
@@ -428,13 +436,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T024154Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T031625Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T024154Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T031625Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -453,7 +461,7 @@
     <h3>Winning</h3>
     <ul>
       <li><strong>In the room:</strong> yell BINGO!</li>
-      <li><strong>Remote:</strong> post BINGO with a screenshot of your card and activity log in <strong>#fabric-compete-roadshow-central</strong> on Slack. On a phone, scroll down for the log; on a laptop, zoom out (Ctrl or Cmd and minus) until both fit.</li>
+      <li><strong>Remote:</strong> post BINGO with a screenshot of your card and activity log in <strong>#fabric-compete-roadshow-central</strong> on Slack. On a phone, scroll down for the log; on a laptop, zoom out (Ctrl or Cmd and minus) until both fit. Not in that channel? Post it in the Meet chat.</li>
       <li>Claims are checked by hand from your screenshot. If a square is rejected, play continues.</li>
     </ul>
     <h3>Bonus: blackout</h3>
@@ -462,12 +470,13 @@
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
     <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">16</span></span></div>
-    <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons, hero portraits and battle units are original art. Sounds: Heroes of Might and Magic III, streamed from the <a href="https://github.com/ZephyrVentum/HoMM3-Soundboard" target="_blank" rel="noopener">HoMM3-Soundboard</a> project.</p>
+    <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. The card's dragons and the hero portraits are original art. Battle unit sprites: Heroes of Might and Magic III, via the <a href="https://heroes.thelazy.net/" target="_blank" rel="noopener">Heroes 3 wiki</a>. Sounds: Heroes of Might and Magic III, streamed from the <a href="https://github.com/ZephyrVentum/HoMM3-Soundboard" target="_blank" rel="noopener">HoMM3-Soundboard</a> project.</p>
   </div>
 
   <h2>Enter your name, hero</h2>
   <p>Your card is shuffled from your name: everyone gets the same squares in a different order.</p>
   <input type="text" id="setup-name" placeholder="Your name" autocomplete="off" aria-label="Your name" maxlength="40">
+  <p class="setup-rule">It counts when it is said out loud or shown on screen in a session, from 10:00 Munich time. Saying it yourself does not count.</p>
   <fieldset class="hero-pick" id="hero-pick">
     <legend>Choose your hero</legend>
     <div class="hero-grid" id="hero-grid"></div>
@@ -481,7 +490,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T024154Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T031625Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -492,7 +501,7 @@
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T024154Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T031625Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
@@ -515,7 +524,7 @@
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T024154Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T031625Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -654,7 +663,7 @@ function loadState() {
   } catch (e) { return null; }
 }
 
-window.addEventListener('storage', (e) => { if (e.key === STATE_KEY) location.reload(); });
+window.addEventListener('storage', (e) => { if (e.key === STATE_KEY || e.key === storageKey('hero')) location.reload(); });
 
 // --- Munich time: the workshop clock for the log and the session picker ---
 // The ?now= clock override exists for local testing only, so nobody can forge times on the live site
@@ -952,7 +961,7 @@ function checkBingo() {
 }
 
 // --- Banner ---
-const HOW_TO_CLAIM = 'In the room: yell BINGO! Remote: post BINGO with a screenshot of your card and activity log in #fabric-compete-roadshow-central on Slack.';
+const HOW_TO_CLAIM = 'In the room: yell BINGO. Remote: post screenshots of your card and activity log in #fabric-compete-roadshow-central on Slack (or in the Meet chat).';
 function showBanner(kind, lines) {
   const banner = document.getElementById('bingo-banner');
   const img = document.getElementById('bingo-serpent');
@@ -990,7 +999,7 @@ function updateHud() {
 
 // --- Reset ---
 function resetAll() {
-  if (!confirm('Reset your card? This clears all marks, notes, and your name.')) return;
+  if (!confirm('Reset your card? This clears all marks, notes, your name and your hero (XP, gold, skills and army).')) return;
   try { localStorage.removeItem(STATE_KEY); localStorage.removeItem(TOASTS_KEY); localStorage.removeItem(storageKey('hero')); } catch (e) {}
   state.playerName = '';
   state.order = [];
@@ -1086,54 +1095,78 @@ const SND_PRELOAD = ['resources1', 'resources2', 'resources3', 'resources4', 're
   'new_week', 'lvl_up', 'learning_stone', 'mirth', 'store', 'button', 'victory_sound', 'lose_battle', 'magicblt', 'firewall', 'rust_dragon',
   'sorrow', 'bloodlust_sound', 'good_morale', 'good_luck', 'double_damage', 'cure', 'prayer', 'view', 'fortune', 'obelisk', 'anim_undead',
   'magic_well', 'blind_sound', 'dimension_door_sound', 'build_town_sound', 'firstaidtent'];
-const sndCache = {}, sndBad = {};
-const sndRetried = {};
-function sndGet(name) {
-  let a = sndCache[name];
-  if (!a) {
-    a = new Audio(SND_BASE + name + '.mp3');
-    a.preload = 'auto';
-    // One retry after a failed download (a cold CDN cache can drop the first request), then the synth fallback
-    a.addEventListener('error', () => {
-      if (sndRetried[name]) { sndBad[name] = true; return; }
-      sndRetried[name] = true;
-      delete sndCache[name];
-      setTimeout(() => { const b = sndGet(name); try { b.load(); } catch (e) {} }, 1500);
-    });
-    sndCache[name] = a;
-  }
-  return a;
+const sfxBuf = {}, sfxLoading = {}, sndBad = {}, sndTries = {};
+// Fetch and decode a game sound once; up to three tries (a cold CDN cache can drop the first request)
+function loadBuf(name) {
+  if (sfxBuf[name] || sfxLoading[name] || sndBad[name]) return;
+  const ctx = ensureAudioCtx();
+  if (!ctx) return;
+  sfxLoading[name] = true;
+  fetch(SND_BASE + name + '.mp3')
+    .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.arrayBuffer(); })
+    .then(b => new Promise((res, rej) => ctx.decodeAudioData(b, res, rej)))
+    .then(buf => { sfxBuf[name] = buf; })
+    .catch(() => {
+      sndTries[name] = (sndTries[name] || 0) + 1;
+      if (sndTries[name] >= 3) sndBad[name] = true;
+      else setTimeout(() => loadBuf(name), 2500 * sndTries[name]);
+    })
+    .then(() => { sfxLoading[name] = false; });
 }
-// Plays a game sound; false means the caller should use its synthesised fallback
+const playingSfx = new Set();
+// Plays a game sound; false means "not ready" and the caller uses its synthesised fallback this time
 function snd(name, vol) {
   if (!audioOn || sndBad[name]) return false;
+  const ctx = ensureAudioCtx();
+  const buf = sfxBuf[name];
+  if (!ctx || !buf) { loadBuf(name); return false; }
   try {
-    const base = sndGet(name);
-    const a = base.readyState >= 2 ? base.cloneNode() : base;
-    a.volume = vol == null ? 0.55 : vol;
-    if (a === base) a.currentTime = 0;
-    const p = a.play();
-    if (p && p.catch) p.catch(() => {});
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const g = ctx.createGain();
+    g.gain.value = vol == null ? 0.55 : vol;
+    src.connect(g).connect(ctx.destination);
+    src.onended = () => playingSfx.delete(src);
+    playingSfx.add(src);
+    src.start();
     return true;
   } catch (e) { return false; }
 }
-// Preload in small batches so the CDN never sees a burst of 36 requests
+// Preload in small batches so the CDN never sees a burst of requests
 function preloadSounds() {
-  SND_PRELOAD.forEach((n, i) => setTimeout(() => { const a = sndGet(n); try { a.load(); } catch (e) {} }, Math.floor(i / 6) * 350));
+  SND_PRELOAD.forEach((n, i) => setTimeout(() => loadBuf(n), Math.floor(i / 6) * 350));
 }
-let music = null;
-function musicStart(name) {
-  if (!audioOn) return;
-  musicStop();
+// One music element, unlocked during the audio tap so iOS lets it play battle music later
+let musicEl = null;
+function unlockMusic() {
+  if (musicEl) return;
+  musicEl = new Audio(SND_BASE + 'button.mp3');
+  musicEl.muted = true;
   try {
-    music = new Audio(SND_BASE + name + '.mp3');
-    music.loop = true;
-    music.volume = 0.22;
-    const p = music.play();
-    if (p && p.catch) p.catch(() => {});
-  } catch (e) { music = null; }
+    const p = musicEl.play();
+    if (p && p.then) p.then(() => { musicEl.pause(); musicEl.muted = false; }).catch(() => { musicEl.muted = false; });
+    else { musicEl.pause(); musicEl.muted = false; }
+  } catch (e) { musicEl.muted = false; }
 }
-function musicStop() { if (music) { try { music.pause(); } catch (e) {} music = null; } }
+function musicStart(name) {
+  if (!audioOn || !musicEl) return;
+  try {
+    musicEl.src = SND_BASE + name + '.mp3';
+    musicEl.loop = true;
+    musicEl.volume = 0.22;
+    musicEl.muted = false;
+    const p = musicEl.play();
+    if (p && p.catch) p.catch(() => {});
+  } catch (e) { /* no music then */ }
+}
+function musicStop() { if (musicEl) { try { musicEl.pause(); } catch (e) {} } }
+// Audio off silences everything at once: game sounds, music and any scheduled synth notes
+function stopAllSounds() {
+  playingSfx.forEach(s => { try { s.stop(); } catch (e) {} });
+  playingSfx.clear();
+  musicStop();
+  if (audioCtx && audioCtx.state === 'running') audioCtx.suspend().catch(() => {});
+}
 function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
 function maybeChirpForTile(idx) {
   if (snd('resources' + (1 + Math.floor(Math.random() * 7)))) return;
@@ -1163,8 +1196,8 @@ function toggleAudio() {
   const label = audioOn ? 'Audio on, click to disable' : 'Audio off, click to enable';
   btn.setAttribute('aria-label', label);
   btn.setAttribute('title', label);
-  if (audioOn) { ensureAudioCtx(); preloadSounds(); if (!snd('button')) sfx.pluck(NOTE.A4, 0); }
-  else musicStop();
+  if (audioOn) { ensureAudioCtx(); unlockMusic(); preloadSounds(); if (!snd('button')) sfx.pluck(NOTE.A4, 0); }
+  else stopAllSounds();
 }
 
 // --- Confetti + screen-shake: motion-aware ---
@@ -1693,10 +1726,30 @@ document.addEventListener('keydown', (e) => {
     sorcery: ['Sorcery', '', 'Your demos never crash. Mostly.', 'Your Fireball burns hotter.'],
     'first-aid': ['First Aid', '', 'You can revive a frozen demo.', 'Heals your most wounded stack each round.'],
     navigation: ['Navigation', '', 'You find OneLake on any map.', 'Your retaliation hits harder.'],
-    pathfinding: ['Pathfinding', '', 'A 260-slide deck cannot slow you down.', 'Your army starts closer to the foe.'],
-    tactics: ['Tactics', '', 'You picked the seat nearest the coffee.', 'Your army strikes first in round one.'],
+    pathfinding: ['Pathfinding', '', 'A 260-slide deck cannot slow you down.', 'Your troops move more freely.'],
+    tactics: ['Tactics', '', 'You picked the seat nearest the coffee.', 'Your army is braced for the first clash.'],
   };
   const SKILL_LEVEL = ['', 'Basic', 'Advanced', 'Expert'];
+  // What each skill does in the Battleground at Basic, Advanced and Expert (matches the battle engine's tables)
+  const SKILL_FX = {
+    logistics: ['', 'Your army gets +1 speed', 'Your army gets +2 speed', 'Your army gets +3 speed'],
+    diplomacy: ['', '5% of the foe desert before the fight', '10% of the foe desert before the fight', '15% of the foe desert before the fight'],
+    scholar: ['', 'Your spells deal +5% damage', 'Your spells deal +10% damage', 'Your spells deal +15% damage'],
+    'eagle-eye': ['', 'Your archers keep full damage up to 8 hexes', 'Your archers keep full damage up to 10 hexes', 'Your archers keep full damage up to 12 hexes'],
+    leadership: ['', '5% chance a stack acts twice', '10% chance a stack acts twice', '15% chance a stack acts twice'],
+    luck: ['', '5% chance of double damage', '10% chance of double damage', '15% chance of double damage'],
+    estates: ['', '+2 Genie Archers join you', '+4 Genie Archers join you', '+6 Genie Archers join you'],
+    wisdom: ['', '+1 Fireball cast', '+2 Fireball casts', '+3 Fireball casts'],
+    archery: ['', 'Genie Archers deal +10% damage', 'Genie Archers deal +25% damage', 'Genie Archers deal +50% damage'],
+    offense: ['', 'Melee stacks deal +10% damage', 'Melee stacks deal +20% damage', 'Melee stacks deal +30% damage'],
+    armorer: ['', 'Your stacks take 5% less damage', 'Your stacks take 10% less damage', 'Your stacks take 15% less damage'],
+    sorcery: ['', 'Fireball deals +10% damage', 'Fireball deals +20% damage', 'Fireball deals +30% damage'],
+    'first-aid': ['', 'Heals your most wounded stack 20 HP each round', 'Heals your most wounded stack 40 HP each round', 'Heals your most wounded stack 60 HP each round'],
+    navigation: ['', 'Retaliation deals +10% damage', 'Retaliation deals +20% damage', 'Retaliation deals +30% damage'],
+    pathfinding: ['', 'Your walking troops move through obstacles', 'Your walking troops move through obstacles and walk 1 hex further', 'Your walking troops move through obstacles and walk 1 hex further, and your flyers fly 1 hex further too'],
+    tactics: ['', '+1 Defense for your army in round 1', '+2 Defense for your army in round 1', '+3 Defense for your army in round 1'],
+  };
+  function fxText(id, lvl, withNow) { return SKILL_FX[id][lvl] + (withNow && lvl > 1 ? ' (now: ' + SKILL_FX[id][lvl - 1].charAt(0).toLowerCase() + SKILL_FX[id][lvl - 1].slice(1) + ')' : ''); }
   const MAX_SKILLS = 8;
   let hero = null;
   const HERO_PORTRAITS = true; // original painted portraits (approved by the owner on 15 Oct)
@@ -1770,7 +1823,7 @@ document.addEventListener('keydown', (e) => {
     document.getElementById('hb-stats').innerHTML = STATS.map((s, i) =>
       '<span title="' + s[0] + '">' + iconHtml(s[1], s[2]) + hero.stats[i] + '</span>').join('');
     document.getElementById('hb-skills').innerHTML = hero.skills.map(([id, lvl]) => {
-      const label = SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '. ' + SKILLS[id][2] + ' Battleground: ' + SKILLS[id][3];
+      const label = SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '. ' + SKILLS[id][2] + ' Battleground: ' + SKILL_FX[id][lvl] + '.';
       return '<button type="button" class="hb-skill" data-skill="' + id + '" aria-label="' + escapeHtml(label) + '" title="' + escapeHtml(label) + '">' +
         iconHtml(id) + '<span class="lvl" aria-hidden="true">' + SKILL_LEVEL[lvl][0] + '</span></button>';
     }).join('');
@@ -1779,7 +1832,7 @@ document.addEventListener('keydown', (e) => {
     const lo = XP_TABLE[xl - 1], hi = XP_TABLE[xl];
     const pct = hi === undefined ? 100 : Math.round(100 * (hero.xp - lo) / (hi - lo));
     document.getElementById('hb-xp-fill').style.width = pct + '%';
-    document.getElementById('hb-xp-text').textContent = hi === undefined ? fmtXp(hero.xp) + ' XP · max level' : fmtXp(hero.xp) + ' / ' + fmtXp(hi) + ' XP';
+    document.getElementById('hb-xp-text').textContent = hi === undefined ? fmtXp(hero.xp) + ' XP · max level' : fmtXp(hero.xp - lo) + ' / ' + fmtXp(hi - lo) + ' XP to level ' + (xl + 1);
     document.getElementById('hb-xp').setAttribute('aria-valuenow', String(pct));
     const army = [['archangels', 'angel', 'Archangels'], ['blackKnights', 'rank-skeleton-warrior', 'Black Knights'],
       ['genieArchers', 'archery', 'extra Genie Archers'], ['catalogKnights', 'knight', 'extra Catalog Knights'], ['lakeflowCavalry', 'cavalry', 'extra Lakeflow Cavalry']]
@@ -1874,7 +1927,7 @@ document.addEventListener('keydown', (e) => {
       '<p>' + escapeHtml(state.playerName || 'Your hero') + ' is a level ' + hero.level + ' ' + c.name + '. Choose a secondary skill:</p>' +
       '<div class="skill-choices">' + hero.offers.map(([id, lvl], i) =>
         '<button type="button" class="skill-choice" data-i="' + i + '"><span class="sc-icon">' + iconHtml(id, SKILLS[id][1]) + '</span>' +
-        '<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><span class="sc-joke">' + escapeHtml(SKILLS[id][2]) + ' <em>Battleground: ' + escapeHtml(SKILLS[id][3]) + '</em></span></button>').join('') +
+        '<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><span class="sc-joke">' + escapeHtml(SKILLS[id][2]) + ' <em>Battleground: ' + escapeHtml(fxText(id, lvl, true)) + '.</em></span></button>').join('') +
       '</div><button type="button" class="fx-later">Decide later</button>';
     openOverlay(html, 'chooser', (card) => {
       card.querySelectorAll('.skill-choice').forEach(b => b.addEventListener('click', () => chooseSkill(Number(b.dataset.i))));
@@ -1904,7 +1957,7 @@ document.addEventListener('keydown', (e) => {
         const btn = (n, label) => '<button type="button" data-buy="' + s.key + '" data-n="' + n + '"' + (n < 1 || afford < n ? ' disabled' : '') + '>' + label + '</button>';
         return '<div class="shop-row"><img src="assets/unit-' + s.art + '.webp?v=' + BUILD + '" alt="" width="128" height="128">' +
           '<b>' + s.name + '</b><span class="shop-meta">' + fmtXp(s.cost) + ' gold each · recruited ' + bought + '/' + s.cap + '</span>' +
-          '<span class="shop-buy">' + btn(1, '+1') + (s.cap >= 5 ? btn(Math.min(5, left), '+5') : '') + btn(afford, 'Max') + '</span></div>';
+          '<span class="shop-buy">' + btn(1, '+1') + (s.cap >= 5 ? btn(Math.min(5, left), '+' + Math.max(1, Math.min(5, left))) : '') + btn(afford, 'Max') + '</span></div>';
       }).join('') + '</div>' +
       '<p>Recruits join every Battleground from now on.</p><button type="button" class="fx-btn shop-done">Done</button>';
   }
@@ -1935,7 +1988,8 @@ document.addEventListener('keydown', (e) => {
     const b = e.target.closest('.hb-skill');
     if (!b || !hero) return;
     const id = b.dataset.skill, lvl = skillLevel(id);
-    toast('<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><br>' + escapeHtml(SKILLS[id][2]) + '<br>Battleground: ' + escapeHtml(SKILLS[id][3]), 5000);
+    toast('<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><br>' + escapeHtml(SKILLS[id][2]) + '<br>Battleground: ' + escapeHtml(SKILL_FX[id][lvl]) + '.' +
+      (lvl < 3 ? '<br>Next, ' + SKILL_LEVEL[lvl + 1] + ': ' + escapeHtml(SKILL_FX[id][lvl + 1]) + '.' : '<br>Mastered.'), 6000);
   });
 
   function loadHeroFor(clsId) {
@@ -1982,20 +2036,31 @@ document.addEventListener('keydown', (e) => {
       name: state.playerName, className: c.name, level: hero.level,
     };
   }
+  // Every battle counts once, from its own victory or defeat event (so "Play again" counts too)
+  function recordBattle(result) {
+    if (!hero) return;
+    hero.battles++;
+    if (result === 'ally') {
+      hero.wins++;
+      let bonus = 0;
+      if (hero.battleXpWins < XP.battleMax) { hero.battleXpWins++; bonus = XP.battle; }
+      syncLevels(false, bonus, GOLD.battle);
+    } else { saveHero(); renderHero(); }
+  }
+  function battleEvent(e) {
+    if (!e) return;
+    if (e.type === 'victory') recordBattle('ally');
+    else if (e.type === 'defeat') recordBattle('enemy');
+    battleSound(e);
+  }
   function onBattleClose(r) {
+    lastLayerCloseAt = Date.now();
     musicStop();
     const result = r && r.result;
-    if (hero && (result === 'ally' || result === 'enemy')) { hero.battles++; saveHero(); }
     if (result === 'ally') {
-      if (hero) {
-        hero.wins++;
-        let bonus = 0;
-        if (hero.battleXpWins < XP.battleMax) { hero.battleXpWins++; bonus = XP.battle; }
-        syncLevels(false, bonus, GOLD.battle);
-      }
-      toast('<b>Victory!</b><br>The Teal Dragon retreats from the Battleground.', 5000);
+      toast('<b>Victory in the Battleground!</b><br>The Teal Dragon retreats. Your bingo card is unchanged.', 5000);
     } else if (result === 'enemy') {
-      toast('<b>Your army was routed.</b><br>Mark more squares, grow stronger, and return.', 5000);
+      toast('<b>Your army was routed.</b><br>Your bingo card is unchanged. Mark more squares, grow stronger, and return.', 5000);
     }
   }
   // Unit art for the battle: standalone SVGs cut from the game-icons.net sprite (the battle tints them)
@@ -2027,25 +2092,35 @@ document.addEventListener('keydown', (e) => {
     }
     return out;
   }
-  // Painted unit art (original, generated for this page); keys listed here once their files ship in assets/
+  // Battle unit sprites from Heroes of Might and Magic III (the owner's decision), one standing frame per creature
   const UNIT_ART = { genieArchers: 'genie-archers', catalogKnights: 'catalog-knights', lakeflowCavalry: 'lakeflow-cavalry',
     archangels: 'archangels', blackKnights: 'black-knights', ballista: 'ballista', firstAidTent: 'first-aid-tent',
-    wraiths: 'wraiths', golems: 'golems', shades: 'shades' };
+    wraiths: 'wraiths', golems: 'golems', shades: 'shades', wyverns: 'wyverns', hydras: 'hydras',
+    redDragon: 'red-dragon', tealDragon: 'teal-dragon' };
   function unitImgs() {
     const out = {};
     Object.entries(UNIT_ART).forEach(([k, f]) => { out[k] = 'assets/unit-' + f + '.webp?v=' + BUILD; });
     return out;
   }
+  // Fresh battle settings each time (also used by "Play again"): first battle a little easier, then bolder with every win
+  function battleParams() {
+    return {
+      hero: heroForBattle(), unitIcons: unitIcons(), unitImgs: unitImgs(),
+      difficulty: hero ? Math.min(1.6, 0.85 + 0.12 * hero.wins) : 1,
+      battleNumber: hero ? hero.battles + 1 : 1,
+    };
+  }
   function openBattle() {
     if (!BATTLE_ON) { toast('<b>The Grail is not yet uncovered.</b><br>Visit more obelisks and come back later today.', 5000); return; }
+    if (!['Lunch', 'Coffee', 'General', 'Other'].includes(currentSession())) {
+      toast('<b>To battle!</b><br>Squares said during the fight can still be marked afterwards.', 4500);
+    }
     loadBattle().then(() => {
       window.Battleground.open({
         allyImg: 'assets/red-crest.webp?v=' + BUILD, enemyImg: 'assets/teal-tower.webp?v=' + BUILD,
-        hero: heroForBattle(), unitIcons: unitIcons(), unitImgs: unitImgs(), onClose: onBattleClose,
-        // First battle a little easier, then the host grows bolder with every victory
-        difficulty: hero ? Math.min(1.6, 0.85 + 0.12 * hero.wins) : 1,
-        battleNumber: hero ? hero.battles + 1 : 1,
-        onEvent: battleSound,
+        ...battleParams(), onClose: onBattleClose,
+        nextBattle: battleParams,
+        onEvent: battleEvent,
         sound: { on: audioOn, toggle: () => { toggleAudio(); return audioOn; } },
       });
     }).catch(() => toast('<b>The Battleground is out of reach.</b><br>Check your connection and try again.', 5000));
@@ -2068,7 +2143,7 @@ document.addEventListener('keydown', (e) => {
     if (r) r.checked = true;
     if (state.playerName) { renderGrid(); renderLog(); }
     renderHero();
-  }).catch(() => { /* emoji fallback stays */ });
+  }).catch(() => { /* icons stay blank if the sprite cannot load; all text remains */ });
 
   // Tavern rumours: tapping the teal dragon hints at a word of power not yet found
   const RUMOURS = {
