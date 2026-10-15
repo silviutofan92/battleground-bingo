@@ -118,7 +118,11 @@
         archangels: clampInt(army.archangels, 0, 99),
         blackKnights: clampInt(army.blackKnights, 0, 99),
         ballista: !!army.ballista,
-        firstAidTent: !!army.firstAidTent
+        firstAidTent: !!army.firstAidTent,
+        // Recruits bought in the shop join the existing ally stacks.
+        genieArchers: clampInt(army.genieArchers, 0, 99),
+        catalogKnights: clampInt(army.catalogKnights, 0, 99),
+        lakeflowCavalry: clampInt(army.lakeflowCavalry, 0, 99)
       },
       buffs: {
         morale: clampInt(buffs.morale, 0, 3),
@@ -596,6 +600,7 @@
         count = Math.max(count, Math.ceil(UNITS.tealDragon.hp / u.hp));
       }
       if (slot.type === 'genieArchers') count += ESTATES[hero.skills.estates];
+      if (u.side === 'ally' && hero.army[slot.type] > 0) count += hero.army[slot.type];
       addStack(slot.type, count, fromOffset(u.side === 'ally' ? fwd : COLS - 1, slot.row));
     });
 

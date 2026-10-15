@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T022346Z">
+<meta name="build" content="bb-20261015T024154Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T022346Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T024154Z">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'">
@@ -174,7 +174,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T022346Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T024154Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -335,6 +335,20 @@
   .hb-skill { position: relative; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border-radius: 6px; background: rgba(245,183,53,0.16); border: 1px solid rgba(245,183,53,0.45); color: #FFE7A3; cursor: pointer; }
   .hb-skill .ic { width: 18px; height: 18px; }
   .hb-skill .lvl { position: absolute; right: -4px; bottom: -4px; min-width: 13px; height: 13px; padding: 0 2px; border-radius: 7px; background: var(--fire3); color: #FFF4E0; font-size: 8.5px; font-weight: 700; line-height: 12px; text-align: center; border: 1px solid #FFE7A3; }
+  .hb-gold { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; font-size: 13px; color: #FFE7A3; }
+  .hb-gold .ic { width: 16px; height: 16px; color: var(--gold); }
+  .hb-shop { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 12px; color: #FFF4E0; background: linear-gradient(180deg, var(--teal3), var(--teal2)); border: 1.5px solid var(--gold); border-radius: 8px; padding: 3px 10px; cursor: pointer; }
+  .hb-shop:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .shop-purse { text-align: center; font-weight: 700; color: #8A5A12; margin: -2px 0 10px; }
+  .shop-purse .ic { width: 16px; height: 16px; color: #C9962E; vertical-align: -3px; }
+  .shop-rows { display: grid; gap: 8px; margin-bottom: 12px; text-align: left; }
+  .shop-row { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 4px 10px; padding: 8px; border: 1.5px solid var(--line); border-radius: 10px; background: #FFFDF7; }
+  .shop-row img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--fire3); object-fit: cover; grid-row: 1 / 3; }
+  .shop-row b { font-family: 'Cinzel', Georgia, serif; font-size: 13.5px; color: var(--fire2); }
+  .shop-meta { font-size: 12px; color: #4A3618; }
+  .shop-buy { grid-column: 3; grid-row: 1 / 3; display: flex; gap: 4px; }
+  .shop-buy button { font-family: inherit; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 7px; border: 1.5px solid var(--goldline); background: linear-gradient(180deg, #FFE7A3, var(--gold)); color: var(--fire1); cursor: pointer; }
+  .shop-buy button:disabled { opacity: 0.4; cursor: not-allowed; }
   .hb-army { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 11.5px; font-weight: 700; color: #FFE7A3; }
   .hb-army:empty { display: none; }
   .hb-army-label { font-family: 'Cinzel', Georgia, serif; color: var(--gold); font-size: 11px; }
@@ -414,13 +428,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T022346Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T024154Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T022346Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T024154Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -434,7 +448,7 @@
       <li>Pick the <strong>session</strong> and note <strong>who said it</strong>. The time is stamped for you, in Munich time. That is your evidence.</li>
       <li>It counts when it is <strong>said out loud or shown on screen</strong> in a session (the chat does not count). Marks count from 10:00 Munich time.</li>
       <li>The centre square is <strong>free</strong>.</li>
-      <li>Your hero earns <strong>XP</strong>: 400 per square, 800 per completed line, 2,000 for a blackout, and 500 per Battleground win (first five). Levels follow the game's experience table.</li>
+      <li>Your hero earns <strong>XP</strong>: 400 per square, 800 per completed line, 2,000 for a blackout, and 500 per Battleground win (first five). Levels follow the game's experience table. Squares, lines and wins also pay <strong>gold</strong>: tap Recruit to buy troops for the Battleground.</li>
     </ul>
     <h3>Winning</h3>
     <ul>
@@ -448,7 +462,7 @@
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
     <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">16</span></span></div>
-    <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons, hero portraits and battle units are original art.</p>
+    <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons, hero portraits and battle units are original art. Sounds: Heroes of Might and Magic III, streamed from the <a href="https://github.com/ZephyrVentum/HoMM3-Soundboard" target="_blank" rel="noopener">HoMM3-Soundboard</a> project.</p>
   </div>
 
   <h2>Enter your name, hero</h2>
@@ -467,7 +481,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T022346Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T024154Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -478,7 +492,7 @@
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T022346Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T024154Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
@@ -488,18 +502,20 @@
       <div class="hb-row">
         <div class="hb-who" id="hb-who"></div>
         <div class="hb-stats" id="hb-stats"></div>
-        <span class="hb-wins" id="hb-wins"></span>
-        <button type="button" class="hb-levelup" id="hb-levelup" hidden>Level up! Choose a skill</button>
+        <span class="hb-gold" id="hb-gold" title="Gold"></span>
+        <button type="button" class="hb-shop" id="hb-shop">Recruit</button>
+        <button type="button" class="hb-levelup" id="hb-levelup" hidden title="Choose a new skill">Level up!</button>
       </div>
       <div class="hb-row">
       <div class="hb-xp" id="hb-xp" role="progressbar" aria-label="Experience" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hb-xp-fill" id="hb-xp-fill"></div><span class="hb-xp-text" id="hb-xp-text"></span></div>
         <div class="hb-skills" id="hb-skills"></div>
         <div class="hb-army" id="hb-army"></div>
+        <span class="hb-wins" id="hb-wins"></span>
       </div>
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T022346Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T024154Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -1064,7 +1080,63 @@ const sfx = {
   gallop() { [0, 0.18, 0.5, 0.68, 1.0, 1.18].forEach(s => { tone(420, s, 0.08, { type: 'square', vol: 0.05, cutoff: 1800 }); tone(300, s + 0.06, 0.08, { type: 'square', vol: 0.04, cutoff: 1500 }); }); },
   choir() { [NOTE.D5, NOTE.Fs5, NOTE.A5].forEach(f => { tone(f, 0, 1.6, { type: 'sine', vol: 0.05, attack: 0.25, cutoff: 9000 }); tone(f, 0, 1.6, { type: 'sine', vol: 0.03, attack: 0.25, cutoff: 9000, detune: 9 }); }); },
 };
+// Game sounds: streamed from the HoMM3-Soundboard project (GitHub, pinned commit) through jsDelivr.
+const SND_BASE = 'https://cdn.jsdelivr.net/gh/ZephyrVentum/HoMM3-Soundboard@03c325c3914e4d76f04d892bee0086c9eea8cc81/app/src/main/res/raw/';
+const SND_PRELOAD = ['resources1', 'resources2', 'resources3', 'resources4', 'resources5', 'resources6', 'resources7', 'chest', 'grail',
+  'new_week', 'lvl_up', 'learning_stone', 'mirth', 'store', 'button', 'victory_sound', 'lose_battle', 'magicblt', 'firewall', 'rust_dragon',
+  'sorrow', 'bloodlust_sound', 'good_morale', 'good_luck', 'double_damage', 'cure', 'prayer', 'view', 'fortune', 'obelisk', 'anim_undead',
+  'magic_well', 'blind_sound', 'dimension_door_sound', 'build_town_sound', 'firstaidtent'];
+const sndCache = {}, sndBad = {};
+const sndRetried = {};
+function sndGet(name) {
+  let a = sndCache[name];
+  if (!a) {
+    a = new Audio(SND_BASE + name + '.mp3');
+    a.preload = 'auto';
+    // One retry after a failed download (a cold CDN cache can drop the first request), then the synth fallback
+    a.addEventListener('error', () => {
+      if (sndRetried[name]) { sndBad[name] = true; return; }
+      sndRetried[name] = true;
+      delete sndCache[name];
+      setTimeout(() => { const b = sndGet(name); try { b.load(); } catch (e) {} }, 1500);
+    });
+    sndCache[name] = a;
+  }
+  return a;
+}
+// Plays a game sound; false means the caller should use its synthesised fallback
+function snd(name, vol) {
+  if (!audioOn || sndBad[name]) return false;
+  try {
+    const base = sndGet(name);
+    const a = base.readyState >= 2 ? base.cloneNode() : base;
+    a.volume = vol == null ? 0.55 : vol;
+    if (a === base) a.currentTime = 0;
+    const p = a.play();
+    if (p && p.catch) p.catch(() => {});
+    return true;
+  } catch (e) { return false; }
+}
+// Preload in small batches so the CDN never sees a burst of 36 requests
+function preloadSounds() {
+  SND_PRELOAD.forEach((n, i) => setTimeout(() => { const a = sndGet(n); try { a.load(); } catch (e) {} }, Math.floor(i / 6) * 350));
+}
+let music = null;
+function musicStart(name) {
+  if (!audioOn) return;
+  musicStop();
+  try {
+    music = new Audio(SND_BASE + name + '.mp3');
+    music.loop = true;
+    music.volume = 0.22;
+    const p = music.play();
+    if (p && p.catch) p.catch(() => {});
+  } catch (e) { music = null; }
+}
+function musicStop() { if (music) { try { music.pause(); } catch (e) {} music = null; } }
+function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
 function maybeChirpForTile(idx) {
+  if (snd('resources' + (1 + Math.floor(Math.random() * 7)))) return;
   if (!audioOn) return;
   let pos = state.order.indexOf(idx);
   if (pos >= 12) pos++;
@@ -1074,6 +1146,7 @@ function maybeChirpForTile(idx) {
 }
 function maybeFanfare(kind) {
   if (!audioOn) return;
+  if (snd(kind === 'blackout' ? 'grail' : 'chest', 0.75)) return;
   if (kind === 'blackout') {
     [[NOTE.D4, 0, 0.22], [NOTE.A4, 0.2, 0.22], [NOTE.D5, 0.4, 0.22], [NOTE.Fs5, 0.6, 0.22], [NOTE.A5, 0.8, 0.9]].forEach(([f, s, d]) => sfx.brass(f, s, d));
     [NOTE.D5, NOTE.Fs5, NOTE.A5].forEach(f => sfx.brass(f, 1.0, 1.1));
@@ -1090,7 +1163,8 @@ function toggleAudio() {
   const label = audioOn ? 'Audio on, click to disable' : 'Audio off, click to enable';
   btn.setAttribute('aria-label', label);
   btn.setAttribute('title', label);
-  if (audioOn) { ensureAudioCtx(); sfx.pluck(NOTE.A4, 0); }
+  if (audioOn) { ensureAudioCtx(); preloadSounds(); if (!snd('button')) sfx.pluck(NOTE.A4, 0); }
+  else musicStop();
 }
 
 // --- Confetti + screen-shake: motion-aware ---
@@ -1295,6 +1369,7 @@ document.addEventListener('keydown', (e) => {
   const timers = new Set();
   let lastFocus = null;
 
+  function cue(name, fallback, vol) { if (!snd(name, vol) && fallback) fallback(); }
   function later(fn, ms) {
     const t = setTimeout(() => { timers.delete(t); fn(); }, ms);
     timers.add(t);
@@ -1342,7 +1417,7 @@ document.addEventListener('keydown', (e) => {
     list.push(m);
     writeJSON(TOASTS_KEY, list);
     const wait = Math.max(0, lastBingoAt + 10000 - Date.now());
-    later(() => { toast('<b>Astrologers proclaim Week of ' + ASTRO[m][0] + '!</b><br>' + ASTRO[m][1], 5500); sfx.bells(); }, wait);
+    later(() => { toast('<b>Astrologers proclaim Week of ' + ASTRO[m][0] + '!</b><br>' + ASTRO[m][1], 5500); cue('new_week', sfx.bells); }, wait);
   });
 
   // Cheat codes: original game / expansion spellings of the same effect
@@ -1477,8 +1552,9 @@ document.addEventListener('keydown', (e) => {
   }
 
   function fxGold() {
-    sfx.coins();
-    toast('<b>+100,000 gold</b><br>and 100 each of wood, ore, mercury, sulfur, crystal and gems. A shrubbery, at last.', 5000);
+    cue('chest', sfx.coins);
+    if (hero) { hero.gold = Math.min(GOLD.max, hero.gold + 100000); saveHero(); renderHero(); floatXp(0, 100000); }
+    toast('<b>+100,000 gold</b><br>A shrubbery, at last. Spend it on troops: tap Recruit.', 5000);
     if (!motionOK()) return;
     for (let i = 0; i < 26; i++) {
       const s = sprite('fx-coin', iconHtml('gold'));
@@ -1494,42 +1570,44 @@ document.addEventListener('keydown', (e) => {
   function armyAdd(key, n, cap) { if (!hero) return; hero.army[key] = Math.min(cap, (hero.army[key] || 0) + n); saveHero(); renderHero(); }
   function buffSet(key, v) { if (!hero) return; hero.buffs[key] = Math.max(hero.buffs[key] || 0, v); saveHero(); }
   function fxKnights() {
-    armyAdd('blackKnights', 10, 50); sfx.clash();
+    armyAdd('blackKnights', 10, 50); cue('anim_undead', sfx.clash);
     toast('<b>10 Black Knights join your army.</b><br>\'Tis but a scratch. They fight in your next Battleground.', 5000);
   }
   function fxSpells() {
-    buffSet('extraCasts', Math.min(9, ((hero && hero.buffs.extraCasts) || 0) + 3)); sfx.fire();
+    buffSet('extraCasts', Math.min(9, ((hero && hero.buffs.extraCasts) || 0) + 3)); cue('magic_well', sfx.fire);
     toast('<b>All spells learned. 999 mana.</b><br>+3 Fireball casts in the Battleground.', 5000);
   }
   function fxFog() {
+    cue('blind_sound');
     document.documentElement.classList.add('fogged');
     later(() => document.documentElement.classList.remove('fogged'), 5000);
     toast('<b>Ignorance is bliss.</b><br>The fog of war rolls in for a few seconds.', 4500);
   }
   function fxGallop() {
-    buffSet('speed', 2); sfx.gallop();
+    buffSet('speed', 2); cue('dimension_door_sound', sfx.gallop);
     toast('<b>Unlimited movement!</b><br>Two coconuts, clip-clop. Your army is faster in the Battleground.', 5000);
   }
   function fxMorale() {
-    buffSet('morale', 3); sfx.harpUp();
+    buffSet('morale', 3); cue('good_morale', sfx.harpUp);
     toast('<b>Morale is maximum.</b><br>And there was much rejoicing. Your stacks act twice more often.', 5000);
   }
   function fxLuck() {
-    buffSet('luck', 3); sfx.coins();
+    buffSet('luck', 3); cue('good_luck', sfx.coins);
     toast('<b>Luck is maximum.</b><br>Follow the white rabbit. Double damage comes more often.', 5000);
   }
   function fxCastle() {
     buffSet('defense', 2);
+    cue('build_town_sound');
     document.querySelector('.game-main').classList.add('castled');
     toast('<b>Every structure is built.</b><br>It is only a model, but your army is fortified (+2 Defense).', 5000);
   }
   function fxMachines() {
     if (hero) { hero.army.ballista = true; hero.army.firstAidTent = true; saveHero(); renderHero(); }
-    sfx.clash();
+    cue('firstaidtent', sfx.clash);
     toast('<b>A Ballista and a First Aid Tent join your army.</b><br>Blessed by the holy hand grenade of Antioch.', 5000);
   }
   function fxAngels() {
-    sfx.choir();
+    cue('prayer', sfx.choir);
     armyAdd('archangels', 5, 25);
     toast('<b>5 Archangels join your army.</b><br>They fight in your next Battleground. The Teal Dragon looks nervous.', 5000);
     if (!motionOK()) return;
@@ -1542,6 +1620,7 @@ document.addEventListener('keydown', (e) => {
   }
 
   function fxFakeVictory() {
+    cue('victory_sound');
     openOverlay(
       '<div class="fx-stamp" aria-hidden="true">CHEAT</div>' +
       '<h3 id="fx-title">VICTORY?</h3>' +
@@ -1550,7 +1629,7 @@ document.addEventListener('keydown', (e) => {
   }
 
   function fxDefeat() {
-    sfx.doom();
+    cue('lose_battle', sfx.doom);
     openOverlay(
       '<img src="assets/teal-spellbook.webp?v=' + BUILD + '" alt="" width="185" height="300">' +
       '<h3 id="fx-title">Defeated</h3>' +
@@ -1559,6 +1638,7 @@ document.addEventListener('keydown', (e) => {
   }
 
   function fxReveal() {
+    cue('view');
     const g = getGridBooleans();
     const lines = [];
     for (let r = 0; r < 5; r++) lines.push([0, 1, 2, 3, 4].map(c => r * 5 + c));
@@ -1576,11 +1656,13 @@ document.addEventListener('keydown', (e) => {
   function fxLevelUp() { heroCheatLevel(); }
 
   function fxBright() {
+    cue('fortune');
     const on = document.documentElement.classList.toggle('phisher');
     toast(on ? '<b>Colours turned up.</b><br>Use the same words again to turn them down.' : '<b>Colours back to normal.</b>', 3500);
   }
 
   function fxGrail() {
+    cue('obelisk');
     if (BATTLE_ON) { openBattle(); return; }
     toast('<b>The Grail is not yet uncovered.</b><br>Visit more obelisks and come back later today.', 5000);
   }
@@ -1627,6 +1709,14 @@ document.addEventListener('keydown', (e) => {
   // Experience: each square (counted once, by the most squares ever marked), each newly completed line,
   // the blackout, and the first five battle wins. Levels follow the HoMM3 hero experience table.
   const XP = { square: 400, line: 800, blackout: 2000, battle: 500, battleMax: 5 };
+  const GOLD = { square: 500, line: 1000, blackout: 2500, battle: 750, max: 999999 };
+  // The Recruit shop: extra troops for the Battleground (costs per creature, caps per hero)
+  const SHOP = [
+    { key: 'genieArchers', name: 'Genie Archers', art: 'genie-archers', cost: 100, cap: 20 },
+    { key: 'catalogKnights', name: 'Catalog Knights', art: 'catalog-knights', cost: 250, cap: 12 },
+    { key: 'lakeflowCavalry', name: 'Lakeflow Cavalry', art: 'lakeflow-cavalry', cost: 1000, cap: 4 },
+    { key: 'archangels', name: 'Archangel', art: 'archangels', cost: 3000, cap: 3 },
+  ];
   const XP_TABLE = [0, 1000, 2000, 3200, 4600, 6200, 8000, 10000, 12200, 14700, 17500, 20600, 24320, 28784, 34140, 40567];
   function levelForXp(xp) { let l = 1; while (l < XP_TABLE.length && xp >= XP_TABLE[l]) l++; return l; }
   function fmtXp(n) { return Number(n).toLocaleString('en-GB'); }
@@ -1647,12 +1737,19 @@ document.addEventListener('keydown', (e) => {
     if (!x.army || typeof x.army !== 'object') x.army = {};
     if (!x.buffs || typeof x.buffs !== 'object') x.buffs = {};
     if (!Number.isInteger(x.battles)) x.battles = 0;
+    if (!x.bought || typeof x.bought !== 'object') x.bought = {};
+    if (!Number.isInteger(x.goldSquares) || !Number.isInteger(x.gold)) {
+      // Heroes saved before gold existed are paid for what they already earned
+      x.goldSquares = Math.max(0, (x.maxMarks - 1) * GOLD.square);
+      x.gold = x.goldSquares + x.lines.length * GOLD.line + (x.blackoutXp ? GOLD.blackout : 0) + x.wins * GOLD.battle;
+    }
     return x;
   }
   function newHero(clsId) {
     const c = classById(clsId);
     return { v: 1, cls: c.id, stats: c.stats.slice(), level: 1, maxMarks: 1, cheatLevels: 0, pending: 0, skills: [], offers: null, wins: 0,
-      xp: 0, squareXp: 0, lines: [], blackoutXp: false, battleXpWins: 0, army: {}, buffs: {}, battles: 0 };
+      xp: 0, squareXp: 0, lines: [], blackoutXp: false, battleXpWins: 0, army: {}, buffs: {}, battles: 0,
+      gold: 0, goldSquares: 0, bought: {} };
   }
   function saveHero() { if (hero) writeJSON(HERO_KEY, hero); }
   function selectedClass() { const r = document.querySelector('input[name="hero-class"]:checked'); return r ? r.value : 'warlock'; }
@@ -1684,15 +1781,18 @@ document.addEventListener('keydown', (e) => {
     document.getElementById('hb-xp-fill').style.width = pct + '%';
     document.getElementById('hb-xp-text').textContent = hi === undefined ? fmtXp(hero.xp) + ' XP · max level' : fmtXp(hero.xp) + ' / ' + fmtXp(hi) + ' XP';
     document.getElementById('hb-xp').setAttribute('aria-valuenow', String(pct));
-    const army = [['archangels', 'angel', 'Archangels'], ['blackKnights', 'rank-skeleton-warrior', 'Black Knights']]
+    const army = [['archangels', 'angel', 'Archangels'], ['blackKnights', 'rank-skeleton-warrior', 'Black Knights'],
+      ['genieArchers', 'archery', 'extra Genie Archers'], ['catalogKnights', 'knight', 'extra Catalog Knights'], ['lakeflowCavalry', 'cavalry', 'extra Lakeflow Cavalry']]
       .filter(([k]) => hero.army[k] > 0)
-      .map(([k, ic, name]) => '<span class="hb-unit" title="' + hero.army[k] + ' ' + name + ' join your next Battleground">' + iconHtml(ic) + hero.army[k] + '</span>');
+      .map(([k, ic, name]) => '<span class="hb-unit" title="' + hero.army[k] + ' ' + name + ' join your next Battleground">' + iconHtml(ic) + (k === 'archangels' || k === 'blackKnights' ? '' : '+') + hero.army[k] + '</span>');
     if (hero.army.ballista) army.push('<span class="hb-unit" title="A Ballista joins your next Battleground">' + iconHtml('archery') + 'Ballista</span>');
     if (hero.army.firstAidTent) army.push('<span class="hb-unit" title="A First Aid Tent joins your next Battleground">' + iconHtml('first-aid') + 'Tent</span>');
     document.getElementById('hb-army').innerHTML = army.length ? '<span class="hb-army-label">Army</span>' + army.join('') : '';
+    document.getElementById('hb-gold').innerHTML = iconHtml('gold') + fmtXp(hero.gold);
     const btn = document.getElementById('hb-levelup');
     btn.hidden = hero.pending === 0;
-    btn.textContent = hero.pending > 1 ? 'Level up! Choose ' + hero.pending + ' skills' : 'Level up! Choose a skill';
+    btn.textContent = hero.pending > 1 ? 'Level up! ×' + hero.pending : 'Level up!';
+    btn.title = hero.pending > 1 ? 'Choose ' + hero.pending + ' new skills' : 'Choose a new skill';
   }
 
   function pickStat(c) {
@@ -1708,38 +1808,41 @@ document.addEventListener('keydown', (e) => {
     hero.stats[s]++;
     hero.pending++;
     if (!quiet) {
-      sfx.harpUp();
+      cue('lvl_up', sfx.harpUp);
       toast('<b>' + escapeHtml(state.playerName || 'Your hero') + ' is now a level ' + hero.level + ' ' + c.name + '!</b><br>+1 ' + STATS[s][0] + '. Tap "Level up!" to choose a skill.', 5500);
     }
   }
   // XP is never paid twice: squares by the most ever marked, each line once, the blackout once
-  function syncLevels(quiet, extraXp) {
+  function syncLevels(quiet, extraXp, extraGold) {
     if (!hero) return;
     hero.maxMarks = Math.max(hero.maxMarks, markedCount());
-    let gained = extraXp || 0;
+    let gained = extraXp || 0, gainedGold = extraGold || 0;
     const squareXp = (hero.maxMarks - 1) * XP.square;
     if (squareXp > hero.squareXp) { gained += squareXp - hero.squareXp; hero.squareXp = squareXp; }
-    for (const line of getBingoLines()) { if (!hero.lines.includes(line)) { hero.lines.push(line); gained += XP.line; } }
-    if (isBlackout() && !hero.blackoutXp) { hero.blackoutXp = true; gained += XP.blackout; }
+    const squareGold = (hero.maxMarks - 1) * GOLD.square;
+    if (squareGold > hero.goldSquares) { gainedGold += squareGold - hero.goldSquares; hero.goldSquares = squareGold; }
+    for (const line of getBingoLines()) { if (!hero.lines.includes(line)) { hero.lines.push(line); gained += XP.line; gainedGold += GOLD.line; } }
+    if (isBlackout() && !hero.blackoutXp) { hero.blackoutXp = true; gained += XP.blackout; gainedGold += GOLD.blackout; }
     hero.xp += gained;
+    hero.gold = Math.min(GOLD.max, hero.gold + gainedGold);
     const want = levelForXp(hero.xp) + hero.cheatLevels;
     while (hero.level < want) gainLevel(quiet);
     saveHero();
     renderHero();
-    if (gained && !quiet) floatXp(gained);
+    if ((gained || gainedGold) && !quiet) floatXp(gained, gainedGold);
   }
-  function floatXp(n) {
+  function floatXp(n, g) {
     const bar = document.getElementById('hero-bar');
     const f = document.createElement('div');
     f.className = 'xp-float fx-sprite-xp';
-    f.textContent = '+' + fmtXp(n) + ' XP';
+    f.textContent = [n ? '+' + fmtXp(n) + ' XP' : '', g ? '+' + fmtXp(g) + ' gold' : ''].filter(Boolean).join(' · ');
     f.setAttribute('aria-hidden', 'true');
     bar.appendChild(f);
     later(() => f.remove(), 1500);
   }
   window.bbXpPreview = function () {
     if (!hero) return '';
-    return markedCount() + 1 > hero.maxMarks ? '+' + fmtXp(XP.square) + ' XP' : 'no new XP';
+    return markedCount() + 1 > hero.maxMarks ? '+' + fmtXp(XP.square) + ' XP · +' + fmtXp(GOLD.square) + ' gold' : 'no new XP or gold';
   };
   function heroCheatLevel() {
     if (!hero) return;
@@ -1788,10 +1891,45 @@ document.addEventListener('keydown', (e) => {
     saveHero();
     renderHero();
     closeOverlay();
-    sfx.pluck(NOTE.A4, 0); sfx.pluck(NOTE.D5, 0.08);
+    cue('learning_stone', () => { sfx.pluck(NOTE.A4, 0); sfx.pluck(NOTE.D5, 0.08); });
     if (hero.pending > 0) toast('<b>Another level awaits.</b><br>Tap "Level up!" again to choose.', 3500);
   }
   document.getElementById('hb-levelup').addEventListener('click', openChooser);
+  function shopHtml() {
+    return '<h3 id="fx-title">Recruit troops</h3>' +
+      '<div class="shop-purse">' + iconHtml('gold') + ' ' + fmtXp(hero.gold) + ' gold</div>' +
+      '<div class="shop-rows">' + SHOP.map(s => {
+        const bought = hero.bought[s.key] || 0, left = s.cap - bought;
+        const afford = Math.min(left, Math.floor(hero.gold / s.cost));
+        const btn = (n, label) => '<button type="button" data-buy="' + s.key + '" data-n="' + n + '"' + (n < 1 || afford < n ? ' disabled' : '') + '>' + label + '</button>';
+        return '<div class="shop-row"><img src="assets/unit-' + s.art + '.webp?v=' + BUILD + '" alt="" width="128" height="128">' +
+          '<b>' + s.name + '</b><span class="shop-meta">' + fmtXp(s.cost) + ' gold each · recruited ' + bought + '/' + s.cap + '</span>' +
+          '<span class="shop-buy">' + btn(1, '+1') + (s.cap >= 5 ? btn(Math.min(5, left), '+5') : '') + btn(afford, 'Max') + '</span></div>';
+      }).join('') + '</div>' +
+      '<p>Recruits join every Battleground from now on.</p><button type="button" class="fx-btn shop-done">Done</button>';
+  }
+  function wireShop(card) {
+    card.querySelector('.shop-done').addEventListener('click', closeOverlay);
+    card.querySelectorAll('[data-buy]').forEach(b => b.addEventListener('click', () => buy(b.dataset.buy, Number(b.dataset.n))));
+  }
+  function buy(key, n) {
+    const s = SHOP.find(x => x.key === key);
+    if (!hero || !s || n < 1) return;
+    const bought = hero.bought[key] || 0;
+    if (bought + n > s.cap || hero.gold < s.cost * n) return;
+    hero.gold -= s.cost * n;
+    hero.bought[key] = bought + n;
+    hero.army[key] = (hero.army[key] || 0) + n;
+    saveHero();
+    renderHero();
+    cue('store', sfx.coins);
+    const card = document.getElementById('fx-card');
+    card.innerHTML = shopHtml();
+    wireShop(card);
+    card.focus();
+  }
+  function openShop() { if (hero) openOverlay(shopHtml(), 'shop', wireShop); }
+  document.getElementById('hb-shop').addEventListener('click', openShop);
   // Tapping a skill badge explains it (phones have no hover tooltips)
   document.getElementById('hb-skills').addEventListener('click', (e) => {
     const b = e.target.closest('.hb-skill');
@@ -1845,6 +1983,7 @@ document.addEventListener('keydown', (e) => {
     };
   }
   function onBattleClose(r) {
+    musicStop();
     const result = r && r.result;
     if (hero && (result === 'ally' || result === 'enemy')) { hero.battles++; saveHero(); }
     if (result === 'ally') {
@@ -1852,9 +1991,8 @@ document.addEventListener('keydown', (e) => {
         hero.wins++;
         let bonus = 0;
         if (hero.battleXpWins < XP.battleMax) { hero.battleXpWins++; bonus = XP.battle; }
-        syncLevels(false, bonus);
+        syncLevels(false, bonus, GOLD.battle);
       }
-      maybeFanfare('line');
       toast('<b>Victory!</b><br>The Teal Dragon retreats from the Battleground.', 5000);
     } else if (result === 'enemy') {
       toast('<b>Your army was routed.</b><br>Mark more squares, grow stronger, and return.', 5000);
@@ -1867,16 +2005,17 @@ document.addEventListener('keydown', (e) => {
   function battleSound(e) {
     if (!audioOn || !e) return;
     switch (e.type) {
-      case 'attack': case 'retaliate': sfx.clash(); break;
-      case 'shoot': sfx.bow(); break;
-      case 'fireball': sfx.fire(); break;
-      case 'breath': sfx.roar(); break;
-      case 'death': sfx.thud(); break;
-      case 'morale': sfx.harpUp(); break;
-      case 'luck': sfx.coins(); break;
-      case 'heal': sfx.pluck(NOTE.A5, 0); sfx.pluck(NOTE.D6, 0.08); break;
-      case 'victory': maybeFanfare('line'); break;
-      case 'defeat': sfx.doom(); break;
+      case 'start': snd(pick(['battle_one', 'battle_two', 'battle_three', 'battle_four', 'battle_five', 'battle_six', 'battle_seven', 'battle_eight']), 0.6); musicStart(pick(['combat01', 'combat02', 'combat03', 'combat04'])); break;
+      case 'attack': case 'retaliate': cue('bloodlust_sound', sfx.clash, 0.45); break;
+      case 'shoot': cue('magicblt', sfx.bow, 0.5); break;
+      case 'fireball': cue('firewall', sfx.fire, 0.6); break;
+      case 'breath': cue('rust_dragon', sfx.roar, 0.6); break;
+      case 'death': cue('sorrow', sfx.thud, 0.4); break;
+      case 'morale': cue('good_morale', sfx.harpUp); break;
+      case 'luck': cue('double_damage', sfx.coins); break;
+      case 'heal': cue('cure', () => { sfx.pluck(NOTE.A5, 0); sfx.pluck(NOTE.D6, 0.08); }); break;
+      case 'victory': musicStop(); cue('victory_sound', () => maybeFanfare('line'), 0.8); break;
+      case 'defeat': musicStop(); cue('lose_battle', sfx.doom, 0.8); break;
       default: break;
     }
   }
@@ -1954,7 +2093,7 @@ document.addEventListener('keydown', (e) => {
   function tellRumour() {
     const found = foundSet();
     const open = CHEATS.filter(c => !found.has(c.id) && RUMOURS[c.id]);
-    sfx.pluck(NOTE.D4, 0);
+    cue('mirth', () => sfx.pluck(NOTE.D4, 0));
     if (!open.length) { toast('<b>Tavern rumour</b><br>The tavern has gone quiet. You know every word of power.'); return; }
     const c = open[rumourIdx++ % open.length];
     toast('<b>Tavern rumour</b><br>Rumour has it ' + RUMOURS[c.id] + '.<br>Every word of power begins with nwc.', 6500);
