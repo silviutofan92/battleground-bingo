@@ -46,8 +46,19 @@
     golems: { name: 'Golems', one: 'Golem', side: 'enemy', count: 10,
       att: 7, def: 10, dmgMin: 4, dmgMax: 5, hp: 30, speed: 3 },
     shades: { name: 'Shades', one: 'Shade', side: 'enemy', count: 14,
-      att: 10, def: 8, dmgMin: 5, dmgMax: 7, hp: 25, speed: 5, shoot: true }
+      att: 10, def: 8, dmgMin: 5, dmgMax: 7, hp: 25, speed: 5, shoot: true },
+    // Optional ally army from hero.army. Machines never retaliate and do not
+    // count as the army: the Ballista cannot move, the Tent never acts.
+    archangels: { name: 'Archangels', one: 'Archangel', side: 'ally', count: 0,
+      att: 30, def: 30, dmgMin: 50, dmgMax: 50, hp: 250, speed: 18, fly: true },
+    blackKnights: { name: 'Black Knights', one: 'Black Knight', side: 'ally', count: 0,
+      att: 16, def: 16, dmgMin: 15, dmgMax: 30, hp: 120, speed: 7 },
+    ballista: { name: 'Ballista', one: 'Ballista', side: 'ally', count: 1,
+      att: 10, def: 10, dmgMin: 30, dmgMax: 50, hp: 250, speed: 0, shoot: true, machine: true },
+    firstAidTent: { name: 'First Aid Tent', one: 'First Aid Tent', side: 'ally', count: 1,
+      att: 0, def: 0, dmgMin: 0, dmgMax: 0, hp: 75, speed: 0, machine: true, passive: true }
   };
+  var TENT_HEAL = 50;
 
   // Deployment: allies on the left edge, enemies on the right edge.
   var LINEUP = [
@@ -69,7 +80,18 @@
   var ARCHERY = [ONE, [11, 10], [5, 4], [3, 2]];   // ranged damage x1.1 / 1.25 / 1.5
   var OFFENSE = [ONE, [11, 10], [6, 5], [13, 10]]; // melee damage x1.1 / 1.2 / 1.3
   var ARMORER = [ONE, [19, 20], [9, 10], [17, 20]]; // damage taken x0.95 / 0.9 / 0.85
-  var SORCERY = [ONE, [11, 10], [6, 5], [13, 10]]; // Fireball damage x1.1 / 1.2 / 1.3
+  var NAVIGATION = [ONE, [11, 10], [6, 5], [13, 10]]; // ally retaliation x1.1 / 1.2 / 1.3
+  var DIPLOMACY = [ONE, [19, 20], [9, 10], [17, 20]]; // enemy counts kept after growth
+  var CHANCE = [0, 5, 10, 15];       // percent: leadership (morale) and luck
+  var LOGISTICS = [0, 1, 1, 2];      // ally speed
+  var PATHFINDING = [0, 1, 2, 2];    // deploy columns forward
+  var FIRST_AID = [0, 20, 40, 60];   // HP healed each round
+  var WISDOM = [0, 1, 1, 2];         // extra Fireball casts
+  var SCHOLAR = [0, 5, 10, 15];      // percent spell damage, added to sorcery
+  var EAGLE_EYE = [6, 8, 10, 12];    // long-range penalty starts beyond this
+  var ESTATES = [0, 2, 4, 6];        // extra Genie Archers
+  var SKILL_KEYS = ['archery', 'offense', 'armorer', 'sorcery', 'leadership', 'luck', 'logistics', 'tactics',
+    'pathfinding', 'firstAid', 'wisdom', 'scholar', 'eagleEye', 'diplomacy', 'estates', 'navigation'];
 
   function clampInt(v, lo, hi) {
     v = Math.floor(Number(v));
@@ -77,23 +99,45 @@
     return Math.max(lo, Math.min(hi, v));
   }
 
-  // Keep only the numbers the rules use: stats 0-15, skills 0-3.
+  // Keep only the numbers the rules use: stats 0-15, skills 0-3, plus the
+  // optional cheat army and buffs.
   function normalizeHero(h) {
     h = h && typeof h === 'object' ? h : {};
     var sk = h.skills && typeof h.skills === 'object' ? h.skills : {};
+    var army = h.army && typeof h.army === 'object' ? h.army : {};
+    var buffs = h.buffs && typeof h.buffs === 'object' ? h.buffs : {};
+    var skills = {};
+    SKILL_KEYS.forEach(function (k) { skills[k] = clampInt(sk[k], 0, 3); });
     return {
       attack: clampInt(h.attack, 0, 15),
       defense: clampInt(h.defense, 0, 15),
       power: clampInt(h.power, 0, 15),
       knowledge: clampInt(h.knowledge, 0, 15),
-      skills: {
-        archery: clampInt(sk.archery, 0, 3),
-        offense: clampInt(sk.offense, 0, 3),
-        armorer: clampInt(sk.armorer, 0, 3),
-        sorcery: clampInt(sk.sorcery, 0, 3)
+      skills: skills,
+      army: {
+        archangels: clampInt(army.archangels, 0, 99),
+        blackKnights: clampInt(army.blackKnights, 0, 99),
+        ballista: !!army.ballista,
+        firstAidTent: !!army.firstAidTent
+      },
+      buffs: {
+        morale: clampInt(buffs.morale, 0, 3),
+        luck: clampInt(buffs.luck, 0, 3),
+        speed: clampInt(buffs.speed, 0, 2),
+        defense: clampInt(buffs.defense, 0, 2),
+        extraCasts: clampInt(buffs.extraCasts, 0, 9)
       }
     };
   }
+
+  // Sorcery and scholar both add percent to spell damage.
+  function spellFraction(h) {
+    var pct = 10 * h.skills.sorcery + SCHOLAR[h.skills.scholar];
+    return pct ? [100 + pct, 100] : ONE;
+  }
+
+  function moraleChance(h) { return CHANCE[h.skills.leadership] + CHANCE[h.buffs.morale]; }
+  function luckChance(h) { return CHANCE[h.skills.luck] + CHANCE[h.buffs.luck]; }
 
   var ZERO_HERO = normalizeHero(null);
 
@@ -102,18 +146,24 @@
   // most (it decides the opening dragon exchange); after that attack, defense,
   // extra Fireball casts, Fireball damage and the skill multipliers add up.
   var GROWTH = {
-    firstAttack: 0.131, attack: 0.009, defense: 0.035, cast: 0.14, fireDamage: 0.13,
-    offense: 0.94, armorer: 1.38, archery: 0.035, spread: 0.12
+    firstAttack: 0.134, attack: 0.008, defense: 0.035, cast: 0.157, fireDamage: 0.125,
+    offense: 0.912, armorer: 1.385, archery: 0.036, leadership: 0.825, luck: 0.825,
+    logistics: 0.12, firstAid: 0.009, estates: 0.09, spread: 0.12
   };
 
+  // Skills and stats only: the cheat army and buffs are meant to overpower.
   function heroStrength(h) {
-    var sorc = SORCERY[h.skills.sorcery];
-    var extraCasts = Math.floor(h.knowledge / 5);
+    var sk = h.skills;
+    var sorc = spellFraction(h);
+    var extraCasts = Math.floor(h.knowledge / 5) + WISDOM[sk.wisdom];
     var fireGain = (FIREBALL_DAMAGE + 8 * h.power) * sorc[0] / sorc[1] / FIREBALL_DAMAGE - 1;
-    var off = OFFENSE[h.skills.offense], arm = ARMORER[h.skills.armorer], arch = ARCHERY[h.skills.archery];
+    var off = OFFENSE[sk.offense], arm = ARMORER[sk.armorer], arch = ARCHERY[sk.archery];
     var g = GROWTH.firstAttack * Math.min(h.attack, 1) + GROWTH.attack * h.attack + GROWTH.defense * h.defense +
       GROWTH.cast * extraCasts + GROWTH.fireDamage * fireGain + GROWTH.offense * (off[0] / off[1] - 1) +
-      GROWTH.armorer * (1 - arm[0] / arm[1]) + GROWTH.archery * (arch[0] / arch[1] - 1);
+      GROWTH.armorer * (1 - arm[0] / arm[1]) + GROWTH.archery * (arch[0] / arch[1] - 1) +
+      (GROWTH.leadership * CHANCE[sk.leadership] + GROWTH.luck * CHANCE[sk.luck]) / 100 +
+      GROWTH.logistics * LOGISTICS[sk.logistics] + GROWTH.firstAid * FIRST_AID[sk.firstAid] +
+      GROWTH.estates * ESTATES[sk.estates];
     return g > 0 ? g : 0;
   }
 
@@ -131,6 +181,7 @@
   function damageBonus(s, attacker, target, kind) {
     var h = heroOf(s), f = ONE;
     if (attacker && attacker.side === 'ally') f = kind === 'ranged' ? ARCHERY[h.skills.archery] : OFFENSE[h.skills.offense];
+    if (attacker && attacker.side === 'ally' && kind === 'retaliation') f = mulFrac(f, NAVIGATION[h.skills.navigation]);
     if (target && target.side === 'ally') f = mulFrac(f, ARMORER[h.skills.armorer]);
     return f;
   }
@@ -139,7 +190,7 @@
   // times the target's armorer when an ally stack is caught in the blast.
   function fireballDamage(s, side, target) {
     var h = side === 'ally' ? heroOf(s) : ZERO_HERO;
-    var f = SORCERY[h.skills.sorcery];
+    var f = spellFraction(h);
     if (target && target.side === 'ally') f = mulFrac(f, ARMORER[heroOf(s).skills.armorer]);
     return Math.max(1, Math.floor(((FIREBALL_DAMAGE + 8 * h.power) * f[0]) / f[1]));
   }
@@ -328,8 +379,9 @@
 
   function meleePenalty(st) { return st.shoot ? 0.5 : 1; }
 
-  function rangedPenalty(shooter, target) {
-    return hexDistance(shooter, target) > LONG_RANGE ? 0.5 : 1;
+  function rangedPenalty(s, shooter, target) {
+    var range = shooter.side === 'ally' ? EAGLE_EYE[heroOf(s).skills.eagleEye] : LONG_RANGE;
+    return hexDistance(shooter, target) > range ? 0.5 : 1;
   }
 
   // Remove HP from the pooled total and recount the stack.
@@ -353,6 +405,13 @@
     for (var i = 0; i < k; i++) sum += randInt(s, attacker.dmgMin, attacker.dmgMax);
     var dmg = computeDamage(attacker.count, sum, attacker.att, effectiveDefence(target), penalty,
       damageBonus(s, attacker, target, kind));
+    if (attacker.side === 'ally' && (kind === 'melee' || kind === 'ranged')) {
+      var luck = luckChance(heroOf(s));
+      if (luck > 0 && randInt(s, 1, 100) <= luck) {
+        dmg *= 2;
+        events.push({ type: 'luck', stack: attacker.id });
+      }
+    }
     var res = hurt(target, dmg);
     events.push({ type: 'damage', kind: kind, source: attacker.id, target: target.id,
       amount: dmg, dealt: res.dealt, kills: res.kills, died: res.died, left: target.count });
@@ -364,20 +423,50 @@
   // Wait phase: stacks that waited act slowest first (same tie rules).
   function pickNext(s) {
     var best = null, i, st;
+    var tactics = s.round === 1 && heroOf(s).skills.tactics > 0;
     for (i = 0; i < s.stacks.length; i++) {
       st = s.stacks[i];
-      if (!st.alive || st.acted || st.waited) continue;
+      if (!st.alive || st.acted || st.waited || st.passive) continue;
+      if (best && tactics && st.side !== best.side) {
+        if (st.side === 'ally') best = st;
+        continue;
+      }
       if (!best || st.speed > best.speed ||
           (st.speed === best.speed && st.side === 'ally' && best.side !== 'ally')) best = st;
     }
     if (best) return best;
     for (i = 0; i < s.stacks.length; i++) {
       st = s.stacks[i];
-      if (!st.alive || st.acted || !st.waited) continue;
+      if (!st.alive || st.acted || !st.waited || st.passive) continue;
       if (!best || st.speed < best.speed ||
           (st.speed === best.speed && st.side === 'ally' && best.side !== 'ally')) best = st;
     }
     return best;
+  }
+
+  // Ally stacks that still count as an army (machines do not).
+  function armyLeft(s) {
+    return aliveOf(s, 'ally').filter(function (st) { return !st.machine; }).length;
+  }
+
+  // First Aid skill, then each Tent, heal the most-wounded ally stack.
+  function roundHeals(s, events) {
+    var sources = [];
+    var aid = FIRST_AID[heroOf(s).skills.firstAid];
+    if (aid > 0) sources.push(['firstAid', aid]);
+    s.stacks.forEach(function (st) { if (st.alive && st.passive && st.side === 'ally') sources.push([st.id, TENT_HEAL]); });
+    sources.forEach(function (src) {
+      var best = null;
+      s.stacks.forEach(function (st) {
+        if (!st.alive || st.side !== 'ally' || !(st.maxHp - st.hpLeft > 0)) return;
+        if (!best || st.maxHp - st.hpLeft > best.maxHp - best.hpLeft) best = st;
+      });
+      if (!best) return;
+      var gain = Math.min(src[1], best.maxHp - best.hpLeft);
+      best.hpLeft += gain;
+      best.count = Math.ceil(best.hpLeft / best.hp);
+      events.push({ type: 'heal', source: src[0], target: best.id, amount: gain, left: best.count });
+    });
   }
 
   function finish(s, result, reason, events) {
@@ -390,7 +479,7 @@
   // Returns true when the battle is over.
   function checkEnd(s, events) {
     if (s.result) return true;
-    var allies = aliveOf(s, 'ally').length, enemies = aliveOf(s, 'enemy').length;
+    var allies = armyLeft(s), enemies = aliveOf(s, 'enemy').length;
     // The ally wins once every enemy stack is down, even if a Fireball took
     // the last ally stack with it.
     if (enemies === 0) { finish(s, 'ally', 'wipe', events); return true; }
@@ -406,9 +495,11 @@
         st.acted = false;
         st.waited = false;
         st.retaliated = false;
+        st.moraled = false;
       });
       if (s.round >= ROUND_CAP) { finish(s, 'enemy', 'cap', events); return; }
       events.push({ type: 'round', round: s.round });
+      roundHeals(s, events);
       next = pickNext(s);
     }
     s.active = next.id;
@@ -428,7 +519,8 @@
     var s = {
       version: 1, seed: seed, rng: seed, cols: COLS, rows: ROWS,
       round: 1, actions: 0, active: null, result: null, endReason: null,
-      hero: hero, spells: { ally: 1 + Math.floor(hero.knowledge / 5), enemy: 0 },
+      hero: hero,
+      spells: { ally: 1 + Math.floor(hero.knowledge / 5) + WISDOM[hero.skills.wisdom] + hero.buffs.extraCasts, enemy: 0 },
       obstacles: [], stacks: []
     };
 
@@ -454,21 +546,72 @@
     if (!isFinite(scale) || scale <= 0) scale = 1;
     s.enemyScale = scale;
 
+    var keep = DIPLOMACY[hero.skills.diplomacy];
+    // Progressive difficulty from the page: 1 (or omitted) is the base battle.
+    var difficulty = opts.difficulty == null ? 1 : Number(opts.difficulty);
+    if (!isFinite(difficulty) || difficulty <= 0) difficulty = 1;
+    difficulty = Math.max(0.25, Math.min(3, difficulty));
+    s.difficulty = difficulty;
+    // Damped: below 1 each step of difficulty moves enemy counts by 30% of
+    // it, above 1 by 20% (the battle is steeper in that direction).
+    var countFactor = 1 + (difficulty < 1 ? 0.3 : 0.2) * (difficulty - 1);
+    var fwd = PATHFINDING[hero.skills.pathfinding];
+    s.deserted = 0;
+
+    function addStack(type, count, hex) {
+      var u = UNITS[type], ally = u.side === 'ally';
+      var speed = u.speed > 0 && ally ? u.speed + LOGISTICS[hero.skills.logistics] + hero.buffs.speed : u.speed;
+      s.stacks.push({
+        id: type, type: type, side: u.side, name: u.name, one: u.one,
+        att: u.att + (ally ? hero.attack : 0),
+        def: u.def + (ally ? hero.defense + hero.buffs.defense : 0),
+        dmgMin: u.dmgMin, dmgMax: u.dmgMax, hp: u.hp, speed: speed,
+        fly: !!u.fly, breath: !!u.breath, shoot: !!u.shoot, noRetaliation: !!u.noRetaliation,
+        machine: !!u.machine, passive: !!u.passive,
+        count: count, hpLeft: count * u.hp, maxHp: count * u.hp, q: hex.q, r: hex.r,
+        alive: true, acted: false, waited: false, defending: false, retaliated: false, moraled: false
+      });
+    }
+
     LINEUP.forEach(function (slot) {
       var u = UNITS[slot.type];
-      var count = u.count, hp = u.hp;
+      var count = u.count;
       if (u.side === 'enemy' && scale !== 1 && u.count > 1) count = Math.max(1, Math.round(u.count * scale));
       if (u.side === 'enemy' && counts[slot.type] != null) count = Math.max(1, Math.floor(counts[slot.type]));
-      var h = fromOffset(u.side === 'ally' ? 0 : COLS - 1, slot.row);
-      s.stacks.push({
-        id: slot.type, type: slot.type, side: u.side, name: u.name, one: u.one,
-        att: u.att + (u.side === 'ally' ? hero.attack : 0),
-        def: u.def + (u.side === 'ally' ? hero.defense : 0),
-        dmgMin: u.dmgMin, dmgMax: u.dmgMax, hp: hp, speed: u.speed,
-        fly: !!u.fly, breath: !!u.breath, shoot: !!u.shoot, noRetaliation: !!u.noRetaliation,
-        count: count, hpLeft: count * hp, q: h.q, r: h.r,
-        alive: true, acted: false, waited: false, defending: false, retaliated: false
-      });
+      if (u.side === 'enemy' && keep !== ONE && count > 1) {
+        var kept = Math.max(1, Math.round(count * keep[0] / keep[1]));
+        s.deserted += count - kept;
+        count = kept;
+      }
+      if (u.side === 'enemy' && difficulty !== 1 && count > 1) {
+        // Seeded stochastic rounding, so small steps still change the host
+        // on average instead of rounding away.
+        var exact = count * countFactor;
+        count = Math.max(1, Math.floor(exact) + (nextRandom(s) < exact - Math.floor(exact) ? 1 : 0));
+      }
+      // A shrunken host never leaves a stack weaker than the Teal Dragon:
+      // otherwise weakest-first players switch targets and, perversely, a
+      // smaller host becomes harder to beat (it binds the Wraiths at 10).
+      if (u.side === 'enemy' && u.count > 1 && counts[slot.type] == null) {
+        count = Math.max(count, Math.ceil(UNITS.tealDragon.hp / u.hp));
+      }
+      if (slot.type === 'genieArchers') count += ESTATES[hero.skills.estates];
+      addStack(slot.type, count, fromOffset(u.side === 'ally' ? fwd : COLS - 1, slot.row));
+    });
+
+    // The cheat army takes the first free hex from its list of spots.
+    var extras = [];
+    if (hero.army.archangels > 0) extras.push(['archangels', hero.army.archangels, [[fwd, 1], [fwd + 1, 1], [fwd + 1, 2], [fwd + 1, 0]]]);
+    if (hero.army.blackKnights > 0) extras.push(['blackKnights', hero.army.blackKnights, [[fwd, 5], [fwd + 1, 5], [fwd + 1, 4], [fwd + 1, 6]]]);
+    if (hero.army.ballista) extras.push(['ballista', 1, [[0, 3], [0, 1], [0, 5], [1, 3], [1, 2], [1, 4]]]);
+    if (hero.army.firstAidTent) extras.push(['firstAidTent', 1, [[0, 3], [0, 1], [0, 5], [1, 3], [1, 4], [1, 2]]]);
+    var obs = obstacleSet(s);
+    extras.forEach(function (x) {
+      var spots = x[2].concat([[0, 0], [1, 0], [1, 6], [2, 1], [2, 3], [2, 5], [0, 6], [2, 0], [2, 2], [2, 4], [2, 6]]);
+      for (var i = 0; i < spots.length; i++) {
+        var h = fromOffset(spots[i][0], spots[i][1]);
+        if (onBoard(h.q, h.r) && !obs[hexKey(h.q, h.r)] && !stackAt(s, h.q, h.r)) { addStack(x[0], x[1], h); return; }
+      }
     });
 
     advance(s, []);
@@ -487,11 +630,11 @@
     }
     var foes = aliveOf(s, otherSide(me.side));
     var blocked = isBlocked(s, me);
-    if (me.shoot && !blocked) {
+    if (me.shoot && (!blocked || me.machine)) {
       foes.forEach(function (f) { acts.push({ type: 'shoot', target: f.id }); });
     }
     var reach = reachable(s, me);
-    if (!me.shoot || blocked) {
+    if (!me.machine && (!me.shoot || blocked)) {
       var spots = [{ q: me.q, r: me.r }].concat(reach);
       foes.forEach(function (f) {
         spots.forEach(function (h) {
@@ -570,7 +713,7 @@
           var second = stackAt(s, b.q, b.r);
           if (second && second.side !== me.side) strike(s, me, second, 'breath', meleePenalty(me), events);
         }
-        if (target.alive && !target.retaliated && !me.noRetaliation) {
+        if (target.alive && !target.retaliated && !me.noRetaliation && !target.machine) {
           target.retaliated = true;
           strike(s, target, me, 'retaliation', meleePenalty(target), events);
         }
@@ -581,7 +724,7 @@
         var t = getStack(s, action.target);
         var d = hexDistance(me, t);
         events.push({ type: 'shot', stack: me.id, target: t.id, distance: d, long: d > LONG_RANGE });
-        strike(s, me, t, 'ranged', rangedPenalty(me, t), events);
+        strike(s, me, t, 'ranged', rangedPenalty(s, me, t), events);
         me.acted = true;
         break;
       }
@@ -605,15 +748,28 @@
         throw new Error('Battleground: unknown action ' + action.type);
     }
 
-    if (!checkEnd(s, events)) advance(s, events);
+    if (!checkEnd(s, events) && !moraleBoost(s, me, action, events)) advance(s, events);
     return { state: s, events: events };
+  }
+
+  // Leadership (and the morale buff): after an ally stack moves, attacks or
+  // shoots, a chance that it acts again this round, once per round.
+  function moraleBoost(s, me, action, events) {
+    if (me.side !== 'ally' || !me.alive || me.moraled) return false;
+    if (action.type !== 'move' && action.type !== 'attack' && action.type !== 'shoot') return false;
+    var chance = moraleChance(heroOf(s));
+    if (chance <= 0 || randInt(s, 1, 100) > chance) return false;
+    me.moraled = true;
+    events.push({ type: 'morale', stack: me.id });
+    events.push({ type: 'turn', stack: me.id, round: s.round });
+    return true;
   }
 
   function outcome(s) {
     if (!s) return null;
     if (s.result) return s.result;
     if (aliveOf(s, 'enemy').length === 0) return 'ally';
-    if (aliveOf(s, 'ally').length === 0) return 'enemy';
+    if (armyLeft(s) === 0) return 'enemy';
     return null;
   }
 
@@ -624,7 +780,7 @@
     var t = getStack(s, action.target);
     if (!t || !t.alive) return null;
     var penalty;
-    if (action.type === 'shoot') penalty = rangedPenalty(me, t);
+    if (action.type === 'shoot') penalty = rangedPenalty(s, me, t);
     else if (action.type === 'attack') penalty = meleePenalty(me);
     else return null;
     var k = Math.min(me.count, 10), def = effectiveDefence(t);
@@ -677,6 +833,7 @@
   // + 0.3 breath bonus - 0.5 expRetaliation/ownHP. Each target is attacked from
   // the reachable adjacent hex with the best breath, then fewest adjacent foes.
   function meleeOptions(s, me) {
+    if (me.machine) return [];
     var spots = [{ q: me.q, r: me.r, steps: 0 }].concat(reachable(s, me));
     var foes = aliveOf(s, otherSide(me.side));
     var out = [];
@@ -700,7 +857,7 @@
       var exp = Math.min(expectedDamage(me, f, meleePenalty(me), null, damageBonus(s, me, f, 'melee')), f.hpLeft);
       var kills = exp >= f.hpLeft;
       var ret = 0;
-      if (!kills && !f.retaliated && !me.noRetaliation) {
+      if (!kills && !f.retaliated && !me.noRetaliation && !f.machine) {
         var cnt = Math.ceil((f.hpLeft - exp) / f.hp);
         ret = Math.min(expectedDamage(f, me, meleePenalty(f), cnt, damageBonus(s, f, me, 'retaliation')), me.hpLeft);
       }
@@ -749,10 +906,10 @@
       if (fb) return fb;
     }
 
-    if (me.shoot && !isBlocked(s, me)) {
+    if (me.shoot && (!isBlocked(s, me) || me.machine)) {
       var bestT = null, bestS = -Infinity;
       foes.forEach(function (f) {
-        var exp = Math.min(expectedDamage(me, f, rangedPenalty(me, f), null, damageBonus(s, me, f, 'ranged')), f.hpLeft);
+        var exp = Math.min(expectedDamage(me, f, rangedPenalty(s, me, f), null, damageBonus(s, me, f, 'ranged')), f.hpLeft);
         var sc = exp / f.hpLeft + (exp >= f.hpLeft ? 0.6 : 0) + (f.shoot ? 0.4 : 0);
         if (sc > bestS + EPS) { bestS = sc; bestT = f; }
       });

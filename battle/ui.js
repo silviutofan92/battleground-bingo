@@ -190,7 +190,10 @@
     var raf = 0;
     var images = { ally: null, enemy: null };
     var icons = {};
+    var arts = {};
     var hero = opts.hero && typeof opts.hero === 'object' ? opts.hero : null;
+    var sound = opts.sound && typeof opts.sound === 'object' && typeof opts.sound.toggle === 'function' ? opts.sound : null;
+    var battleNumber = Math.max(1, Math.floor(Number(opts.battleNumber)) || 1);
     var st = {
       closed: false, state: null, auto: false, busy: false, mode: 'normal',
       hover: null, hoverSig: '', pendingFireball: null, message: '', hint: '',
@@ -216,6 +219,19 @@
     head.appendChild(title);
     head.appendChild(status);
     head.appendChild(roundBox);
+    if (sound) {
+      var soundBtn = el('button', 'bg-sound', sound.on ? 'Sound on' : 'Sound off');
+      soundBtn.type = 'button';
+      soundBtn.setAttribute('aria-pressed', String(!!sound.on));
+      soundBtn.addEventListener('click', function () {
+        var on;
+        try { on = !!sound.toggle(); } catch (e) { on = soundBtn.getAttribute('aria-pressed') !== 'true'; }
+        soundBtn.textContent = on ? 'Sound on' : 'Sound off';
+        soundBtn.setAttribute('aria-pressed', String(on));
+      });
+      head.appendChild(soundBtn);
+      overlay.classList.add('bg-has-sound');
+    }
     head.appendChild(closeX);
 
     var heroLine = hero ? el('p', 'bg-hero') : null;
@@ -339,15 +355,52 @@
       return null;
     }
 
-    // Start-of-battle line when the enemy host has grown to match the hero.
-    function growthText(state) {
+    // Start-of-battle line: difficulty, a grown host, and any deserters.
+    function startLine(state) {
+      var bits = [];
+      var d = state.difficulty || 1;
+      if (d < 1) bits.push('Battle ' + battleNumber + ': the Teal Dragon tests you.');
+      else if (d > 1) bits.push('Battle ' + battleNumber + ': the host grows bolder.');
       var parts = [], grown = false;
       state.stacks.forEach(function (x) {
         if (x.side !== 'enemy' || x.count <= 1) return;
         parts.push(x.count + ' ' + x.name);
         if (E.UNITS[x.type] && x.count > E.UNITS[x.type].count) grown = true;
       });
-      return grown ? 'The Teal Dragon\'s host has grown to meet you: ' + joinNames(parts) + '.' : '';
+      if (grown) bits.push('The Teal Dragon\'s host has grown to meet you: ' + joinNames(parts) + '.');
+      if (state.deserted > 0) bits.push('Your parley works: ' + state.deserted + (state.deserted === 1 ? ' creature deserts' : ' creatures desert') + ' the host.');
+      return bits.join(' ');
+    }
+
+    // Sound hook: one call per shown event; the host's handler cannot break us.
+    function emit(type, side, unit) {
+      if (typeof opts.onEvent !== 'function') return;
+      try { opts.onEvent({ type: type, side: side, unit: unit }); } catch (e) { /* ignore host errors */ }
+    }
+
+    function sideOf(state, id) {
+      var x = id ? E.getStack(state, id) : null;
+      return x ? x.side : null;
+    }
+
+    function emitEvents(events, state) {
+      if (typeof opts.onEvent !== 'function') return;
+      events.forEach(function (e) {
+        if (e.type === 'turn') emit('turn', sideOf(state, e.stack), e.stack);
+        else if (e.type === 'move') emit('move', sideOf(state, e.stack), e.stack);
+        else if (e.type === 'attack') emit('attack', sideOf(state, e.stack), e.stack);
+        else if (e.type === 'shot') emit('shoot', sideOf(state, e.stack), e.stack);
+        else if (e.type === 'fireball') emit('fireball', e.side, null);
+        else if (e.type === 'luck') emit('luck', sideOf(state, e.stack), e.stack);
+        else if (e.type === 'morale') emit('morale', sideOf(state, e.stack), e.stack);
+        else if (e.type === 'heal') emit('heal', sideOf(state, e.target), e.target);
+        else if (e.type === 'damage') {
+          if (e.kind === 'retaliation') emit('retaliate', sideOf(state, e.source), e.source);
+          if (e.kind === 'breath') emit('breath', sideOf(state, e.source), e.source);
+          emit('damage', sideOf(state, e.target), e.target);
+          if (e.died) emit('death', sideOf(state, e.target), e.target);
+        } else if (e.type === 'end') emit(e.result === 'ally' ? 'victory' : 'defeat', 'ally', null);
+      });
     }
 
     function describeStack(s) {
@@ -542,7 +595,9 @@
       var p = unitPoint(s);
       var r = st.L.k * 0.72;
       var ally = s.side === 'ally';
-      var img = s.type === 'redDragon' ? images.ally : s.type === 'tealDragon' ? images.enemy : null;
+      // Painted art first (unitImgs, then the dragon images), then the SVG
+      // icon, then a plain disc with the first letter.
+      var img = arts[s.type] || (s.type === 'redDragon' ? images.ally : s.type === 'tealDragon' ? images.enemy : null);
 
       ctx.beginPath();
       ctx.ellipse(p.x, p.y + r * 0.8, r * 0.78, r * 0.2, 0, 0, Math.PI * 2);
@@ -564,6 +619,11 @@
         ctx.clip();
         drawImageCover(img, p.x - r * 0.9, p.y - r * 0.9, r * 1.8, r * 1.8);
         ctx.restore();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r * 0.93, 0, Math.PI * 2);
+        ctx.lineWidth = Math.max(2, r * 0.12);
+        ctx.strokeStyle = ally ? COLORS.ally : COLORS.enemy;
+        ctx.stroke();
       } else if (icons[s.type]) {
         ctx.drawImage(icons[s.type], p.x - r * 0.64, p.y - r * 0.64, r * 1.28, r * 1.28);
       } else {
@@ -782,7 +842,7 @@
     /* ---- flow ---- */
     function newBattle(seed) {
       var s = typeof seed === 'number' && isFinite(seed) ? seed : Math.floor(Math.random() * 4294967296);
-      st.state = E.createBattle({ seed: s, hero: hero || undefined });
+      st.state = E.createBattle({ seed: s, hero: hero || undefined, difficulty: opts.difficulty });
       if (heroLine) {
         heroLine.textContent = heroText(hero, st.state.hero);
         heroLine.title = skillsText(st.state.hero);
@@ -793,8 +853,11 @@
       st.anim = null;
       st.cache = null;
       clearHover();
-      st.message = growthText(st.state) || 'Tap a lit hex to move, or an enemy to attack. Tap the side of an enemy you want to strike from.';
+      st.message = startLine(st.state) || 'Tap a lit hex to move, or an enemy to attack. Tap the side of an enemy you want to strike from.';
       removeScroll();
+      emit('start', 'ally', null);
+      var first = E.activeStack(st.state);
+      if (first) emit('turn', first.side, first.id);
       step();
     }
 
@@ -832,6 +895,7 @@
       var before = st.state;
       var res = E.applyAction(before, action);
       st.state = res.state;
+      emitEvents(res.events, res.state);
       st.mode = 'normal';
       st.pendingFireball = null;
       clearHover();
@@ -1151,6 +1215,22 @@
       });
     }
     loadIcons(opts.unitIcons);
+    // Painted unit art (unitImgs): loaded once; a failed load falls back silently.
+    if (opts.unitImgs && typeof opts.unitImgs === 'object') {
+      Object.keys(opts.unitImgs).forEach(function (key) {
+        var id = ICON_ALIASES[key] || key;
+        var url = opts.unitImgs[key];
+        if (!E.UNITS[id] || typeof url !== 'string' || !url) return;
+        var art = new window.Image();
+        art.onload = function () {
+          if (st.closed) return;
+          arts[id] = art;
+          render();
+        };
+        art.onerror = function () { arts[id] = null; };
+        art.src = url;
+      });
+    }
     loadImage(opts.allyImg, 'ally');
     loadImage(opts.enemyImg, 'enemy');
 

@@ -131,6 +131,42 @@
   }
 }
 
+.bg-overlay .bg-sound {
+  flex: 0 0 auto;
+  height: 40px;
+  margin: 0;
+  padding: 0 10px;
+  border: 2px solid #E6811A;
+  border-radius: 20px;
+  background: #12292F;
+  color: #F5B735;
+  font: 600 12px/1 system-ui, sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bg-overlay .bg-sound[aria-pressed="false"] {
+  color: #E9D9AE;
+  border-color: rgba(230, 129, 26, 0.6);
+}
+
+.bg-overlay .bg-sound:focus-visible {
+  outline: 3px solid #F5B735;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .bg-overlay.bg-has-sound .bg-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 .bg-overlay .bg-close:hover {
   border-color: #F5B735;
   background: #1B3139;
