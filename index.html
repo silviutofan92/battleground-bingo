@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T021833Z">
+<meta name="build" content="bb-20261015T022346Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T021833Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T022346Z">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'">
@@ -174,7 +174,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T021833Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T022346Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -335,6 +335,11 @@
   .hb-skill { position: relative; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border-radius: 6px; background: rgba(245,183,53,0.16); border: 1px solid rgba(245,183,53,0.45); color: #FFE7A3; cursor: pointer; }
   .hb-skill .ic { width: 18px; height: 18px; }
   .hb-skill .lvl { position: absolute; right: -4px; bottom: -4px; min-width: 13px; height: 13px; padding: 0 2px; border-radius: 7px; background: var(--fire3); color: #FFF4E0; font-size: 8.5px; font-weight: 700; line-height: 12px; text-align: center; border: 1px solid #FFE7A3; }
+  .hb-army { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 11.5px; font-weight: 700; color: #FFE7A3; }
+  .hb-army:empty { display: none; }
+  .hb-army-label { font-family: 'Cinzel', Georgia, serif; color: var(--gold); font-size: 11px; }
+  .hb-unit { display: inline-flex; align-items: center; gap: 2px; }
+  .hb-unit .ic { width: 16px; height: 16px; color: var(--gold); }
   .hb-skill:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .hb-wins { font-size: 12px; color: #FFE7A3; }
   .hb-levelup { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 12.5px; color: var(--fire1); background: linear-gradient(180deg, #FFE7A3, var(--gold)); border: 1.5px solid #FFF4E0; border-radius: 8px; padding: 4px 10px; cursor: pointer; animation: pulse 0.8s ease infinite alternate; }
@@ -409,13 +414,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T021833Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T022346Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T021833Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T022346Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -462,7 +467,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T021833Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T022346Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -473,7 +478,7 @@
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T021833Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T022346Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
@@ -489,11 +494,12 @@
       <div class="hb-row">
       <div class="hb-xp" id="hb-xp" role="progressbar" aria-label="Experience" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hb-xp-fill" id="hb-xp-fill"></div><span class="hb-xp-text" id="hb-xp-text"></span></div>
         <div class="hb-skills" id="hb-skills"></div>
+        <div class="hb-army" id="hb-army"></div>
       </div>
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T021833Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T022346Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -1485,7 +1491,7 @@ document.addEventListener('keydown', (e) => {
   }
 
   // Cheat units and buffs live on the hero (its own key), never on the card
-  function armyAdd(key, n, cap) { if (!hero) return; hero.army[key] = Math.min(cap, (hero.army[key] || 0) + n); saveHero(); }
+  function armyAdd(key, n, cap) { if (!hero) return; hero.army[key] = Math.min(cap, (hero.army[key] || 0) + n); saveHero(); renderHero(); }
   function buffSet(key, v) { if (!hero) return; hero.buffs[key] = Math.max(hero.buffs[key] || 0, v); saveHero(); }
   function fxKnights() {
     armyAdd('blackKnights', 10, 50); sfx.clash();
@@ -1518,7 +1524,7 @@ document.addEventListener('keydown', (e) => {
     toast('<b>Every structure is built.</b><br>It is only a model, but your army is fortified (+2 Defense).', 5000);
   }
   function fxMachines() {
-    if (hero) { hero.army.ballista = true; hero.army.firstAidTent = true; saveHero(); }
+    if (hero) { hero.army.ballista = true; hero.army.firstAidTent = true; saveHero(); renderHero(); }
     sfx.clash();
     toast('<b>A Ballista and a First Aid Tent join your army.</b><br>Blessed by the holy hand grenade of Antioch.', 5000);
   }
@@ -1678,6 +1684,12 @@ document.addEventListener('keydown', (e) => {
     document.getElementById('hb-xp-fill').style.width = pct + '%';
     document.getElementById('hb-xp-text').textContent = hi === undefined ? fmtXp(hero.xp) + ' XP · max level' : fmtXp(hero.xp) + ' / ' + fmtXp(hi) + ' XP';
     document.getElementById('hb-xp').setAttribute('aria-valuenow', String(pct));
+    const army = [['archangels', 'angel', 'Archangels'], ['blackKnights', 'rank-skeleton-warrior', 'Black Knights']]
+      .filter(([k]) => hero.army[k] > 0)
+      .map(([k, ic, name]) => '<span class="hb-unit" title="' + hero.army[k] + ' ' + name + ' join your next Battleground">' + iconHtml(ic) + hero.army[k] + '</span>');
+    if (hero.army.ballista) army.push('<span class="hb-unit" title="A Ballista joins your next Battleground">' + iconHtml('archery') + 'Ballista</span>');
+    if (hero.army.firstAidTent) army.push('<span class="hb-unit" title="A First Aid Tent joins your next Battleground">' + iconHtml('first-aid') + 'Tent</span>');
+    document.getElementById('hb-army').innerHTML = army.length ? '<span class="hb-army-label">Army</span>' + army.join('') : '';
     const btn = document.getElementById('hb-levelup');
     btn.hidden = hero.pending === 0;
     btn.textContent = hero.pending > 1 ? 'Level up! Choose ' + hero.pending + ' skills' : 'Level up! Choose a skill';
