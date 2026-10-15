@@ -175,7 +175,7 @@
   // step (both have diminishing returns for the casual player).
   var CAST_GROWTH = [0, 0.157, 0.314, 0.36];
   var LOGISTICS_GROWTH = [0, 0.12, 0.078, 0.034];
-  var PATHFINDING_GROWTH = [0, 0, 0.09, 0.09];
+  var PATHFINDING_GROWTH = [0, 0, 0.02, 0.02];
 
   function castGrowth(n) {
     return n < CAST_GROWTH.length ? CAST_GROWTH[n] : CAST_GROWTH[CAST_GROWTH.length - 1] + 0.03 * (n - CAST_GROWTH.length + 1);
@@ -953,6 +953,25 @@
     };
   }
 
+  // The enemy does not always take its favourite option: it picks at random,
+  // weighted by each option's score, so the likeliest target is not a certain
+  // one. (A within-10%-of-best band changed nothing: the Teal Dragon's first
+  // target outscores the next by about 6 to 1.) The draw is seeded from a copy
+  // of the battle's random state, so aiAction stays pure and a seed replays the
+  // same battle. The ally's Auto still takes the best option.
+  function pickWeighted(s, me, list) {
+    var best = list[0];
+    for (var i = 1; i < list.length; i++) if (list[i].score > best.score + EPS) best = list[i];
+    if (me.side !== 'enemy') return best;
+    var pos = list.filter(function (o) { return o.score > EPS; });
+    if (pos.length < 2) return best;
+    var total = 0;
+    pos.forEach(function (o) { total += o.score; });
+    var r = nextRandom({ rng: (s.rng ^ 0x9E3779B9) >>> 0 }) * total;
+    for (var j = 0; j < pos.length; j++) { r -= pos[j].score; if (r < 0) return pos[j]; }
+    return pos[pos.length - 1];
+  }
+
   function aiAction(s) {
     if (!s || s.result) return null;
     var me = activeStack(s);
@@ -965,29 +984,22 @@
     }
 
     if (me.shoot && (!isBlocked(s, me) || me.machine)) {
-      var bestT = null, bestS = -Infinity;
-      foes.forEach(function (f) {
+      var shots = foes.map(function (f) {
         var exp = Math.min(expectedDamage(me, f, rangedPenalty(s, me, f), null, damageBonus(s, me, f, 'ranged')), f.hpLeft);
-        var sc = exp / f.hpLeft + (exp >= f.hpLeft ? 0.6 : 0) + (f.shoot ? 0.4 : 0);
-        if (sc > bestS + EPS) { bestS = sc; bestT = f; }
+        return { score: exp / f.hpLeft + (exp >= f.hpLeft ? 0.6 : 0) + (f.shoot ? 0.4 : 0), action: { type: 'shoot', target: f.id } };
       });
-      if (bestT) return { type: 'shoot', target: bestT.id };
+      if (shots.length) return pickWeighted(s, me, shots).action;
     }
 
     var opts = meleeOptions(s, me);
-    if (opts.length) {
-      var pick = opts[0];
-      for (var i = 1; i < opts.length; i++) if (opts[i].score > pick.score + EPS) pick = opts[i];
-      return pick.action;
-    }
+    if (opts.length) return pickWeighted(s, me, opts).action;
 
     // Advance toward the top threat: the foe that would hurt this stack most.
-    var threat = null, tScore = -Infinity;
-    foes.forEach(function (f) {
+    var threats = foes.map(function (f) {
       var threatDmg = expectedDamage(f, me, 1, null, damageBonus(s, f, me, f.shoot ? 'ranged' : 'melee'));
-      var sc = Math.min(threatDmg, me.hpLeft) / me.hpLeft + (f.shoot ? 0.4 : 0);
-      if (sc > tScore + EPS) { tScore = sc; threat = f; }
+      return { score: Math.min(threatDmg, me.hpLeft) / me.hpLeft + (f.shoot ? 0.4 : 0), action: f };
     });
+    var threat = threats.length ? pickWeighted(s, me, threats).action : null;
     if (threat) {
       var distFn = distanceTo(s, me, threat);
       var cur = distFn(me), best = null, bestD = Infinity;
