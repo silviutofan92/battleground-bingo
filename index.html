@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T004729Z">
+<meta name="build" content="bb-20261015T005232Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T004729Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T005232Z">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Sans:wght@400;500;700;900&display=swap');
   :root {
@@ -112,7 +112,8 @@
   .audio-toggle.on { border-color: var(--fire4); background: #FFF1E6; }
   .rules-link { color: var(--fire3); border-color: var(--fire3); }
 
-  .foe { flex-shrink: 0; width: 76px; text-align: center; }
+  .foe { flex-shrink: 0; width: 76px; text-align: center; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; border-radius: 8px; }
+  .foe:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   .foe img { width: 62px; height: auto; display: block; margin: 0 auto 3px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35)); transition: opacity 0.6s ease, transform 0.9s ease; }
   .foe-hp { height: 7px; border-radius: 4px; background: #2A1A07; border: 1px solid var(--bronze); overflow: hidden; }
   .foe-hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, var(--teal3), var(--teal4)); transition: width 0.6s ease; }
@@ -158,7 +159,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T004729Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T005232Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -324,13 +325,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T004729Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T005232Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T004729Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T005232Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -356,7 +357,7 @@
       <li>After the first line, keep going for a <strong>full card</strong>.</li>
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
-    <div class="lore">🐉 Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">8</span></span></div>
+    <div class="lore">🐉 Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">8</span></span></div>
   </div>
 
   <h2>Enter your name, hero</h2>
@@ -370,7 +371,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T004729Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T005232Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -379,15 +380,15 @@
           <button class="rules-link" id="rules-link" type="button">How to play</button>
         </div>
       </div>
-      <div class="foe" id="foe" role="img" aria-label="Teal dragon, health 100%">
-        <img src="assets/teal-tower.webp?v=bb-20261015T004729Z" alt="" width="180" height="200">
+      <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
+        <img src="assets/teal-tower.webp?v=bb-20261015T005232Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T004729Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T005232Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -834,7 +835,7 @@ function updateHud() {
   const foe = document.getElementById('foe');
   foe.classList.toggle('fled', blackout);
   document.getElementById('foe-label').textContent = blackout ? 'Fled!' : 'Teal Dragon';
-  foe.setAttribute('aria-label', blackout ? 'The teal dragon has fled' : 'Teal dragon, health ' + hp + '%');
+  foe.setAttribute('aria-label', (blackout ? 'The teal dragon has fled' : 'Teal dragon, health ' + hp + '%') + '. Tap for a tavern rumour.');
 }
 
 // --- Reset ---
@@ -1358,6 +1359,30 @@ document.addEventListener('keydown', (e) => {
   function fxGrail() {
     toast('<b>The Grail is not yet uncovered.</b><br>Visit more obelisks and come back later today.', 5000);
   }
+
+  // Tavern rumours: tapping the teal dragon hints at a word of power not yet found
+  const RUMOURS = {
+    gold: 'a band of knights will trade anything for a shrubbery',
+    angels: 'heroes who avert their eyes are joined by angels',
+    victory: 'a wooden rabbit once won a siege',
+    defeat: 'a blue pill makes you forget the whole battle',
+    reveal: 'the Matrix can show you the whole map',
+    levelup: 'a chosen one named Neo levels up in an instant',
+    bright: 'a famous toy maker\'s colours brighten any world',
+    grail: 'an oracle knows where the Grail lies',
+  };
+  let rumourIdx = 0;
+  function tellRumour() {
+    const found = foundSet();
+    const open = CHEATS.filter(c => !found.has(c.id) && RUMOURS[c.id]);
+    sfx.pluck(NOTE.D4, 0);
+    if (!open.length) { toast('<b>Tavern rumour</b><br>The tavern has gone quiet. You know every word of power.'); return; }
+    const c = open[rumourIdx++ % open.length];
+    toast('<b>Tavern rumour</b><br>Rumour has it ' + RUMOURS[c.id] + '.<br>Every word of power begins with nwc.', 6500);
+  }
+  const foeEl = document.getElementById('foe');
+  foeEl.addEventListener('click', tellRumour);
+  foeEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tellRumour(); } });
 
   updateCheatCount();
 })();
