@@ -4,14 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T005232Z">
+<meta name="build" content="bb-20261015T011449Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T005232Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T011449Z">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=DM+Sans:wght@400;500;700;900&amp;display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=DM+Sans:wght@400;500;700;900&amp;display=swap"></noscript>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Sans:wght@400;500;700;900&display=swap');
   :root {
     --ink: #0B2026; --deep: #1B3139; --parch: #FBF6EA; --parch2: #F1E4C8; --line: #D9BC82;
     --gold: #F5B735; --gold2: #E6811A; --goldline: #C9962E; --bronze: #7A4E10;
@@ -63,6 +66,8 @@
   }
   .start-btn:focus-visible, .fx-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   .start-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+  .storage-warn { margin: 10px auto 0; padding: 8px 12px; max-width: 420px; border-radius: 8px; background: #FFE6D6; color: var(--fire1); font-size: 13px; font-weight: 700; border: 1px solid var(--fire3); }
+  .storage-warn[hidden] { display: none; }
   .gate-hint { font-size: 12px; color: var(--muted); margin-top: 10px; font-style: italic; }
 
   .rules-toggle {
@@ -80,6 +85,8 @@
   .rules-panel ul, .rules-body ul { margin-left: 18px; margin-bottom: 4px; }
   .rules-panel li, .rules-body li { margin-bottom: 2px; }
   .lore { margin-top: 12px; padding: 8px 10px; border-left: 3px solid var(--gold); background: rgba(245,183,53,0.14); font-style: italic; border-radius: 0 6px 6px 0; }
+  .credits { margin-top: 10px; font-size: 11px; color: var(--muted); }
+  .credits a { color: var(--fire3); }
   .lore .count { font-style: normal; font-weight: 700; color: var(--fire2); white-space: nowrap; }
 
   /* --- GAME LAYOUT: card + log side by side --- */
@@ -104,12 +111,16 @@
   .title-block { flex: 1; min-width: 0; text-align: center; }
   .title-block h1 { font-size: 26px; font-weight: 900; color: var(--fire2); line-height: 1.1; }
   .player-bar { font-size: 13px; color: #5A4426; margin-top: 5px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 10px; }
-  .player-label { font-weight: 700; color: var(--fire1); }
+  .player-label { font-weight: 700; color: var(--fire1); overflow-wrap: anywhere; }
+  .player-bar > span { min-width: 0; }
   .audio-toggle, .rules-link {
     background: transparent; border: 1.5px solid var(--line); border-radius: 8px; padding: 3px 10px;
     cursor: pointer; font-size: 12px; font-family: inherit; color: #5A4426; font-weight: 700; line-height: 1.4;
   }
   .audio-toggle.on { border-color: var(--fire4); background: #FFF1E6; }
+  .audio-toggle .ic { width: 16px; height: 16px; color: var(--fire2); vertical-align: -3px; }
+  .modal .modal-square .ic { width: 20px; height: 20px; color: var(--fire2); }
+  .sidebar-title .ic, .lore .ic { color: var(--fire2); }
   .rules-link { color: var(--fire3); border-color: var(--fire3); }
 
   .foe { flex-shrink: 0; width: 76px; text-align: center; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; border-radius: 8px; }
@@ -146,7 +157,7 @@
     background: #FFFDF7; border: 2px solid var(--line); border-radius: 10px; padding: 8px 6px; color: var(--text);
     text-align: center; font-size: 11.5px; font-weight: 500; line-height: 1.3;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 92px; cursor: pointer; position: relative; user-select: none; -webkit-user-select: none;
+    min-height: 84px; cursor: pointer; position: relative; user-select: none; -webkit-user-select: none;
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   }
   .cell .emoji { font-size: 18px; margin-bottom: 2px; display: block; }
@@ -159,7 +170,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T005232Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T011449Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -280,6 +291,57 @@
   .fx-angel { left: -60px; font-size: 34px; animation: angel-fly 3.2s ease-in-out forwards; }
   @keyframes angel-fly { 0% { transform: translate(0, 0); } 50% { transform: translate(55vw, -18px); } 100% { transform: translate(calc(100vw + 120px), 0); } }
 
+  /* Icons (game-icons.net sprite, loaded at runtime; emoji until it arrives) */
+  .ic { width: 1.25em; height: 1.25em; fill: currentColor; vertical-align: -0.25em; display: inline-block; }
+  .cell .emoji .ic { width: 24px; height: 24px; color: var(--fire2); vertical-align: middle; }
+  .cell.checked .emoji .ic { color: #FFE7A3; }
+  .log-text .ic { color: var(--fire2); margin-right: 2px; }
+  .fx-sprite .ic { width: 30px; height: 30px; color: var(--gold); filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45)); }
+  .fx-angel .ic { color: #FFF8E6; width: 38px; height: 38px; }
+
+  /* Hero picker (setup) */
+  .hero-pick { border: none; margin: 4px auto 16px; max-width: 420px; }
+  .hero-pick legend { font-family: 'Cinzel', Georgia, serif; font-weight: 700; color: var(--fire1); font-size: 15px; margin: 0 auto 8px; }
+  .hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .hero-opt { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border: 2px solid var(--line); border-radius: 10px; background: #FFFDF7; cursor: pointer; }
+  .hero-opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .hero-opt .ho-icon { font-size: 24px; line-height: 1; color: var(--fire2); }
+  .hero-opt .ho-icon .ic { width: 30px; height: 30px; }
+  .hero-opt .ho-name { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 13px; color: var(--text); }
+  .hero-opt .ho-meta { font-size: 11px; color: var(--muted); }
+  .hero-opt:has(input:checked) { border-color: var(--fire3); background: #FFF1E6; box-shadow: 0 0 0 2px rgba(233,87,7,0.25); }
+  .hero-opt:has(input:focus-visible) { outline: 3px solid var(--gold2); outline-offset: 2px; }
+
+  /* Hero bar (card) */
+  .hero-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 5px 10px; margin-bottom: 8px; border-radius: 10px; background: linear-gradient(180deg, #2A1A07, #1A1004); color: #F5D27A; border: 1px solid var(--bronze); }
+  .hb-who { display: flex; align-items: center; gap: 6px; min-width: 0; overflow-wrap: anywhere; font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 13px; }
+  .hb-who .ic, .hb-who .hb-cls { width: 22px; height: 22px; font-size: 18px; color: var(--gold); }
+  .hb-stats { display: flex; gap: 10px; font-size: 13px; font-weight: 700; color: #FFF4E0; }
+  .hb-stats span { display: inline-flex; align-items: center; gap: 3px; }
+  .hb-stats .ic { color: var(--gold); width: 16px; height: 16px; }
+  .hb-skills { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; min-width: 0; }
+  .hb-skill { font-size: 11px; padding: 2px 7px; border-radius: 10px; background: rgba(245,183,53,0.16); border: 1px solid rgba(245,183,53,0.4); color: #FFE7A3; white-space: nowrap; }
+  .hb-skill .ic { width: 13px; height: 13px; }
+  .hb-wins { font-size: 12px; color: #FFE7A3; }
+  .hb-levelup { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 12.5px; color: var(--fire1); background: linear-gradient(180deg, #FFE7A3, var(--gold)); border: 1.5px solid #FFF4E0; border-radius: 8px; padding: 4px 10px; cursor: pointer; animation: pulse 0.8s ease infinite alternate; }
+  .hb-levelup[hidden] { display: none; }
+
+  /* Skill chooser (in the cheat-free overlay) */
+  .skill-choices { display: grid; gap: 8px; margin: 4px 0 12px; }
+  .skill-choice { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 2px 10px; text-align: left; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; background: #FFFDF7; cursor: pointer; font-family: inherit; color: var(--text); }
+  .skill-choice:hover, .skill-choice:focus-visible { border-color: var(--fire3); outline: none; background: #FFF1E6; }
+  .skill-choice .sc-icon { grid-row: 1 / 3; font-size: 24px; color: var(--fire2); }
+  .skill-choice .sc-icon .ic { width: 30px; height: 30px; }
+  .skill-choice b { font-family: 'Cinzel', Georgia, serif; font-size: 14px; color: var(--fire2); }
+  .skill-choice span.sc-joke { font-size: 12.5px; color: #4A3618; }
+  .fx-later { background: none; border: none; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 13px; font-family: inherit; }
+
+  /* Battleground entry */
+  .battle-strip { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 12px; padding: 11px 14px; font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 15px; color: #FFF4E0; background: linear-gradient(180deg, var(--teal3), var(--teal2) 60%, var(--teal1)); border: 2px solid var(--gold); border-radius: 10px; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(245,210,122,0.35); }
+  .battle-strip[hidden] { display: none; }
+  .battle-strip .ic { width: 20px; height: 20px; color: var(--gold); }
+  .battle-strip:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   }
@@ -325,13 +387,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T005232Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T011449Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T005232Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T011449Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -357,38 +419,52 @@
       <li>After the first line, keep going for a <strong>full card</strong>.</li>
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
-    <div class="lore">🐉 Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">8</span></span></div>
+    <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">8</span></span></div>
+    <p class="credits">Icons by Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons and art are original.</p>
   </div>
 
   <h2>Enter your name, hero</h2>
   <p>Your card is shuffled from your name: everyone gets the same squares in a different order.</p>
   <input type="text" id="setup-name" placeholder="Your name" autocomplete="off" aria-label="Your name" maxlength="40">
+  <fieldset class="hero-pick" id="hero-pick">
+    <legend>Choose your hero</legend>
+    <div class="hero-grid" id="hero-grid"></div>
+  </fieldset>
   <button class="start-btn" id="start-btn" type="button" disabled>To battle!</button>
   <div class="gate-hint">Your card is saved in this browser. Private windows forget it.</div>
+  <div class="storage-warn" id="storage-warn" hidden>This browser is blocking storage, so your card will not survive a reload. Keep this tab open.</div>
 </div>
 
 <!-- GAME: card + activity log -->
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T005232Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T011449Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
           <span>Hero: <span class="player-label" id="player-display"></span></span>
-          <button class="audio-toggle" id="audio-toggle" type="button" aria-label="Audio off, click to enable" title="Audio off, click to enable">🔈</button>
+          <button class="audio-toggle" id="audio-toggle" type="button" aria-label="Audio off, click to enable" title="Audio off, click to enable"><svg class="ic" aria-hidden="true"><use href="#i-sound-off"></use></svg></button>
           <button class="rules-link" id="rules-link" type="button">How to play</button>
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T005232Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T011449Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
     </div>
 
+    <div class="hero-bar" id="hero-bar" aria-live="polite">
+      <div class="hb-who" id="hb-who"></div>
+      <div class="hb-stats" id="hb-stats"></div>
+      <div class="hb-skills" id="hb-skills"></div>
+      <span class="hb-wins" id="hb-wins"></span>
+      <button type="button" class="hb-levelup" id="hb-levelup" hidden>Level up! Choose a skill</button>
+    </div>
+
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T005232Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T011449Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -400,10 +476,11 @@
       <button class="reset-btn" id="reset-btn" type="button">Reset card</button>
       <span class="score" aria-live="polite"><span id="count">1</span>/25</span>
     </div>
+    <button type="button" class="battle-strip" id="battle-strip" hidden><span id="battle-strip-icon"><svg class="ic" aria-hidden="true"><use href="#i-battle"></use></svg></span> Battleground: lead your army against the Teal Dragon</button>
   </div>
 
   <div class="game-sidebar frame">
-    <div class="sidebar-title">📜 Activity log</div>
+    <div class="sidebar-title"><svg class="ic" aria-hidden="true"><use href="#i-rules"></use></svg> Activity log</div>
     <div class="sidebar-sub">15 October · Munich time. This is your evidence: keep it in your screenshot.</div>
     <div class="log-entries" id="log-entries">
       <div class="log-empty">No squares marked yet.</div>
@@ -480,6 +557,10 @@ const SQUARES = [
   { emoji: '🗺️', text: '"Is this on the roadmap?"' },
 ];
 const FREE_TEXT = 'Someone says "Fabric IQ"';
+// Icon per square, by position in SQUARES (game-icons.net sprite keys)
+const SQUARE_ICONS = ['mute', 'talkover', 'customer-question', 'agreement', 'coffee', 'slide-number', 'skip-slide', 'kasespatzle',
+  'databucks', 'four-cs', 'f0', 'agent365', 'single-source', 'direct-lake', 'genie-one', 'migration', 'oktoberfest', 'myth-busting',
+  'ga-preview', 'fabcon', 'excel', 'meeting-link', 'offline', 'roadmap'];
 
 let state = { playerName: '', order: [], checked: {}, log: [], lineBingoShown: false, blackoutShown: false };
 let pendingCell = null;
@@ -498,6 +579,7 @@ function writeJSON(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode / quota: non-fatal */ }
 }
 
+const STORAGE_OK = (() => { try { localStorage.setItem(KEY_PREFIX + 'probe', '1'); localStorage.removeItem(KEY_PREFIX + 'probe'); return true; } catch (e) { return false; } })();
 function saveState() {
   writeJSON(STATE_KEY, { version: 1, playerName: state.playerName, checked: state.checked, log: state.log });
 }
@@ -587,6 +669,10 @@ function cardOrder(name) {
   return shuffleArray([...Array(SQUARES.length).keys()], seededRandom(hashString(name + '-battleground-2026')));
 }
 
+// An SVG icon from the game-icons.net sprite (it renders once the sprite is injected)
+function iconHtml(key) {
+  return key ? '<svg class="ic" aria-hidden="true"><use href="#i-' + key + '"></use></svg>' : '';
+}
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -603,8 +689,10 @@ const bus = {
 };
 
 // Reduced-motion preference (live-tracked); motionOK() gates every effect
-let prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', e => { prefersReducedMotion = e.matches; });
+const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)');
+let prefersReducedMotion = REDUCED_MOTION.matches;
+if (REDUCED_MOTION.addEventListener) REDUCED_MOTION.addEventListener('change', e => { prefersReducedMotion = e.matches; });
+else if (REDUCED_MOTION.addListener) REDUCED_MOTION.addListener(e => { prefersReducedMotion = e.matches; });
 function motionOK() { return !prefersReducedMotion; }
 
 // --- Views ---
@@ -612,6 +700,7 @@ function enterGameView(name) {
   document.getElementById('player-display').textContent = name;
   document.getElementById('setup-gate').style.display = 'none';
   document.getElementById('game-wrapper').classList.add('active');
+  window.scrollTo(0, 0);
 }
 
 function tryRestoreState() {
@@ -635,6 +724,8 @@ function tryRestoreState() {
   // Re-show the banner silently: no bus.emit, so no confetti, audio or vibration replay
   if (state.blackoutShown) showBanner('blackout', lines);
   else if (state.lineBingoShown) showBanner('line', lines);
+  bus.emit('card:restore', {});
+  maybeAcquireWakeLock();
 }
 
 // --- Setup ---
@@ -648,6 +739,7 @@ function startGame() {
   const name = setupInput.value.trim();
   if (!name) return;
   state.playerName = name;
+  lastLayerCloseAt = Date.now();
   enterGameView(name);
   shuffleGrid();
 }
@@ -683,12 +775,12 @@ function renderGrid() {
       const sq = SQUARES[dataIdx];
       const mark = state.checked[dataIdx];
       cell.className = 'cell' + (mark ? ' checked' : '');
-      cell.innerHTML = '<span class="emoji" aria-hidden="true">' + sq.emoji + '</span><span class="text">' + escapeHtml(sq.text) + '</span>' +
+      cell.innerHTML = '<span class="emoji" aria-hidden="true">' + iconHtml(SQUARE_ICONS[dataIdx], sq.emoji) + '</span><span class="text">' + escapeHtml(sq.text) + '</span>' +
         '<span class="ts">' + (mark ? escapeHtml(mark.time.slice(0, 5)) : '') + '</span>';
       cell.setAttribute('aria-label', sq.text + (mark ? ', marked' : ''));
       cell.addEventListener('click', () => handleCellClick(cell, dataIdx));
       cell.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCellClick(cell, dataIdx); }
+        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); handleCellClick(cell, dataIdx); }
       });
       sqIdx++;
     }
@@ -707,8 +799,9 @@ function handleCellClick(cell, idx) {
     if (confirm('Unmark "' + SQUARES[idx].text + '"? The activity log keeps a record of the change.')) unmarkSquare(idx);
     return;
   }
-  pendingCell = { cell, idx };
-  document.getElementById('modal-square').textContent = SQUARES[idx].emoji + ' ' + SQUARES[idx].text;
+  pendingCell = { cell, idx, pos: [...document.getElementById('grid').children].indexOf(cell) };
+  document.getElementById('game-wrapper').inert = true;
+  document.getElementById('modal-square').innerHTML = iconHtml(SQUARE_ICONS[idx]) + ' ' + escapeHtml(SQUARES[idx].text);
   document.getElementById('modal-session').value = currentSession();
   document.getElementById('modal-note').value = '';
   document.getElementById('modal').classList.add('open');
@@ -722,9 +815,13 @@ function confirmNote() { if (!pendingCell) return; markSquare(pendingCell.idx, c
 function skipNote() { if (!pendingCell) return; markSquare(pendingCell.idx, composeNote('')); closeModal(); }
 function closeModal() {
   const modal = document.getElementById('modal');
-  if (modal.classList.contains('open')) lastLayerCloseAt = Date.now();
+  const wasOpen = modal.classList.contains('open');
+  const pos = pendingCell ? pendingCell.pos : -1;
+  if (wasOpen) lastLayerCloseAt = Date.now();
   modal.classList.remove('open');
+  document.getElementById('game-wrapper').inert = false;
   pendingCell = null;
+  if (wasOpen && pos >= 0) { const c = document.getElementById('grid').children[pos]; if (c) c.focus({ preventScroll: true }); }
 }
 
 function markSquare(idx, note) {
@@ -752,7 +849,7 @@ function renderLog() {
     '<div class="log-entry ' + (l.action === 'unmarked' ? 'log-remove' : '') + '">' +
     '<span class="log-time">' + escapeHtml(l.time) + '</span>' +
     '<span class="log-action ' + (l.action === 'unmarked' ? 'unmarked' : 'marked') + '">' + (l.action === 'unmarked' ? '✕' : '✓') + '</span>' +
-    '<span class="log-text">' + escapeHtml((l.emoji || '') + ' ' + (l.text || '')) + '</span>' +
+    '<span class="log-text">' + iconHtml(typeof l.idx === 'number' ? SQUARE_ICONS[l.idx] : 'crest') + ' ' + escapeHtml(l.text || '') + '</span>' +
     (l.note ? '<span class="log-note">' + escapeHtml(l.note) + '</span>' : '') +
     '</div>'
   ).join('');
@@ -811,7 +908,7 @@ function showBanner(kind, lines) {
   if (!img.getAttribute('src')) { img.addEventListener('load', () => { img.hidden = false; }, { once: true }); img.src = img.dataset.src; }
   banner.classList.add('show');
   banner.classList.toggle('blackout', kind === 'blackout');
-  document.getElementById('bingo-title').textContent = kind === 'blackout' ? '🏆 BLACKOUT 🏆' : 'B I N G O !';
+  document.getElementById('bingo-title').textContent = kind === 'blackout' ? 'BLACKOUT' : 'B I N G O !';
   document.getElementById('bingo-sub').textContent =
     (kind === 'blackout' ? 'Full card! Rank: Archangel. ' : lines.join(' + ') + '! ') + HOW_TO_CLAIM;
 }
@@ -841,7 +938,7 @@ function updateHud() {
 // --- Reset ---
 function resetAll() {
   if (!confirm('Reset your card? This clears all marks, notes, and your name.')) return;
-  try { localStorage.removeItem(STATE_KEY); localStorage.removeItem(TOASTS_KEY); } catch (e) {}
+  try { localStorage.removeItem(STATE_KEY); localStorage.removeItem(TOASTS_KEY); localStorage.removeItem(storageKey('hero')); } catch (e) {}
   state.playerName = '';
   state.order = [];
   state.checked = {};
@@ -859,6 +956,8 @@ function resetAll() {
   startBtn.disabled = true;
   hideBanner();
   updateHud();
+  window.scrollTo(0, 0);
+  lastLayerCloseAt = Date.now();
 }
 
 // --- Haptics: vibrate, motion-aware ---
@@ -932,7 +1031,7 @@ function maybeFanfare(kind) {
 function toggleAudio() {
   audioOn = !audioOn;
   const btn = document.getElementById('audio-toggle');
-  btn.textContent = audioOn ? '🔊' : '🔈';
+  btn.innerHTML = iconHtml(audioOn ? 'sound-on' : 'sound-off');
   btn.classList.toggle('on', audioOn);
   const label = audioOn ? 'Audio on, click to disable' : 'Audio off, click to enable';
   btn.setAttribute('aria-label', label);
@@ -1001,15 +1100,19 @@ function fireConfetti(kind) {
 
 // --- Wake Lock: keep the screen alive once the card is 60% full ---
 let wakeLock = null;
+let wakeLockPending = false;
 async function maybeAcquireWakeLock() {
   if (!('wakeLock' in navigator)) return;
-  if (wakeLock) return;
+  if (wakeLock || wakeLockPending) return;
   if (Object.keys(state.checked).length < 15) return;
   if (document.hidden) return;
+  wakeLockPending = true;
   try {
-    wakeLock = await navigator.wakeLock.request('screen');
+    const lock = await navigator.wakeLock.request('screen');
+    if (!state.playerName) { lock.release().catch(() => {}); return; }
+    wakeLock = lock;
     wakeLock.addEventListener('release', () => { wakeLock = null; });
-  } catch (e) { /* permission denied or unsupported */ }
+  } catch (e) { /* permission denied or unsupported */ } finally { wakeLockPending = false; }
 }
 async function maybeReleaseWakeLock() {
   if (wakeLock) {
@@ -1077,6 +1180,12 @@ function initBusListeners() {
 }
 initBusListeners();
 buildSessionOptions();
+if (!STORAGE_OK) {
+  document.getElementById('storage-warn').hidden = false;
+  const warn = document.createElement('div');
+  warn.className = 'storage-warn'; warn.textContent = document.getElementById('storage-warn').textContent;
+  document.querySelector('.game-main').prepend(warn);
+}
 
 // --- Buttons, modals and keyboard ---
 document.getElementById('rules-toggle').addEventListener('click', (e) => {
@@ -1084,23 +1193,40 @@ document.getElementById('rules-toggle').addEventListener('click', (e) => {
   e.currentTarget.setAttribute('aria-expanded', String(open));
 });
 document.getElementById('rules-modal-content').innerHTML = document.getElementById('rules-content').innerHTML;
-document.getElementById('rules-link').addEventListener('click', () => document.getElementById('rules-modal').classList.add('open'));
-document.getElementById('rules-close').addEventListener('click', () => document.getElementById('rules-modal').classList.remove('open'));
-document.getElementById('rules-modal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+document.getElementById('rules-link').addEventListener('click', () => {
+  document.getElementById('rules-modal').classList.add('open');
+  document.getElementById('game-wrapper').inert = true;
+  document.getElementById('rules-close').focus();
+});
+function closeRules() {
+  const rules = document.getElementById('rules-modal');
+  if (!rules.classList.contains('open')) return;
+  rules.classList.remove('open');
+  document.getElementById('game-wrapper').inert = false;
+  lastLayerCloseAt = Date.now();
+  document.getElementById('rules-link').focus();
+}
+document.getElementById('rules-close').addEventListener('click', closeRules);
+function backdropClose(el, close) {
+  let downOnBackdrop = false;
+  el.addEventListener('mousedown', (e) => { downOnBackdrop = e.target === el; });
+  el.addEventListener('click', (e) => { if (e.target === el && downOnBackdrop) close(); downOnBackdrop = false; });
+}
+backdropClose(document.getElementById('rules-modal'), closeRules);
 document.getElementById('audio-toggle').addEventListener('click', toggleAudio);
 document.getElementById('reset-btn').addEventListener('click', resetAll);
 document.getElementById('btn-confirm').addEventListener('click', confirmNote);
 document.getElementById('btn-skip').addEventListener('click', skipNote);
 document.getElementById('btn-cancel').addEventListener('click', closeModal);
-document.getElementById('modal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal(); });
+backdropClose(document.getElementById('modal'), closeModal);
 document.getElementById('modal-note').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') { e.preventDefault(); confirmNote(); }
+  if (e.key === 'Enter' && !e.repeat) { e.preventDefault(); confirmNote(); }
   if (e.key === 'Escape') { e.preventDefault(); closeModal(); }
 });
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   const rules = document.getElementById('rules-modal');
-  if (rules.classList.contains('open')) { rules.classList.remove('open'); return; }
+  if (rules.classList.contains('open')) { closeRules(); return; }
   if (document.getElementById('modal').classList.contains('open')) closeModal();
 });
 
@@ -1254,13 +1380,13 @@ document.addEventListener('keydown', (e) => {
   document.getElementById('cheat-close').addEventListener('click', closeCheat);
 
   // Cheat-only overlay: a separate dialog, never the bingo banner
-  function openOverlay(html, cls) {
+  function openOverlay(html, cls, wire) {
     lastFocus = lastFocus || document.activeElement;
     overlayCard.className = 'fx-card frame' + (cls ? ' ' + cls : '');
     overlayCard.innerHTML = html;
     overlay.hidden = false;
-    const btn = overlayCard.querySelector('button');
-    if (btn) btn.addEventListener('click', closeOverlay);
+    if (wire) wire(overlayCard);
+    else { const btn = overlayCard.querySelector('button'); if (btn) btn.addEventListener('click', closeOverlay); }
     overlayCard.focus();
   }
   function closeOverlay() {
@@ -1271,7 +1397,7 @@ document.addEventListener('keydown', (e) => {
     if (lastFocus && lastFocus.focus && document.contains(lastFocus) && lastFocus !== input) lastFocus.focus();
     lastFocus = null;
   }
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeOverlay(); });
+  backdropClose(overlay, closeOverlay);
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     if (!overlay.hidden) { closeOverlay(); return; }
@@ -1281,7 +1407,7 @@ document.addEventListener('keydown', (e) => {
   function sprite(cls, text) {
     const s = document.createElement('div');
     s.className = 'fx-sprite ' + cls;
-    s.textContent = text;
+    s.innerHTML = text;
     s.setAttribute('aria-hidden', 'true');
     document.body.appendChild(s);
     return s;
@@ -1292,7 +1418,7 @@ document.addEventListener('keydown', (e) => {
     toast('<b>+100,000 gold</b><br>and 100 each of wood, ore, mercury, sulfur, crystal and gems. A shrubbery, at last.', 5000);
     if (!motionOK()) return;
     for (let i = 0; i < 26; i++) {
-      const s = sprite('fx-coin', '🪙');
+      const s = sprite('fx-coin', iconHtml('gold'));
       s.style.left = (Math.random() * 96).toFixed(1) + 'vw';
       s.style.setProperty('--d', (1.1 + Math.random() * 0.9).toFixed(2) + 's');
       s.style.setProperty('--r', Math.round(180 + Math.random() * 540) + 'deg');
@@ -1306,7 +1432,7 @@ document.addEventListener('keydown', (e) => {
     toast('<b>5 Archangels join your army.</b><br>The Teal Dragon looks nervous.', 5000);
     if (!motionOK()) return;
     for (let i = 0; i < 5; i++) {
-      const s = sprite('fx-angel', '👼');
+      const s = sprite('fx-angel', iconHtml('angel'));
       s.style.top = (14 + i * 9) + 'vh';
       s.style.animationDelay = (i * 0.18).toFixed(2) + 's';
       later(() => s.remove(), 4400);
@@ -1345,11 +1471,7 @@ document.addEventListener('keydown', (e) => {
     later(() => document.querySelectorAll('.cell.reveal').forEach(n => n.classList.remove('reveal')), 5000);
   }
 
-  function fxLevelUp() {
-    sfx.harpUp();
-    const skills = ['Attack', 'Defense', 'Spell Power', 'Knowledge'];
-    toast('<b>' + escapeHtml(state.playerName || 'Your hero') + ' has gained a level!</b><br>+1 ' + skills[Math.floor(Math.random() * skills.length)] + '.');
-  }
+  function fxLevelUp() { heroCheatLevel(); }
 
   function fxBright() {
     const on = document.documentElement.classList.toggle('phisher');
@@ -1357,8 +1479,240 @@ document.addEventListener('keydown', (e) => {
   }
 
   function fxGrail() {
+    if (BATTLE_ON) { openBattle(); return; }
     toast('<b>The Grail is not yet uncovered.</b><br>Visit more obelisks and come back later today.', 5000);
   }
+
+  // ---------- Hero: class, primary stats, levels and secondary skills (own storage key; never the card or log) ----------
+  const HERO_KEY = storageKey('hero');
+  const CLASSES = [
+    { id: 'knight', name: 'Knight', town: 'Castle', icon: 'knight', emoji: '🛡️', stats: [2, 2, 1, 1], might: true },
+    { id: 'cleric', name: 'Cleric', town: 'Castle', icon: 'cleric', emoji: '✨', stats: [1, 0, 2, 2], might: false },
+    { id: 'ranger', name: 'Ranger', town: 'Rampart', icon: 'ranger', emoji: '🏹', stats: [1, 3, 1, 1], might: true },
+    { id: 'wizard', name: 'Wizard', town: 'Tower', icon: 'wizard', emoji: '🧙', stats: [0, 0, 2, 3], might: false },
+    { id: 'barbarian', name: 'Barbarian', town: 'Stronghold', icon: 'barbarian', emoji: '🪓', stats: [4, 0, 1, 1], might: true },
+    { id: 'warlock', name: 'Warlock', town: 'Dungeon', icon: 'warlock', emoji: '🐉', stats: [0, 0, 3, 2], might: false },
+  ];
+  const STATS = [['Attack', 'attack', '⚔️'], ['Defense', 'defense', '🛡️'], ['Spell Power', 'power', '✨'], ['Knowledge', 'knowledge', '📖']];
+  const SKILLS = {
+    logistics: ['Logistics', '🥾', 'You always find the meeting link.'],
+    diplomacy: ['Diplomacy', '🤝', 'Unshaken by "It\'s already in their Microsoft agreement".'],
+    scholar: ['Scholar', '📜', 'You remember what was on slide 82.'],
+    'eagle-eye': ['Eagle Eye', '🦅', 'You spot every F0 from across the room.'],
+    leadership: ['Leadership', '🚩', 'Morale +1 for everyone at your table.'],
+    luck: ['Luck', '🍀', 'The 4 C\'s come up twice today.'],
+    estates: ['Estates', '🏰', '+125 Databucks a day, allegedly.'],
+    wisdom: ['Wisdom', '🦉', 'You can read the roadmap. Most of it.'],
+    archery: ['Archery', '🏹', 'Battleground: your Genie Archers hit harder.'],
+    offense: ['Offense', '🗡️', 'Battleground: your melee stacks hit harder.'],
+    armorer: ['Armorer', '🛡️', 'Battleground: your stacks take less damage.'],
+    sorcery: ['Sorcery', '🔥', 'Battleground: your Fireball burns hotter.'],
+    'first-aid': ['First Aid', '🧪', 'You can revive a frozen demo.'],
+    navigation: ['Navigation', '🧭', 'You find OneLake on any map.'],
+    pathfinding: ['Pathfinding', '👣', 'A 260-slide deck cannot slow you down.'],
+    tactics: ['Tactics', '♞', 'You picked the seat nearest the coffee.'],
+  };
+  const SKILL_LEVEL = ['', 'Basic', 'Advanced', 'Expert'];
+  const MAX_SKILLS = 8;
+  let hero = null;
+
+  function classById(id) { return CLASSES.find(c => c.id === id) || CLASSES[5]; }
+  function levelForMarks(m) { return 1 + Math.floor((Math.max(1, m) - 1) / 3); }
+  function validHero(x) {
+    return x && x.v === 1 && CLASSES.some(c => c.id === x.cls) && Array.isArray(x.stats) && x.stats.length === 4 &&
+      x.stats.every(n => Number.isInteger(n) && n >= 0 && n < 100) && Number.isInteger(x.level) && x.level >= 1 &&
+      Number.isInteger(x.maxMarks) && Number.isInteger(x.cheatLevels) && Number.isInteger(x.pending) && x.pending >= 0 &&
+      Array.isArray(x.skills) && x.skills.every(s => Array.isArray(s) && SKILLS[s[0]] && s[1] >= 1 && s[1] <= 3) &&
+      (x.offers === null || Array.isArray(x.offers)) && Number.isInteger(x.wins);
+  }
+  function newHero(clsId) {
+    const c = classById(clsId);
+    return { v: 1, cls: c.id, stats: c.stats.slice(), level: 1, maxMarks: 1, cheatLevels: 0, pending: 0, skills: [], offers: null, wins: 0 };
+  }
+  function saveHero() { if (hero) writeJSON(HERO_KEY, hero); }
+  function selectedClass() { const r = document.querySelector('input[name="hero-class"]:checked'); return r ? r.value : 'warlock'; }
+  function skillLevel(id) { const s = hero && hero.skills.find(x => x[0] === id); return s ? s[1] : 0; }
+
+  function buildHeroPicker() {
+    const grid = document.getElementById('hero-grid');
+    grid.innerHTML = CLASSES.map(c =>
+      '<label class="hero-opt"><input type="radio" name="hero-class" value="' + c.id + '"' + (c.id === 'warlock' ? ' checked' : '') + '>' +
+      '<span class="ho-icon">' + iconHtml(c.icon, c.emoji) + '</span><span class="ho-name">' + c.name + '</span>' +
+      '<span class="ho-meta">' + c.town + ' · ' + (c.might ? 'might' : 'magic') + '</span></label>').join('');
+  }
+
+  function renderHero() {
+    if (!hero) return;
+    const c = classById(hero.cls);
+    document.getElementById('hb-who').innerHTML = '<span class="hb-cls">' + iconHtml(c.icon, c.emoji) + '</span>Level ' + hero.level + ' ' + c.name;
+    document.getElementById('hb-stats').innerHTML = STATS.map((s, i) =>
+      '<span title="' + s[0] + '">' + iconHtml(s[1], s[2]) + hero.stats[i] + '</span>').join('');
+    document.getElementById('hb-skills').innerHTML = hero.skills.map(([id, lvl]) =>
+      '<span class="hb-skill" title="' + escapeHtml(SKILLS[id][2]) + '">' + iconHtml(id, SKILLS[id][1]) + ' ' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</span>').join('');
+    document.getElementById('hb-wins').innerHTML = hero.wins ? iconHtml('battle') + ' ' + hero.wins + (hero.wins === 1 ? ' battle won' : ' battles won') : '';
+    const btn = document.getElementById('hb-levelup');
+    btn.hidden = hero.pending === 0;
+    btn.textContent = hero.pending > 1 ? 'Level up! Choose ' + hero.pending + ' skills' : 'Level up! Choose a skill';
+  }
+
+  function pickStat(c) {
+    const w = c.might ? [0.35, 0.35, 0.15, 0.15] : [0.15, 0.15, 0.35, 0.35];
+    let r = Math.random(), i = 0;
+    while (i < 3 && r >= w[i]) { r -= w[i]; i++; }
+    return i;
+  }
+  function gainLevel(quiet) {
+    const c = classById(hero.cls);
+    hero.level++;
+    const s = pickStat(c);
+    hero.stats[s]++;
+    hero.pending++;
+    if (!quiet) {
+      sfx.harpUp();
+      toast('<b>' + escapeHtml(state.playerName || 'Your hero') + ' is now a level ' + hero.level + ' ' + c.name + '!</b><br>+1 ' + STATS[s][0] + '. Tap "Level up!" to choose a skill.', 5500);
+    }
+  }
+  // Levels follow the highest number of marks ever reached, so unmarking and re-marking never farms levels
+  function syncLevels(quiet) {
+    if (!hero) return;
+    hero.maxMarks = Math.max(hero.maxMarks, markedCount());
+    const want = levelForMarks(hero.maxMarks) + hero.cheatLevels;
+    while (hero.level < want) gainLevel(quiet);
+    saveHero();
+    renderHero();
+  }
+  function heroCheatLevel() {
+    if (!hero) return;
+    hero.cheatLevels++;
+    syncLevels(false);
+  }
+
+  function makeOffers() {
+    const known = hero.skills;
+    const upgrades = known.filter(s => s[1] < 3).map(s => [s[0], s[1] + 1]);
+    const fresh = known.length < MAX_SKILLS ? Object.keys(SKILLS).filter(id => !known.some(s => s[0] === id)).map(id => [id, 1]) : [];
+    const take = (list) => list.splice(Math.floor(Math.random() * list.length), 1)[0];
+    const offers = [];
+    if (upgrades.length) offers.push(take(upgrades));
+    if (fresh.length) offers.push(take(fresh));
+    while (offers.length < 2 && (fresh.length || upgrades.length)) offers.push(take(fresh.length ? fresh : upgrades));
+    return offers;
+  }
+  function openChooser() {
+    if (!hero || hero.pending === 0) return;
+    if (!hero.offers || !hero.offers.length) { hero.offers = makeOffers(); saveHero(); }
+    if (!hero.offers.length) {
+      hero.pending = 0; saveHero(); renderHero();
+      toast('<b>Nothing left to learn.</b><br>Your hero has mastered every skill.');
+      return;
+    }
+    const c = classById(hero.cls);
+    const html = '<h3 id="fx-title">Level up!</h3>' +
+      '<p>' + escapeHtml(state.playerName || 'Your hero') + ' is a level ' + hero.level + ' ' + c.name + '. Choose a secondary skill:</p>' +
+      '<div class="skill-choices">' + hero.offers.map(([id, lvl], i) =>
+        '<button type="button" class="skill-choice" data-i="' + i + '"><span class="sc-icon">' + iconHtml(id, SKILLS[id][1]) + '</span>' +
+        '<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><span class="sc-joke">' + escapeHtml(SKILLS[id][2]) + '</span></button>').join('') +
+      '</div><button type="button" class="fx-later">Decide later</button>';
+    openOverlay(html, 'chooser', (card) => {
+      card.querySelectorAll('.skill-choice').forEach(b => b.addEventListener('click', () => chooseSkill(Number(b.dataset.i))));
+      card.querySelector('.fx-later').addEventListener('click', closeOverlay);
+    });
+  }
+  function chooseSkill(i) {
+    const pick = hero.offers && hero.offers[i];
+    if (!pick) return;
+    const existing = hero.skills.find(s => s[0] === pick[0]);
+    if (existing) existing[1] = pick[1]; else hero.skills.push([pick[0], pick[1]]);
+    hero.pending = Math.max(0, hero.pending - 1);
+    hero.offers = null;
+    saveHero();
+    renderHero();
+    closeOverlay();
+    sfx.pluck(NOTE.A4, 0); sfx.pluck(NOTE.D5, 0.08);
+    if (hero.pending > 0) toast('<b>Another level awaits.</b><br>Tap "Level up!" again to choose.', 3500);
+  }
+  document.getElementById('hb-levelup').addEventListener('click', openChooser);
+
+  function loadHeroFor(clsId) {
+    const saved = readJSON(HERO_KEY, null);
+    hero = validHero(saved) ? saved : newHero(clsId);
+    syncLevels(true);
+  }
+  bus.on('card:reset', () => { hero = newHero(selectedClass()); syncLevels(true); });
+  bus.on('card:restore', () => loadHeroFor('warlock'));
+  bus.on('card:wipe', () => { hero = null; });
+  bus.on('tile:mark', () => syncLevels(false));
+  buildHeroPicker();
+
+  // ---------- Battleground: lazy-loaded, dark-launched behind ?battle=1 until ENABLE_BATTLE flips ----------
+  const ENABLE_BATTLE = false;
+  const BATTLE_ON = ENABLE_BATTLE || new URLSearchParams(location.search).get('battle') === '1';
+  let battleLoading = null;
+  function loadBattle() {
+    if (window.Battleground && window.BattleEngine) return Promise.resolve();
+    if (battleLoading) return battleLoading;
+    const v = '?v=' + BUILD;
+    if (!document.getElementById('battle-css')) {
+      const css = document.createElement('link');
+      css.id = 'battle-css'; css.rel = 'stylesheet'; css.href = 'battle/battle.css' + v;
+      document.head.appendChild(css);
+    }
+    const load = (src) => new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = src + v; s.onload = res; s.onerror = () => { s.remove(); rej(new Error('load ' + src)); };
+      document.head.appendChild(s);
+    });
+    battleLoading = load('battle/engine.js').then(() => load('battle/ui.js'));
+    battleLoading.catch(() => { battleLoading = null; });
+    return battleLoading;
+  }
+  function heroForBattle() {
+    if (!hero) return undefined;
+    const c = classById(hero.cls);
+    return {
+      attack: hero.stats[0], defense: hero.stats[1], power: hero.stats[2], knowledge: hero.stats[3],
+      skills: { archery: skillLevel('archery'), offense: skillLevel('offense'), armorer: skillLevel('armorer'), sorcery: skillLevel('sorcery') },
+      name: state.playerName, className: c.name, level: hero.level,
+    };
+  }
+  function onBattleClose(r) {
+    const result = r && r.result;
+    if (result === 'ally') {
+      if (hero) { hero.wins++; saveHero(); renderHero(); }
+      maybeFanfare('line');
+      toast('<b>Victory!</b><br>The Teal Dragon retreats from the Battleground.', 5000);
+    } else if (result === 'enemy') {
+      toast('<b>Your army was routed.</b><br>Mark more squares, grow stronger, and return.', 5000);
+    }
+  }
+  function openBattle() {
+    if (!BATTLE_ON) { toast('<b>The Grail is not yet uncovered.</b><br>Visit more obelisks and come back later today.', 5000); return; }
+    loadBattle().then(() => {
+      window.Battleground.open({
+        allyImg: 'assets/red-crest.webp?v=' + BUILD, enemyImg: 'assets/teal-tower.webp?v=' + BUILD,
+        hero: heroForBattle(), onClose: onBattleClose,
+      });
+    }).catch(() => toast('<b>The Battleground is out of reach.</b><br>Check your connection and try again.', 5000));
+  }
+  const battleStrip = document.getElementById('battle-strip');
+  battleStrip.hidden = !BATTLE_ON;
+  battleStrip.addEventListener('click', openBattle);
+
+  // ---------- Icon sprite: fetched once; squares, hero bar and effects switch from emoji to icons when it lands ----------
+  fetch('assets/icons.svg?v=' + BUILD).then(r => r.ok ? r.text() : Promise.reject(new Error('icons ' + r.status))).then(svg => {
+    if (!/^\s*<svg[\s>]/.test(svg) || /<script/i.test(svg)) return;
+    const holder = document.createElement('div');
+    holder.setAttribute('aria-hidden', 'true');
+    holder.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    holder.innerHTML = svg;
+    document.body.prepend(holder);
+    const chosen = selectedClass();
+    buildHeroPicker();
+    const r = document.querySelector('input[name="hero-class"][value="' + chosen + '"]');
+    if (r) r.checked = true;
+    if (state.playerName) { renderGrid(); renderLog(); }
+    renderHero();
+  }).catch(() => { /* emoji fallback stays */ });
 
   // Tavern rumours: tapping the teal dragon hints at a word of power not yet found
   const RUMOURS = {
