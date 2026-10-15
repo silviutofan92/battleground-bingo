@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="build" content="bb-20261015T015652Z">
+<meta name="build" content="bb-20261015T020519Z">
 <meta name="theme-color" content="#0B2026">
 <title>Battleground Bingo · Central Compete Workshop</title>
 <meta property="og:title" content="Battleground Bingo · Central Compete Workshop">
 <meta property="og:description" content="Spot it, tap it, claim it. Five in a row wins.">
-<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T015652Z">
+<link rel="icon" href="assets/red-crest.webp?v=bb-20261015T020519Z">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;family=Noto+Serif:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'">
@@ -161,7 +161,7 @@
     background: #FFFDF7; border: 2px solid var(--line); border-radius: 10px; padding: 8px 6px; color: var(--text);
     text-align: center; font-size: 11.5px; font-weight: 500; line-height: 1.3;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 80px; cursor: pointer; position: relative; user-select: none; -webkit-user-select: none;
+    min-height: 76px; cursor: pointer; position: relative; user-select: none; -webkit-user-select: none;
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   }
   .cell .emoji { font-size: 18px; margin-bottom: 2px; display: block; }
@@ -174,7 +174,7 @@
   .cell.checked { background: linear-gradient(135deg, var(--fire2), var(--fire3)); color: #FFF4E0; border-color: var(--gold); box-shadow: 0 4px 14px rgba(133,36,7,0.35); }
   .cell.checked::before {
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 22px; height: 26px; opacity: 0.95;
-    background: url('assets/red-crest.webp?v=bb-20261015T015652Z') center / contain no-repeat;
+    background: url('assets/red-crest.webp?v=bb-20261015T020519Z') center / contain no-repeat;
     filter: drop-shadow(0 0 1px #F5D27A) drop-shadow(0 0 2px rgba(0,0,0,0.4));
   }
   .cell.checked::after { content: '✓'; position: absolute; top: 3px; right: 6px; font-size: 12px; font-weight: 900; color: var(--gold); }
@@ -290,6 +290,8 @@
     color: rgba(186,44,3,0.2); border: 5px solid rgba(186,44,3,0.2); border-radius: 8px;
   }
 
+  html.fogged .grid { filter: blur(3px) grayscale(0.5); transition: filter 0.4s ease; pointer-events: none; }
+  .game-main.castled { outline: 4px double var(--goldline); outline-offset: 3px; }
   .fx-sprite { position: fixed; z-index: 150; pointer-events: none; font-size: 26px; will-change: transform; }
   .fx-coin { top: -40px; animation: coin-fall var(--d, 1.6s) cubic-bezier(0.3, 0.6, 0.6, 1) forwards; }
   @keyframes coin-fall { to { transform: translateY(calc(100vh + 80px)) rotate(var(--r, 360deg)); } }
@@ -319,7 +321,7 @@
   .hero-opt:has(input:focus-visible) { outline: 3px solid var(--gold2); outline-offset: 2px; }
 
   /* Hero bar (card) */
-  .hero-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 5px 10px; margin-bottom: 8px; border-radius: 10px; background: linear-gradient(180deg, #2A1A07, #1A1004); color: #F5D27A; border: 1px solid var(--bronze); }
+  .hero-bar { display: flex; flex-direction: column; gap: 5px; padding: 6px 10px; margin-bottom: 8px; border-radius: 10px; background: linear-gradient(180deg, #2A1A07, #1A1004); color: #F5D27A; border: 1px solid var(--bronze); }
   .hb-who { display: flex; align-items: center; gap: 6px; min-width: 0; overflow-wrap: anywhere; font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 13px; }
   .ho-portrait-ic .ic { width: 34px; height: 34px; color: var(--fire2); }
   .hb-portrait-ic .ic { width: 22px; height: 22px; color: var(--gold); }
@@ -327,15 +329,19 @@
   .hb-stats { display: flex; gap: 10px; font-size: 13px; font-weight: 700; color: #FFF4E0; }
   .hb-stats span { display: inline-flex; align-items: center; gap: 3px; }
   .hb-stats .ic { color: var(--gold); width: 16px; height: 16px; }
-  .hb-skills { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; min-width: 0; }
-  .hb-skill { font-size: 11px; padding: 2px 7px; border-radius: 10px; background: rgba(245,183,53,0.16); border: 1px solid rgba(245,183,53,0.4); color: #FFE7A3; white-space: nowrap; }
-  .hb-skill .ic { width: 13px; height: 13px; }
+  .hb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 12px; min-width: 0; }
+  .hb-row .hb-levelup { margin-left: auto; }
+  .hb-skills { display: flex; flex-wrap: wrap; gap: 5px; min-width: 0; }
+  .hb-skill { position: relative; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border-radius: 6px; background: rgba(245,183,53,0.16); border: 1px solid rgba(245,183,53,0.45); color: #FFE7A3; cursor: pointer; }
+  .hb-skill .ic { width: 18px; height: 18px; }
+  .hb-skill .lvl { position: absolute; right: -4px; bottom: -4px; min-width: 13px; height: 13px; padding: 0 2px; border-radius: 7px; background: var(--fire3); color: #FFF4E0; font-size: 8.5px; font-weight: 700; line-height: 12px; text-align: center; border: 1px solid #FFE7A3; }
+  .hb-skill:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .hb-wins { font-size: 12px; color: #FFE7A3; }
   .hb-levelup { font-family: 'Cinzel', Georgia, serif; font-weight: 700; font-size: 12.5px; color: var(--fire1); background: linear-gradient(180deg, #FFE7A3, var(--gold)); border: 1.5px solid #FFF4E0; border-radius: 8px; padding: 4px 10px; cursor: pointer; animation: pulse 0.8s ease infinite alternate; }
   .hb-levelup[hidden] { display: none; }
 
   .hero-bar { position: relative; }
-  .hb-xp { flex: 1 1 170px; position: relative; height: 15px; border-radius: 8px; background: #120A02; border: 1px solid var(--bronze); overflow: hidden; }
+  .hb-xp { flex: 1 1 160px; min-width: 140px; position: relative; height: 15px; border-radius: 8px; background: #120A02; border: 1px solid var(--bronze); overflow: hidden; }
   .hb-xp-fill { height: 100%; width: 0; background: linear-gradient(90deg, #8A5A12, var(--gold)); transition: width 0.6s ease; }
   .hb-xp-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #FFF4E0; text-shadow: 0 1px 2px #000; letter-spacing: 0.2px; }
   .xp-float { position: absolute; right: 12px; top: -6px; z-index: 5; font-family: 'Cinzel', Georgia, serif; font-weight: 900; font-size: 15px; color: var(--gold); text-shadow: 0 1px 0 #2A1A07, 0 0 8px rgba(245,183,53,0.6); pointer-events: none; animation: xp-up 1.4s ease-out forwards; }
@@ -403,13 +409,13 @@
 <!-- SETUP GATE -->
 <div class="setup-page frame" id="setup-gate">
   <div class="setup-banners">
-    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T015652Z" alt="Red dragon banner" width="199" height="540">
+    <img class="banner" src="assets/red-banner.webp?v=bb-20261015T020519Z" alt="Red dragon banner" width="199" height="540">
     <div class="setup-title">
       <h1>Battleground Bingo</h1>
       <div class="subtitle">Central Compete Workshop · 15 October</div>
       <div class="vs"><span class="ally">Red dragon: us</span><br><span class="foe-txt">Teal dragon: the foe</span></div>
     </div>
-    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T015652Z" alt="Teal dragon banner" width="193" height="540">
+    <img class="banner" src="assets/teal-banner.webp?v=bb-20261015T020519Z" alt="Teal dragon banner" width="193" height="540">
   </div>
 
   <button type="button" class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-content">How to play</button>
@@ -436,7 +442,7 @@
       <li>After the first line, keep going for a <strong>full card</strong>.</li>
       <li><strong>No self-triggering:</strong> saying it yourself to fill your own square does not count.</li>
     </ul>
-    <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">8</span></span></div>
+    <div class="lore"><svg class="ic" aria-hidden="true"><use href="#i-warlock"></use></svg> Veterans of Erathia remember the old words of power. They all begin the same way. On a phone, knock on the red crest five times. Stuck? The teal dragon hears every tavern rumour: tap it. Cheats never mark squares. <span class="count">Cheats found: <span class="cheats-found">0</span>/<span class="cheats-total">16</span></span></div>
     <p class="credits">Icons by Caro Asercion, Cathelineau, Delapouite, Lorc, Sbed and Skoll from <a href="https://game-icons.net/" target="_blank" rel="noopener">game-icons.net</a>, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured. Dragons and hero portraits are original art.</p>
   </div>
 
@@ -456,7 +462,7 @@
 <div class="game-wrapper" id="game-wrapper">
   <div class="game-main frame">
     <div class="game-header">
-      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T015652Z" alt="" width="135" height="160"></button>
+      <button class="crest" id="crest" type="button" aria-label="Red dragon crest"><img src="assets/red-crest.webp?v=bb-20261015T020519Z" alt="" width="135" height="160"></button>
       <div class="title-block">
         <h1>Battleground Bingo</h1>
         <div class="player-bar">
@@ -467,23 +473,27 @@
         </div>
       </div>
       <div class="foe" id="foe" role="button" tabindex="0" aria-label="Teal dragon, health 100%. Tap for a tavern rumour.">
-        <img src="assets/teal-tower.webp?v=bb-20261015T015652Z" alt="" width="180" height="200">
+        <img src="assets/teal-tower.webp?v=bb-20261015T020519Z" alt="" width="180" height="200">
         <div class="foe-hp"><div class="foe-hp-fill" id="foe-hp-fill"></div></div>
         <div class="foe-label" id="foe-label">Teal Dragon</div>
       </div>
     </div>
 
     <div class="hero-bar" id="hero-bar" aria-live="polite">
-      <div class="hb-who" id="hb-who"></div>
-      <div class="hb-stats" id="hb-stats"></div>
-      <div class="hb-skills" id="hb-skills"></div>
-      <span class="hb-wins" id="hb-wins"></span>
-      <button type="button" class="hb-levelup" id="hb-levelup" hidden>Level up! Choose a skill</button>
+      <div class="hb-row">
+        <div class="hb-who" id="hb-who"></div>
+        <div class="hb-stats" id="hb-stats"></div>
+        <span class="hb-wins" id="hb-wins"></span>
+        <button type="button" class="hb-levelup" id="hb-levelup" hidden>Level up! Choose a skill</button>
+      </div>
+      <div class="hb-row">
       <div class="hb-xp" id="hb-xp" role="progressbar" aria-label="Experience" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hb-xp-fill" id="hb-xp-fill"></div><span class="hb-xp-text" id="hb-xp-text"></span></div>
+        <div class="hb-skills" id="hb-skills"></div>
+      </div>
     </div>
 
     <div class="bingo-banner" id="bingo-banner">
-      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T015652Z">
+      <img class="bingo-serpent" id="bingo-serpent" alt="" width="1120" height="366" hidden data-src="assets/red-serpent.webp?v=bb-20261015T020519Z">
       <div class="bingo-title" id="bingo-title">B I N G O !</div>
       <div class="bingo-sub" id="bingo-sub"></div>
     </div>
@@ -1029,6 +1039,23 @@ const sfx = {
   coins() { for (let i = 0; i < 9; i++) tone(2200 + Math.random() * 1800, i * 0.07 + Math.random() * 0.03, 0.18, { type: 'sine', vol: 0.05, attack: 0.002, cutoff: 9000 }); },
   harpUp() { [NOTE.D4, NOTE.F4, NOTE.A4, NOTE.D5, NOTE.F4 * 2, NOTE.A5].forEach((f, i) => sfx.pluck(f, i * 0.07)); },
   doom() { [NOTE.D4, NOTE.C5 / 2, 233.08, NOTE.A3].forEach((f, i) => sfx.brass(f, i * 0.32, 0.42)); },
+  // Noise-based battle cues: a short burst through a filter
+  noise(start, dur, type, freq, vol, sweepTo) {
+    if (!audioOn) return;
+    const ctx = ensureAudioCtx(); if (!ctx) return;
+    if (!sfx.buf) { const b = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate); const d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; sfx.buf = b; }
+    const t0 = ctx.currentTime + start;
+    const src = ctx.createBufferSource(); src.buffer = sfx.buf;
+    const f = ctx.createBiquadFilter(); f.type = type; f.frequency.setValueAtTime(freq, t0); if (sweepTo) f.frequency.exponentialRampToValueAtTime(sweepTo, t0 + dur);
+    const g = ctx.createGain(); g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+    src.connect(f).connect(g).connect(ctx.destination); src.start(t0); src.stop(t0 + dur + 0.05);
+  },
+  clash() { sfx.noise(0, 0.12, 'bandpass', 3200, 0.35); tone(820, 0, 0.18, { type: 'square', vol: 0.03, cutoff: 4000 }); tone(1240, 0.01, 0.14, { type: 'square', vol: 0.02, cutoff: 5000 }); },
+  bow() { sfx.pluck(196, 0); sfx.noise(0.02, 0.18, 'highpass', 2500, 0.12, 6000); },
+  fire() { sfx.noise(0, 0.7, 'lowpass', 300, 0.4, 4000); tone(110, 0, 0.6, { type: 'sawtooth', vol: 0.04, cutoff: 600 }); },
+  roar() { sfx.noise(0, 0.8, 'lowpass', 500, 0.35, 180); tone(85, 0, 0.8, { type: 'sawtooth', vol: 0.06, cutoff: 400 }); tone(127, 0.05, 0.7, { type: 'sawtooth', vol: 0.04, cutoff: 400 }); },
+  thud() { tone(70, 0, 0.35, { type: 'sine', vol: 0.18, cutoff: 600 }); sfx.noise(0, 0.12, 'lowpass', 400, 0.15); },
+  gallop() { [0, 0.18, 0.5, 0.68, 1.0, 1.18].forEach(s => { tone(420, s, 0.08, { type: 'square', vol: 0.05, cutoff: 1800 }); tone(300, s + 0.06, 0.08, { type: 'square', vol: 0.04, cutoff: 1500 }); }); },
   choir() { [NOTE.D5, NOTE.Fs5, NOTE.A5].forEach(f => { tone(f, 0, 1.6, { type: 'sine', vol: 0.05, attack: 0.25, cutoff: 9000 }); tone(f, 0, 1.6, { type: 'sine', vol: 0.03, attack: 0.25, cutoff: 9000, detune: 9 }); }); },
 };
 function maybeChirpForTile(idx) {
@@ -1282,7 +1309,8 @@ document.addEventListener('keydown', (e) => {
     timers.clear();
     toastsEl.innerHTML = '';
     document.querySelectorAll('.fx-sprite, .confetti-canvas, .xp-float').forEach(n => n.remove());
-    document.documentElement.classList.remove('phisher');
+    document.documentElement.classList.remove('phisher', 'fogged');
+    document.querySelector('.game-main').classList.remove('castled');
     document.querySelectorAll('.cell.reveal').forEach(n => n.classList.remove('reveal'));
     closeOverlay();
     closeCheat();
@@ -1321,6 +1349,14 @@ document.addEventListener('keydown', (e) => {
     { id: 'levelup', codes: ['nwcigotbetter', 'nwcneo'], run: fxLevelUp },
     { id: 'bright', codes: ['nwcphisherprice'], run: fxBright },
     { id: 'grail', codes: ['nwcalreadygotone', 'nwcoracle'], run: fxGrail },
+    { id: 'knights', codes: ['nwcfleshwound', 'nwcagents'], run: fxKnights },
+    { id: 'spells', codes: ['nwctim', 'nwcthereisnospoon'], run: fxSpells },
+    { id: 'fog', codes: ['nwcignoranceisbliss'], run: fxFog },
+    { id: 'gallop', codes: ['nwccoconuts', 'nwcnebuchadnezzar'], run: fxGallop },
+    { id: 'morale', codes: ['nwcmuchrejoicing', 'nwcmorpheus'], run: fxMorale },
+    { id: 'luck', codes: ['nwccastleanthrax', 'nwcfollowthewhiterabbit'], run: fxLuck },
+    { id: 'castle', codes: ['nwconlyamodel', 'nwczion'], run: fxCastle },
+    { id: 'machines', codes: ['nwcantioch', 'nwclotsofguns'], run: fxMachines },
   ];
   const BY_CODE = new Map();
   CHEATS.forEach(c => c.codes.forEach(code => BY_CODE.set(code, c)));
@@ -1448,9 +1484,48 @@ document.addEventListener('keydown', (e) => {
     }
   }
 
+  // Cheat units and buffs live on the hero (its own key), never on the card
+  function armyAdd(key, n, cap) { if (!hero) return; hero.army[key] = Math.min(cap, (hero.army[key] || 0) + n); saveHero(); }
+  function buffSet(key, v) { if (!hero) return; hero.buffs[key] = Math.max(hero.buffs[key] || 0, v); saveHero(); }
+  function fxKnights() {
+    armyAdd('blackKnights', 10, 50); sfx.clash();
+    toast('<b>10 Black Knights join your army.</b><br>\'Tis but a scratch. They fight in your next Battleground.', 5000);
+  }
+  function fxSpells() {
+    buffSet('extraCasts', Math.min(9, ((hero && hero.buffs.extraCasts) || 0) + 3)); sfx.fire();
+    toast('<b>All spells learned. 999 mana.</b><br>+3 Fireball casts in the Battleground.', 5000);
+  }
+  function fxFog() {
+    document.documentElement.classList.add('fogged');
+    later(() => document.documentElement.classList.remove('fogged'), 5000);
+    toast('<b>Ignorance is bliss.</b><br>The fog of war rolls in for a few seconds.', 4500);
+  }
+  function fxGallop() {
+    buffSet('speed', 2); sfx.gallop();
+    toast('<b>Unlimited movement!</b><br>Two coconuts, clip-clop. Your army is faster in the Battleground.', 5000);
+  }
+  function fxMorale() {
+    buffSet('morale', 3); sfx.harpUp();
+    toast('<b>Morale is maximum.</b><br>And there was much rejoicing. Your stacks act twice more often.', 5000);
+  }
+  function fxLuck() {
+    buffSet('luck', 3); sfx.coins();
+    toast('<b>Luck is maximum.</b><br>Follow the white rabbit. Double damage comes more often.', 5000);
+  }
+  function fxCastle() {
+    buffSet('defense', 2);
+    document.querySelector('.game-main').classList.add('castled');
+    toast('<b>Every structure is built.</b><br>It is only a model, but your army is fortified (+2 Defense).', 5000);
+  }
+  function fxMachines() {
+    if (hero) { hero.army.ballista = true; hero.army.firstAidTent = true; saveHero(); }
+    sfx.clash();
+    toast('<b>A Ballista and a First Aid Tent join your army.</b><br>Blessed by the holy hand grenade of Antioch.', 5000);
+  }
   function fxAngels() {
     sfx.choir();
-    toast('<b>5 Archangels join your army.</b><br>The Teal Dragon looks nervous.', 5000);
+    armyAdd('archangels', 5, 25);
+    toast('<b>5 Archangels join your army.</b><br>They fight in your next Battleground. The Teal Dragon looks nervous.', 5000);
     if (!motionOK()) return;
     for (let i = 0; i < 5; i++) {
       const s = sprite('fx-angel', iconHtml('angel'));
@@ -1516,22 +1591,22 @@ document.addEventListener('keydown', (e) => {
   ];
   const STATS = [['Attack', 'attack', '⚔️'], ['Defense', 'defense', '🛡️'], ['Spell Power', 'power', '✨'], ['Knowledge', 'knowledge', '📖']];
   const SKILLS = {
-    logistics: ['Logistics', '🥾', 'You always find the meeting link.'],
-    diplomacy: ['Diplomacy', '🤝', 'Unshaken by "It\'s already in their Microsoft agreement".'],
-    scholar: ['Scholar', '📜', 'You remember what was on slide 82.'],
-    'eagle-eye': ['Eagle Eye', '🦅', 'You spot every F0 from across the room.'],
-    leadership: ['Leadership', '🚩', 'Morale +1 for everyone at your table.'],
-    luck: ['Luck', '🍀', 'The 4 C\'s come up twice today.'],
-    estates: ['Estates', '🏰', '+125 Databucks a day, allegedly.'],
-    wisdom: ['Wisdom', '🦉', 'You can read the roadmap. Most of it.'],
-    archery: ['Archery', '🏹', 'Battleground: your Genie Archers hit harder.'],
-    offense: ['Offense', '🗡️', 'Battleground: your melee stacks hit harder.'],
-    armorer: ['Armorer', '🛡️', 'Battleground: your stacks take less damage.'],
-    sorcery: ['Sorcery', '🔥', 'Battleground: your Fireball burns hotter.'],
-    'first-aid': ['First Aid', '🧪', 'You can revive a frozen demo.'],
-    navigation: ['Navigation', '🧭', 'You find OneLake on any map.'],
-    pathfinding: ['Pathfinding', '👣', 'A 260-slide deck cannot slow you down.'],
-    tactics: ['Tactics', '♞', 'You picked the seat nearest the coffee.'],
+    logistics: ['Logistics', '', 'You always find the meeting link.', 'Your army moves faster.'],
+    diplomacy: ['Diplomacy', '', 'Unshaken by "It\'s already in their Microsoft agreement".', 'Some of the foe desert before the fight.'],
+    scholar: ['Scholar', '', 'You remember what was on slide 82.', 'Your spells hit harder.'],
+    'eagle-eye': ['Eagle Eye', '', 'You spot every F0 from across the room.', 'Your archers keep their punch at long range.'],
+    leadership: ['Leadership', '', 'Morale +1 for everyone at your table.', 'Your stacks sometimes act twice.'],
+    luck: ['Luck', '', 'The 4 C\'s come up twice today.', 'Your attacks sometimes deal double damage.'],
+    estates: ['Estates', '', '+125 Databucks a day, allegedly.', 'Extra Genie Archers join you.'],
+    wisdom: ['Wisdom', '', 'You can read the roadmap. Most of it.', 'Extra Fireball casts.'],
+    archery: ['Archery', '', 'You never miss a quiz question.', 'Your Genie Archers hit harder.'],
+    offense: ['Offense', '', 'You go straight for the objection.', 'Your melee stacks hit harder.'],
+    armorer: ['Armorer', '', 'Objections bounce right off you.', 'Your stacks take less damage.'],
+    sorcery: ['Sorcery', '', 'Your demos never crash. Mostly.', 'Your Fireball burns hotter.'],
+    'first-aid': ['First Aid', '', 'You can revive a frozen demo.', 'Heals your most wounded stack each round.'],
+    navigation: ['Navigation', '', 'You find OneLake on any map.', 'Your retaliation hits harder.'],
+    pathfinding: ['Pathfinding', '', 'A 260-slide deck cannot slow you down.', 'Your army starts closer to the foe.'],
+    tactics: ['Tactics', '', 'You picked the seat nearest the coffee.', 'Your army strikes first in round one.'],
   };
   const SKILL_LEVEL = ['', 'Basic', 'Advanced', 'Expert'];
   const MAX_SKILLS = 8;
@@ -1563,12 +1638,15 @@ document.addEventListener('keydown', (e) => {
     if (!Array.isArray(x.lines)) x.lines = [];
     if (typeof x.blackoutXp !== 'boolean') x.blackoutXp = false;
     if (!Number.isInteger(x.battleXpWins)) x.battleXpWins = 0;
+    if (!x.army || typeof x.army !== 'object') x.army = {};
+    if (!x.buffs || typeof x.buffs !== 'object') x.buffs = {};
+    if (!Number.isInteger(x.battles)) x.battles = 0;
     return x;
   }
   function newHero(clsId) {
     const c = classById(clsId);
     return { v: 1, cls: c.id, stats: c.stats.slice(), level: 1, maxMarks: 1, cheatLevels: 0, pending: 0, skills: [], offers: null, wins: 0,
-      xp: 0, squareXp: 0, lines: [], blackoutXp: false, battleXpWins: 0 };
+      xp: 0, squareXp: 0, lines: [], blackoutXp: false, battleXpWins: 0, army: {}, buffs: {}, battles: 0 };
   }
   function saveHero() { if (hero) writeJSON(HERO_KEY, hero); }
   function selectedClass() { const r = document.querySelector('input[name="hero-class"]:checked'); return r ? r.value : 'warlock'; }
@@ -1588,8 +1666,11 @@ document.addEventListener('keydown', (e) => {
     document.getElementById('hb-who').innerHTML = heroFace(c, 'hb-portrait') + 'Level ' + hero.level + ' ' + c.name;
     document.getElementById('hb-stats').innerHTML = STATS.map((s, i) =>
       '<span title="' + s[0] + '">' + iconHtml(s[1], s[2]) + hero.stats[i] + '</span>').join('');
-    document.getElementById('hb-skills').innerHTML = hero.skills.map(([id, lvl]) =>
-      '<span class="hb-skill" title="' + escapeHtml(SKILLS[id][2]) + '">' + iconHtml(id, SKILLS[id][1]) + ' ' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</span>').join('');
+    document.getElementById('hb-skills').innerHTML = hero.skills.map(([id, lvl]) => {
+      const label = SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '. ' + SKILLS[id][2] + ' Battleground: ' + SKILLS[id][3];
+      return '<button type="button" class="hb-skill" data-skill="' + id + '" aria-label="' + escapeHtml(label) + '" title="' + escapeHtml(label) + '">' +
+        iconHtml(id) + '<span class="lvl" aria-hidden="true">' + SKILL_LEVEL[lvl][0] + '</span></button>';
+    }).join('');
     document.getElementById('hb-wins').innerHTML = hero.wins ? iconHtml('battle') + ' ' + hero.wins + (hero.wins === 1 ? ' battle won' : ' battles won') : '';
     const xl = levelForXp(hero.xp);
     const lo = XP_TABLE[xl - 1], hi = XP_TABLE[xl];
@@ -1678,7 +1759,7 @@ document.addEventListener('keydown', (e) => {
       '<p>' + escapeHtml(state.playerName || 'Your hero') + ' is a level ' + hero.level + ' ' + c.name + '. Choose a secondary skill:</p>' +
       '<div class="skill-choices">' + hero.offers.map(([id, lvl], i) =>
         '<button type="button" class="skill-choice" data-i="' + i + '"><span class="sc-icon">' + iconHtml(id, SKILLS[id][1]) + '</span>' +
-        '<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><span class="sc-joke">' + escapeHtml(SKILLS[id][2]) + '</span></button>').join('') +
+        '<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><span class="sc-joke">' + escapeHtml(SKILLS[id][2]) + ' <em>Battleground: ' + escapeHtml(SKILLS[id][3]) + '</em></span></button>').join('') +
       '</div><button type="button" class="fx-later">Decide later</button>';
     openOverlay(html, 'chooser', (card) => {
       card.querySelectorAll('.skill-choice').forEach(b => b.addEventListener('click', () => chooseSkill(Number(b.dataset.i))));
@@ -1699,6 +1780,13 @@ document.addEventListener('keydown', (e) => {
     if (hero.pending > 0) toast('<b>Another level awaits.</b><br>Tap "Level up!" again to choose.', 3500);
   }
   document.getElementById('hb-levelup').addEventListener('click', openChooser);
+  // Tapping a skill badge explains it (phones have no hover tooltips)
+  document.getElementById('hb-skills').addEventListener('click', (e) => {
+    const b = e.target.closest('.hb-skill');
+    if (!b || !hero) return;
+    const id = b.dataset.skill, lvl = skillLevel(id);
+    toast('<b>' + SKILL_LEVEL[lvl] + ' ' + SKILLS[id][0] + '</b><br>' + escapeHtml(SKILLS[id][2]) + '<br>Battleground: ' + escapeHtml(SKILLS[id][3]), 5000);
+  });
 
   function loadHeroFor(clsId) {
     const saved = readJSON(HERO_KEY, null);
@@ -1736,14 +1824,17 @@ document.addEventListener('keydown', (e) => {
   function heroForBattle() {
     if (!hero) return undefined;
     const c = classById(hero.cls);
+    const skills = {};
+    Object.keys(SKILLS).forEach(id => { skills[id.replace(/-([a-z])/g, (m, ch) => ch.toUpperCase())] = skillLevel(id); });
     return {
       attack: hero.stats[0], defense: hero.stats[1], power: hero.stats[2], knowledge: hero.stats[3],
-      skills: { archery: skillLevel('archery'), offense: skillLevel('offense'), armorer: skillLevel('armorer'), sorcery: skillLevel('sorcery') },
+      skills, army: Object.assign({}, hero.army), buffs: Object.assign({}, hero.buffs),
       name: state.playerName, className: c.name, level: hero.level,
     };
   }
   function onBattleClose(r) {
     const result = r && r.result;
+    if (hero && (result === 'ally' || result === 'enemy')) { hero.battles++; saveHero(); }
     if (result === 'ally') {
       if (hero) {
         hero.wins++;
@@ -1758,7 +1849,25 @@ document.addEventListener('keydown', (e) => {
     }
   }
   // Unit art for the battle: standalone SVGs cut from the game-icons.net sprite (the battle tints them)
-  const UNIT_ICONS = { genieArchers: 'archery', catalogKnights: 'knight', lakeflowCavalry: 'cavalry', wraiths: 'wraith', golems: 'golem', shades: 'shade' };
+  const UNIT_ICONS = { genieArchers: 'archery', catalogKnights: 'knight', lakeflowCavalry: 'cavalry', wraiths: 'wraith', golems: 'golem', shades: 'shade',
+    archangels: 'angel', blackKnights: 'rank-skeleton-warrior', ballista: 'archery', firstAidTent: 'first-aid' };
+  // Battle cues (original sounds; only when the player has turned audio on)
+  function battleSound(e) {
+    if (!audioOn || !e) return;
+    switch (e.type) {
+      case 'attack': case 'retaliate': sfx.clash(); break;
+      case 'shoot': sfx.bow(); break;
+      case 'fireball': sfx.fire(); break;
+      case 'breath': sfx.roar(); break;
+      case 'death': sfx.thud(); break;
+      case 'morale': sfx.harpUp(); break;
+      case 'luck': sfx.coins(); break;
+      case 'heal': sfx.pluck(NOTE.A5, 0); sfx.pluck(NOTE.D6, 0.08); break;
+      case 'victory': maybeFanfare('line'); break;
+      case 'defeat': sfx.doom(); break;
+      default: break;
+    }
+  }
   function unitIcons() {
     const out = {};
     for (const [unit, key] of Object.entries(UNIT_ICONS)) {
@@ -1773,6 +1882,11 @@ document.addEventListener('keydown', (e) => {
       window.Battleground.open({
         allyImg: 'assets/red-crest.webp?v=' + BUILD, enemyImg: 'assets/teal-tower.webp?v=' + BUILD,
         hero: heroForBattle(), unitIcons: unitIcons(), onClose: onBattleClose,
+        // First battle a little easier, then the host grows bolder with every victory
+        difficulty: hero ? Math.min(1.6, 0.85 + 0.12 * hero.wins) : 1,
+        battleNumber: hero ? hero.battles + 1 : 1,
+        onEvent: battleSound,
+        sound: { on: audioOn, toggle: () => { toggleAudio(); return audioOn; } },
       });
     }).catch(() => toast('<b>The Battleground is out of reach.</b><br>Check your connection and try again.', 5000));
   }
@@ -1806,6 +1920,14 @@ document.addEventListener('keydown', (e) => {
     levelup: 'a chosen one named Neo levels up in an instant',
     bright: 'a famous toy maker\'s colours brighten any world',
     grail: 'an oracle knows where the Grail lies',
+    knights: 'a black knight fights on with only a flesh wound',
+    spells: 'an enchanter named Tim knows every spell',
+    fog: 'ignorance is bliss, and the fog is cosy',
+    gallop: 'two coconuts make a fine gallop',
+    morale: 'there was much rejoicing across the realm',
+    luck: 'the lucky follow the white rabbit',
+    castle: 'it is only a model, yet it builds everything',
+    machines: 'the holy hand grenade came from Antioch',
   };
   let rumourIdx = 0;
   function tellRumour() {
