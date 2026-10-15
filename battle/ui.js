@@ -371,6 +371,8 @@
       if (grown) bits.push('The Teal Dragon\'s host has grown to meet you: ' + joinNames(parts) + '.');
       var newFoes = state.stacks.filter(function (x) { return x.type === 'wyverns' || x.type === 'hydras'; }).map(function (x) { return x.name; });
       if (newFoes.length) bits.push('New foes join the host: ' + joinNames(newFoes) + '.');
+      // A bare army rarely beats a Hydra (simulated); recruits bought with gold do.
+      if (state.stacks.some(function (x) { return x.type === 'hydras'; })) bits.push('Hydras are tough: close this battle, recruit troops with your gold and come back.');
       if (state.deserted > 0) bits.push('Your parley works: ' + state.deserted + (state.deserted === 1 ? ' creature deserts' : ' creatures desert') + ' the host.');
       return bits.join(' ');
     }

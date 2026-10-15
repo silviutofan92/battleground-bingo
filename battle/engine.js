@@ -60,13 +60,14 @@
     // New foes that join a bolder host (difficulty from 1.09 and 1.33).
     wyverns: { name: 'Wyverns', one: 'Wyvern', side: 'enemy', count: 1,
       att: 14, def: 14, dmgMin: 14, dmgMax: 18, hp: 70, speed: 7, fly: true },
-    hydras: { name: 'Hydras', one: 'Hydra', side: 'enemy', count: 2,
+    hydras: { name: 'Hydras', one: 'Hydra', side: 'enemy', count: 1,
       att: 16, def: 18, dmgMin: 25, dmgMax: 45, hp: 175, speed: 5, noRetaliation: true }
   };
-  // Hydras are defined (art and icon keys work) but do not join yet: any
-  // Hydra in the host collapsed the casual win rate at 1.33 in simulation.
+  // On the page's curve a Wyvern joins after three wins and Hydras after six
+  // (three wins against the five-stack host): the end-game host.
   var NEW_FOES = [
-    { type: 'wyverns', from: 1.09, spots: [[8, 1], [8, 3], [8, 5], [7, 1], [7, 3], [7, 5]] }
+    { type: 'wyverns', from: 1.09, spots: [[8, 1], [8, 3], [8, 5], [7, 1], [7, 3], [7, 5]] },
+    { type: 'hydras', from: 1.33, spots: [[8, 3], [8, 5], [8, 1], [7, 3], [7, 5], [7, 1]] }
   ];
   var TENT_HEAL = 50;
 
